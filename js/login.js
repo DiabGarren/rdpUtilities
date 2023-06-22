@@ -1,4 +1,4 @@
-import { setLocalStorage } from './utils.mjs';
+import { setLocalStorage, userLogin } from './utils.mjs';
 
 const uname = document.querySelector('#username');
 const pword = document.querySelector('#password');
@@ -16,26 +16,13 @@ const login = async () => {
     }
     password = pword.value;
 
-    const res = await fetch('http://156.155.158.70:1830/users/login', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            'username': username,
-            'email': email,
-            'password': password
-        })
-    });
-
-    const body = await res.json();
-    if (body.error) {
-        message.textContent = body.error;
+    const res = await userLogin(username, email, password);
+    if (res.error) {
+        message.textContent = res.error;
         return;
     }
 
-    setLocalStorage('id', body.id);
+    setLocalStorage('id', res.id);
     
     location = `/rdpUtilities/dashboard`;
 };
