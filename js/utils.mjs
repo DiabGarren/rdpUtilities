@@ -6,7 +6,7 @@ export function getParam(param) {
 };
 
 export async function getUserData(userId) {
-    const res = await fetch(`http://156.155.158.70:1830/users/${userId}`);
+    const res = await fetch(`https://rdputilities-api.onrender.com/users/${userId}`);
     const data = await res.json();
     return data;
 };
@@ -19,8 +19,26 @@ export function getLocalStorage(key) {
     return JSON.parse(localStorage.getItem(key));
 };
 
+export async function userLogin(username, email, password) {
+    const res = await fetch('https://rdputilities-api.onrender.com/users/login', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'username': username,
+            'email': email,
+            'password': password
+        })
+    });
+
+    const data = await res.json();
+    return data;
+}
+
 export async function newUser(firstName, lastName, username, email, password) {
-    const res = await fetch('http://156.155.158.70:1830/users', {
+    const res = await fetch('https://rdputilities-api.onrender.com/users', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -41,19 +59,19 @@ export async function newUser(firstName, lastName, username, email, password) {
 };
 
 export async function getAllWardCouncilDocs() {
-    const res = await fetch(`http://156.155.158.70:1830/wardCouncil`);
+    const res = await fetch(`https://rdputilities-api.onrender.com/wardCouncil`);
     const data = await res.json();
     return data;
 };
 
 export async function getWardCouncilDoc(date) {
-    const res = await fetch(`http://156.155.158.70:1830/wardCouncil/${date}`);
+    const res = await fetch(`https://rdputilities-api.onrender.com/wardCouncil/${date}`);
     const data = await res.json();
     return data;
 };
 
 export async function createWardCouncilDoc(date, agenda, notes) {
-    const res = await fetch('http://156.155.158.70:1830/wardCouncil', {
+    const res = await fetch('https://rdputilities-api.onrender.com/wardCouncil', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
