@@ -70,7 +70,7 @@ export async function getWardCouncilDoc(date) {
     return data;
 };
 
-export async function createWardCouncilDoc(date, agenda, notes) {
+export async function createWardCouncilDoc(date, opening, st, train, agenda, closing, notes) {
     const res = await fetch('https://rdputilities-api.onrender.com/wardCouncil', {
         method: 'POST',
         headers: {
@@ -79,11 +79,24 @@ export async function createWardCouncilDoc(date, agenda, notes) {
         },
         body: JSON.stringify({
             'date': date,
+            'openingPrayer': opening,
+            'spiritualThought': st,
+            'training': train,
             'agenda': agenda,
+            'closingPrayer': closing,
             'notes': notes
         })
     });
 
     const data = await res.json();
+    return data;
+};
+
+export async function deleteWardCouncilDoc(date) {
+    const res = await fetch(`https://rdputilities-api.onrender.com/wardCouncil/${date}`, {
+        method: 'DELETE'
+    });
+
+    const data = res;
     return data;
 }

@@ -1,4 +1,4 @@
-import { getLocalStorage, getUserData, uploadImage } from "./utils.mjs";
+import { getLocalStorage, getUserData } from "./utils.mjs";
 
 const id = getLocalStorage('id');
 const user = await getUserData(id);
