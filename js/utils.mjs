@@ -95,6 +95,27 @@ export async function createWardCouncilDoc(date, opening, st, train, agenda, clo
     return data;
 };
 
+export async function updateWardCouncilDoc(date, opening, st, train, agenda, closing, notes) {
+    const res = await fetch(`${baseUrl}wardCouncil/${date}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'openingPrayer': opening,
+            'spiritualThought': st,
+            'training': train,
+            'agenda': agenda,
+            'closingPrayer': closing,
+            'notes': notes
+        })
+    });
+
+    const data = await res.json();
+    return data;
+}
+
 export async function deleteWardCouncilDoc(date) {
     const res = await fetch(`${baseUrl}wardCouncil/${date}`, {
         method: 'DELETE'

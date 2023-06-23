@@ -1,4 +1,4 @@
-import { getAllWardCouncilDocs, getLocalStorage, getUserData, getParam, getWardCouncilDoc, createWardCouncilDoc, deleteWardCouncilDoc } from './utils.mjs';
+import { getAllWardCouncilDocs, getLocalStorage, getUserData, getParam, getWardCouncilDoc, createWardCouncilDoc, deleteWardCouncilDoc, updateWardCouncilDoc } from './utils.mjs';
 
 const id = getLocalStorage('id');
 const userData = await getUserData(id);
@@ -8,6 +8,7 @@ document.querySelector('#profile').textContent = `${userData.firstName[0]}${user
 
 let date = getParam('date');
 const newDoc = getParam('new');
+const update = getParam('update');
 
 const wrapper = document.querySelector('.wrapper');
 
@@ -18,7 +19,7 @@ if (!id) {
     if (userData.level < '2') {
         location = '/rdpUtilities/restricted';
     } else {
-        if (date) {
+        if (date && !update && !newDoc) {
             document.title += ` ${date}`;
             document.querySelector('h1').textContent += ` ${date}`;
 
@@ -97,11 +98,11 @@ if (!id) {
 
                 closing.appendChild(closingLab);
                 closing.appendChild(closingTxt);
-                
-                let updateBtn = document.createElement('button');
+
+                let updateBtn = document.createElement('a');
+                updateBtn.href = `/rdpUtilities/wardCouncil/?date=${date}&update=true`;
                 updateBtn.textContent = 'Update document';
                 updateBtn.className = 'btn btn-green';
-                updateBtn.id = 'update';
 
                 let delBtn = document.createElement('button');
                 delBtn.textContent = 'Delete document';
@@ -125,7 +126,7 @@ if (!id) {
 
                 wrapper.appendChild(error);
             }
-            
+
             let back = document.createElement('a');
             back.href = '/rdpUtilities/wardCouncil/';
             back.textContent = 'Back';
@@ -133,123 +134,7 @@ if (!id) {
 
             wrapper.appendChild(back);
         } else {
-            if (newDoc) {
-                let warn = document.createElement('h3');
-                warn.className = 'form-warning';
-                warn.id = 'message';
-
-                let heading = document.createElement('h2');
-                heading.textContent = 'New meeting';
-
-                wrapper.appendChild(heading);
-
-                let date = document.createElement('div');
-                date.className = 'ward_council-item';
-
-                let dateLab = document.createElement('h3');
-                dateLab.textContent = 'Date';
-
-                let dateTxt = document.createElement('input');
-                dateTxt.type = 'date';
-                dateTxt.id = 'date';
-
-                date.appendChild(dateLab);
-                date.appendChild(dateTxt);
-
-                let opening = document.createElement('div');
-                opening.id = 'op';
-                opening.className = 'ward_council-item';
-
-                let openingLab = document.createElement('h3');
-                openingLab.textContent = 'Opening Prayer';
-
-                let openingTxt = document.createElement('input');
-                openingTxt.id = 'open';
-                openingTxt.value = 'By invitation';
-
-                opening.appendChild(openingLab);
-                opening.appendChild(openingTxt);
-
-                let sp = document.createElement('div');
-                sp.id = 'sp';
-                sp.className = 'ward_council-item';
-
-                let spLab = document.createElement('h3');
-                spLab.textContent = 'Spiritual Thought';
-
-                let spTxt = document.createElement('input');
-                spTxt.id = 'st';
-
-                sp.appendChild(spLab);
-                sp.appendChild(spTxt);
-
-                let train = document.createElement('div');
-                train.id = 'train';
-                train.className = 'ward_council-item';
-
-                let trainLab = document.createElement('h3');
-                trainLab.textContent = 'Handbook Training';
-
-                let trainTxt = document.createElement('input');
-                train.id = 'training';
-                train.appendChild(trainLab);
-                train.appendChild(trainTxt);
-
-                let agenda = document.createElement('div');
-                agenda.id = 'agenda';
-                agenda.className = 'ward_council-item';
-
-                let agendaLab = document.createElement('h3');
-                agendaLab.textContent = 'Agenda';
-
-                let addItem = document.createElement('button');
-                addItem.textContent = 'Add item';
-                addItem.id = 'addItem';
-                addItem.className = 'btn btn-blue';
-
-                let agendaList = document.createElement('ul');
-                agendaList.id = 'agendaList';
-
-                agenda.appendChild(agendaLab);
-                agenda.appendChild(addItem);
-                agenda.appendChild(agendaList);
-
-                let closing = document.createElement('div');
-                closing.id = 'cp';
-                closing.className = 'ward_council-item';
-
-                let closingLab = document.createElement('h3');
-                closingLab.textContent = 'Closing Prayer';
-
-                let closingTxt = document.createElement('input');
-                closingTxt.id = 'close';
-                closingTxt.value = 'By invitation';
-
-                closing.appendChild(closingLab);
-                closing.appendChild(closingTxt);
-                
-                wrapper.appendChild(warn);
-                wrapper.appendChild(date);
-                wrapper.appendChild(opening);
-                wrapper.appendChild(sp);
-                wrapper.appendChild(train);
-                wrapper.appendChild(agenda);
-                wrapper.appendChild(closing);
-                
-                let submit = document.createElement('button');
-                submit.textContent = 'Submit';
-                submit.className = 'btn btn-green';
-                submit.id = 'submit';
-                
-                let back = document.createElement('a');
-                back.href = '/rdpUtilities/wardCouncil/';
-                back.textContent = 'Back';
-                back.className = 'btn btn-blue';
-                
-                wrapper.appendChild(submit);
-                wrapper.appendChild(back);
-
-            } else {
+            if (!update && !newDoc) {
                 let heading = document.createElement('h2');
                 heading.textContent = 'Meetings';
                 wrapper.appendChild(heading);
@@ -275,8 +160,122 @@ if (!id) {
 }
 
 
-if (newDoc) {
-    const agendaList = document.querySelector('#agendaList');
+if (newDoc || update) {
+    let warn = document.createElement('h3');
+    warn.className = 'form-warning';
+    warn.id = 'message';
+
+    let heading = document.createElement('h2');
+    heading.textContent = 'New meeting';
+
+    wrapper.appendChild(heading);
+
+    let dateContainer = document.createElement('div');
+    dateContainer.className = 'ward_council-item';
+
+    let dateLab = document.createElement('h3');
+    dateLab.textContent = 'Date';
+
+    let dateTxt = document.createElement('input');
+    dateTxt.type = 'date';
+    dateTxt.id = 'date';
+
+    dateContainer.appendChild(dateLab);
+    dateContainer.appendChild(dateTxt);
+
+    let opening = document.createElement('div');
+    opening.id = 'op';
+    opening.className = 'ward_council-item';
+
+    let openingLab = document.createElement('h3');
+    openingLab.textContent = 'Opening Prayer';
+
+    let openingTxt = document.createElement('input');
+    openingTxt.id = 'open';
+    openingTxt.value = 'By invitation';
+
+    opening.appendChild(openingLab);
+    opening.appendChild(openingTxt);
+
+    let sp = document.createElement('div');
+    sp.id = 'sp';
+    sp.className = 'ward_council-item';
+
+    let spLab = document.createElement('h3');
+    spLab.textContent = 'Spiritual Thought';
+
+    let spTxt = document.createElement('input');
+    spTxt.id = 'st';
+
+    sp.appendChild(spLab);
+    sp.appendChild(spTxt);
+
+    let train = document.createElement('div');
+    train.id = 'train';
+    train.className = 'ward_council-item';
+
+    let trainLab = document.createElement('h3');
+    trainLab.textContent = 'Handbook Training';
+
+    let trainTxt = document.createElement('input');
+    train.id = 'training';
+    train.appendChild(trainLab);
+    train.appendChild(trainTxt);
+
+    let agenda = document.createElement('div');
+    agenda.id = 'agenda';
+    agenda.className = 'ward_council-item';
+
+    let agendaLab = document.createElement('h3');
+    agendaLab.textContent = 'Agenda';
+
+    let addItem = document.createElement('button');
+    addItem.textContent = 'Add item';
+    addItem.id = 'addItem';
+    addItem.className = 'btn btn-blue';
+
+    let agendaList = document.createElement('ul');
+    agendaList.id = 'agendaList';
+
+    agenda.appendChild(agendaLab);
+    agenda.appendChild(addItem);
+    agenda.appendChild(agendaList);
+
+    let closing = document.createElement('div');
+    closing.id = 'cp';
+    closing.className = 'ward_council-item';
+
+    let closingLab = document.createElement('h3');
+    closingLab.textContent = 'Closing Prayer';
+
+    let closingTxt = document.createElement('input');
+    closingTxt.id = 'close';
+    closingTxt.value = 'By invitation';
+
+    closing.appendChild(closingLab);
+    closing.appendChild(closingTxt);
+
+    wrapper.appendChild(warn);
+    wrapper.appendChild(dateContainer);
+    wrapper.appendChild(opening);
+    wrapper.appendChild(sp);
+    wrapper.appendChild(train);
+    wrapper.appendChild(agenda);
+    wrapper.appendChild(closing);
+
+    let submit = document.createElement('a');
+    submit.textContent = 'Submit';
+    submit.className = 'btn btn-green';
+    submit.id = 'submit';
+
+    let back = document.createElement('a');
+    back.href = '/rdpUtilities/wardCouncil/';
+    back.textContent = 'Back';
+    back.className = 'btn btn-blue';
+
+    wrapper.appendChild(submit);
+    wrapper.appendChild(back);
+
     document.querySelector('#addItem').addEventListener('click', () => {
         let list = document.createElement('li');
         list.className = 'items';
@@ -302,76 +301,120 @@ if (newDoc) {
         });
 
     });
-    document.querySelector('#submit').addEventListener('click', async () => {
-        console.log(document.querySelector('#date').value);
-        if (document.querySelector('#date').value) {
-            console.log('Create new doc');
-            let agendaItems = []
-            document.querySelectorAll('.item').forEach((input) => {
-                agendaItems.push(input.value);
+
+    if (newDoc) {
+        document.querySelector('#submit').addEventListener('click', async () => {
+            console.log(document.querySelector('#date').value);
+            if (document.querySelector('#date').value) {
+                console.log('Create new doc');
+                let agendaItems = []
+                document.querySelectorAll('.item').forEach((input) => {
+                    agendaItems.push(input.value);
+                });
+
+                const date = document.querySelector('#date').value;
+                const open = document.querySelector('#open').value;
+                let st = document.querySelector('#st').value;
+                if (!st) {
+                    st = 'N/A';
+                }
+                let train = document.querySelector('#training').value;
+                if (!train) {
+                    train = 'N/A';
+                }
+                const close = document.querySelector('#close').value;
+
+                const res = await createWardCouncilDoc(date, open, st, train, agendaItems, close, '');
+                if (!res.error && res) {
+                    location = '/rdpUtilities/wardCouncil/';
+                }
+            } else {
+                document.querySelector('#message').textContent = 'Please select a date';
+            }
+        });
+    } else if (update) {
+        const doc = await getWardCouncilDoc(date);
+        console.log(doc[0]);
+        dateTxt.value = doc[0].date;
+        openingTxt.value = doc[0].openingPrayer;
+        spTxt.value = doc[0].spiritualThought;
+        trainTxt.value = doc[0].training;
+
+        doc[0].agenda.forEach((item) => {
+            let list = document.createElement('li');
+            list.className = 'items';
+
+            let itemLab = document.createElement('h3');
+            itemLab.textContent = 'Item';
+            let itemIn = document.createElement('input');
+            itemIn.className = 'item';
+            itemIn.value = item;
+
+            let removeItem = document.createElement('input');
+            removeItem.type = 'button';
+            removeItem.className = 'removeItem';
+            removeItem.value = 'X';
+
+            list.appendChild(itemLab);
+            list.appendChild(itemIn);
+            list.appendChild(removeItem);
+            agendaList.appendChild(list);
+
+            removeItem.addEventListener('click', () => {
+                agendaList.removeChild(list);
+            });
+            agenda.appendChild(agendaLab);
+            agenda.appendChild(agendaList);
+
+            document.querySelector('#submit').addEventListener('click', async () => {
+                console.log(document.querySelector('#date').value);
+                if (document.querySelector('#date').value) {
+                    console.log('Create new doc');
+                    let agendaItems = []
+                    document.querySelectorAll('.item').forEach((input) => {
+                        agendaItems.push(input.value);
+                    });
+
+                    const date = document.querySelector('#date').value;
+                    const open = document.querySelector('#open').value;
+                    let st = document.querySelector('#st').value;
+                    if (!st) {
+                        st = 'N/A';
+                    }
+                    let train = document.querySelector('#training').value;
+                    if (!train) {
+                        train = 'N/A';
+                    }
+                    const close = document.querySelector('#close').value;
+
+                    const res = await updateWardCouncilDoc(date, open, st, train, agendaItems, close, '');
+                    if (!res.error && res) {
+                        location = '/rdpUtilities/wardCouncil/';
+                    }
+                } else {
+                    document.querySelector('#message').textContent = 'Please select a date';
+                }
             });
 
-            const date = document.querySelector('#date').value;
-            const open = document.querySelector('#open').value;
-            let st = document.querySelector('#st').value;
-            if (!st) {
-                st = 'N/A';
-            }
-            let train = document.querySelector('#training').value;
-            if (!train) {
-                train = 'N/A';
-            }
-            const close = document.querySelector('#close').value;
-
-            const res = await createWardCouncilDoc(date, open, st, train, agendaItems, close, '');
-            if (!res.error && res) {
-                location = '/rdpUtilities/wardCouncil/';
-            }
-        } else {
-            document.querySelector('#message').textContent = 'Please select a date';
-        }
-    });
-}
-
-if (document.querySelector('#update')) {
-    document.querySelector('#update').addEventListener('click', async () => {
-        document.querySelector('#openingTxt').remove();
-        let openingTxt = document.createElement('input');
-        openingTxt.value = 'By invitation';
-        document.querySelector('#op').appendChild(openingTxt);
-
-        document.querySelector('#spTxt').remove();
-        let spTxt = document.createElement('input');
-        document.querySelector('#sp').appendChild(spTxt);
-
-        document.querySelector('#trainTxt').remove();
-        let trainTxt = document.createElement('input');
-        document.querySelector('#train').appendChild(trainTxt);
-
-        document.querySelector('#agendaList').remove();
-
-        document.querySelector('#closingTxt').remove();
-        let closingTxt = document.createElement('input');
-        closingTxt.value = 'By invitation';
-        document.querySelector('#cp').appendChild(closingTxt);
-    });
+        });
+    }
 }
 
 if (document.querySelector('#delete')) {
     document.querySelector('#delete').addEventListener('click', async () => {
         let deleteDoc = document.createElement('div');
         deleteDoc.id = 'doc-delete';
-        
+
         let deleteWrapper = document.createElement('div');
         deleteWrapper.id = 'doc-delete-wrapper';
-        
+
         let confirm = document.createElement('p');
         confirm.textContent = 'Are you sure you want to delete this document?';
         confirm.id = 'delete-warning';
-        
-                let confirmBtn = document.createElement('button');
-                confirmBtn.textContent = 'Confirm';
-                confirmBtn.className = 'btn btn-delete';
+
+        let confirmBtn = document.createElement('button');
+        confirmBtn.textContent = 'Confirm';
+        confirmBtn.className = 'btn btn-red';
 
         let cancelBtn = document.createElement('button');
         cancelBtn.textContent = 'Cancel';
