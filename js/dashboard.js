@@ -21,7 +21,7 @@ if (!id) {
         let wc = document.createElement('a');
         wc.href = '/rdpUtilities/wardCouncil';
         wc.textContent = 'Ward Council';
-        wc.className = 'btn';
+        wc.className = 'btn btn-blue';
 
         wrapper.appendChild(wc);
 
@@ -30,7 +30,7 @@ if (!id) {
             let bishopric = document.createElement('a');
             bishopric.href = '/rdpUtilities/bishopric';
             bishopric.textContent = 'Bishopric';
-            bishopric.className = 'btn';
+            bishopric.className = 'btn btn-blue';
 
             wrapper.appendChild(bishopric);
         }

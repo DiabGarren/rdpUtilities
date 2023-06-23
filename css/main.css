@@ -7,6 +7,8 @@
     --light-blue: #BFDEE8;
     --dark-red: #910505;
     --light-red: #ff9393;
+    --dark-green: #028202;
+    --light-green: #50f650;
 }
 
 * {
@@ -102,31 +104,48 @@ h1 {
 
 .btn {
     display: block;
-    width: 200px;
+    max-width: 350px;
+    width: 100%;
     margin: 10px 0 0 0;
     padding: 5px;
 
     font-size: 20px;
 
     border-radius: 5px;
-    border: 2px solid var(--dark-blue);
-
+    cursor: pointer;
     color: white;
-    background-color: var(--dark-blue);
     text-decoration: none;
+    text-align: center;
 }
 
-.btn:hover {
+.btn-blue {
+    border: 2px solid var(--dark-blue);
+    background-color: var(--dark-blue);
+}
+
+.btn-blue:hover {
     color: var(--dark-blue);
     background-color: var(--light-blue);
 }
 
-.delete-btn {
-    margin: 50px 0 0 0;
+.btn-red {
+    border: 2px solid var(--dark-red);
+    background-color: var(--dark-red);
 }
 
-.delete-btn:hover {
+.btn-red:hover {
     border: 2px solid var(--dark-red);
     color: var(--dark-red);
     background: var(--light-red);
+}
+
+.btn-green {
+    border: 2px solid var(--dark-green);
+    background-color: var(--dark-green);
+}
+
+.btn-green:hover {
+    border: 2px solid var(--dark-green);
+    color: var(--dark-green);
+    background: var(--light-green);
 }

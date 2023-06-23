@@ -6,12 +6,10 @@ const userData = await getUserData(id);
 document.title += ` ${userData.firstName} ${userData.lastName}`;
 document.querySelector('#profile').textContent = `${userData.firstName[0]}${userData.lastName[0]}`;
 
-
 let date = getParam('date');
 const newDoc = getParam('new');
 
 const wrapper = document.querySelector('.wrapper');
-// let output = '';
 
 if (!id) {
     location = '/rdpUtilities';
@@ -24,13 +22,6 @@ if (!id) {
             document.title += ` ${date}`;
             document.querySelector('h1').textContent += ` ${date}`;
 
-            let back = document.createElement('a');
-            back.href = '/rdpUtilities/wardCouncil/';
-            back.textContent = 'Back';
-            back.className = 'btn';
-
-            wrapper.appendChild(back);
-
             const doc = await getWardCouncilDoc(date);
             if (doc.length > 0) {
                 let opening = document.createElement('div');
@@ -42,6 +33,7 @@ if (!id) {
 
                 let openingTxt = document.createElement('p');
                 openingTxt.textContent = doc[0].openingPrayer;
+                openingTxt.id = 'openingTxt';
 
                 opening.appendChild(openingLab);
                 opening.appendChild(openingTxt);
@@ -55,6 +47,7 @@ if (!id) {
 
                 let spTxt = document.createElement('p');
                 spTxt.textContent = doc[0].spiritualThought;
+                spTxt.id = 'spTxt';
 
                 sp.appendChild(spLab);
                 sp.appendChild(spTxt);
@@ -68,6 +61,7 @@ if (!id) {
 
                 let trainTxt = document.createElement('p');
                 trainTxt.textContent = doc[0].training;
+                trainTxt.id = 'trainTxt';
 
                 train.appendChild(trainLab);
                 train.appendChild(trainTxt);
@@ -80,6 +74,7 @@ if (!id) {
                 agendaLab.textContent = 'Agenda';
 
                 let agendaList = document.createElement('ul');
+                agendaList.id = 'agendaList';
                 doc[0].agenda.forEach((item) => {
                     let agendaItem = document.createElement('li');
                     agendaItem.textContent = item;
@@ -98,17 +93,20 @@ if (!id) {
 
                 let closingTxt = document.createElement('p');
                 closingTxt.textContent = doc[0].closingPrayer;
+                closingTxt.id = 'closingTxt';
 
                 closing.appendChild(closingLab);
                 closing.appendChild(closingTxt);
+                
+                let updateBtn = document.createElement('button');
+                updateBtn.textContent = 'Update document';
+                updateBtn.className = 'btn btn-green';
+                updateBtn.id = 'update';
 
-                let del = document.createElement('div');
-                let delBtn = document.createElement('a');
-                delBtn.href = `/rdpUtilities/wardCouncil/delete/?date=${date}`;
+                let delBtn = document.createElement('button');
                 delBtn.textContent = 'Delete document';
-                delBtn.className = 'btn delete-btn';
-
-                del.appendChild(delBtn);
+                delBtn.className = 'btn btn-red';
+                delBtn.id = 'delete';
 
                 wrapper.appendChild(opening);
                 wrapper.appendChild(sp);
@@ -117,7 +115,8 @@ if (!id) {
                 wrapper.appendChild(closing);
 
                 if (userData.level >= 3) {
-                    wrapper.appendChild(del);
+                    wrapper.appendChild(updateBtn);
+                    wrapper.appendChild(delBtn);
                 }
 
             } else {
@@ -126,25 +125,30 @@ if (!id) {
 
                 wrapper.appendChild(error);
             }
+            
+            let back = document.createElement('a');
+            back.href = '/rdpUtilities/wardCouncil/';
+            back.textContent = 'Back';
+            back.className = 'btn btn-blue';
+
+            wrapper.appendChild(back);
         } else {
             if (newDoc) {
-                let back = document.createElement('a');
-                back.href = '/rdpUtilities/wardCouncil/';
-                back.textContent = 'Back';
-                back.className = 'btn';
-
-                wrapper.appendChild(back);
-
                 let warn = document.createElement('h3');
                 warn.className = 'form-warning';
                 warn.id = 'message';
 
+                let heading = document.createElement('h2');
+                heading.textContent = 'New meeting';
+
+                wrapper.appendChild(heading);
+
                 let date = document.createElement('div');
                 date.className = 'ward_council-item';
-                
-                let dateLab = document.createElement('h2');
+
+                let dateLab = document.createElement('h3');
                 dateLab.textContent = 'Date';
-                
+
                 let dateTxt = document.createElement('input');
                 dateTxt.type = 'date';
                 dateTxt.id = 'date';
@@ -156,7 +160,7 @@ if (!id) {
                 opening.id = 'op';
                 opening.className = 'ward_council-item';
 
-                let openingLab = document.createElement('h2');
+                let openingLab = document.createElement('h3');
                 openingLab.textContent = 'Opening Prayer';
 
                 let openingTxt = document.createElement('input');
@@ -170,7 +174,7 @@ if (!id) {
                 sp.id = 'sp';
                 sp.className = 'ward_council-item';
 
-                let spLab = document.createElement('h2');
+                let spLab = document.createElement('h3');
                 spLab.textContent = 'Spiritual Thought';
 
                 let spTxt = document.createElement('input');
@@ -183,7 +187,7 @@ if (!id) {
                 train.id = 'train';
                 train.className = 'ward_council-item';
 
-                let trainLab = document.createElement('h2');
+                let trainLab = document.createElement('h3');
                 trainLab.textContent = 'Handbook Training';
 
                 let trainTxt = document.createElement('input');
@@ -195,14 +199,13 @@ if (!id) {
                 agenda.id = 'agenda';
                 agenda.className = 'ward_council-item';
 
-                let agendaLab = document.createElement('h2');
+                let agendaLab = document.createElement('h3');
                 agendaLab.textContent = 'Agenda';
 
-                let addItem = document.createElement('input');
-                addItem.type = 'button';
-                addItem.value = 'Add item';
+                let addItem = document.createElement('button');
+                addItem.textContent = 'Add item';
                 addItem.id = 'addItem';
-                addItem.className = 'btn';
+                addItem.className = 'btn btn-blue';
 
                 let agendaList = document.createElement('ul');
                 agendaList.id = 'agendaList';
@@ -215,7 +218,7 @@ if (!id) {
                 closing.id = 'cp';
                 closing.className = 'ward_council-item';
 
-                let closingLab = document.createElement('h2');
+                let closingLab = document.createElement('h3');
                 closingLab.textContent = 'Closing Prayer';
 
                 let closingTxt = document.createElement('input');
@@ -224,13 +227,7 @@ if (!id) {
 
                 closing.appendChild(closingLab);
                 closing.appendChild(closingTxt);
-
-                let submit = document.createElement('input');
-                submit.type = 'button';
-                submit.value = 'Submit';
-                submit.className = 'btn';
-                submit.id = 'submit';
-
+                
                 wrapper.appendChild(warn);
                 wrapper.appendChild(date);
                 wrapper.appendChild(opening);
@@ -238,22 +235,38 @@ if (!id) {
                 wrapper.appendChild(train);
                 wrapper.appendChild(agenda);
                 wrapper.appendChild(closing);
+                
+                let submit = document.createElement('button');
+                submit.textContent = 'Submit';
+                submit.className = 'btn btn-green';
+                submit.id = 'submit';
+                
+                let back = document.createElement('a');
+                back.href = '/rdpUtilities/wardCouncil/';
+                back.textContent = 'Back';
+                back.className = 'btn btn-blue';
+                
                 wrapper.appendChild(submit);
+                wrapper.appendChild(back);
 
             } else {
+                let heading = document.createElement('h2');
+                heading.textContent = 'Meetings';
+                wrapper.appendChild(heading);
+
                 const docs = await getAllWardCouncilDocs();
 
                 docs.forEach((doc) => {
                     let wcDoc = document.createElement('a');
                     wcDoc.href = `/rdpUtilities/wardCouncil/?date=${doc.date}`;
                     wcDoc.textContent = doc.date;
-                    wcDoc.className = 'btn';
+                    wcDoc.className = 'btn btn-blue';
                     wrapper.appendChild(wcDoc);
                 });
                 let createDoc = document.createElement('a');
                 createDoc.href = '/rdpUtilities/wardCouncil/?new=true';
                 createDoc.textContent = 'Create document';
-                createDoc.className = 'btn';
+                createDoc.className = 'btn btn-blue';
 
                 wrapper.appendChild(createDoc);
             }
@@ -266,16 +279,16 @@ if (newDoc) {
     const agendaList = document.querySelector('#agendaList');
     document.querySelector('#addItem').addEventListener('click', () => {
         let list = document.createElement('li');
-        list.classList.add('items');
+        list.className = 'items';
 
         let item = document.createElement('h3');
         item.textContent = 'Item';
         let itemIn = document.createElement('input');
-        itemIn.classList.add('item');
+        itemIn.className = 'item';
 
         let removeItem = document.createElement('input');
         removeItem.type = 'button';
-        removeItem.classList.add('removeItem');
+        removeItem.className = 'removeItem';
         removeItem.value = 'X';
 
         list.appendChild(item);
@@ -320,12 +333,68 @@ if (newDoc) {
     });
 }
 
+if (document.querySelector('#update')) {
+    document.querySelector('#update').addEventListener('click', async () => {
+        document.querySelector('#openingTxt').remove();
+        let openingTxt = document.createElement('input');
+        openingTxt.value = 'By invitation';
+        document.querySelector('#op').appendChild(openingTxt);
+
+        document.querySelector('#spTxt').remove();
+        let spTxt = document.createElement('input');
+        document.querySelector('#sp').appendChild(spTxt);
+
+        document.querySelector('#trainTxt').remove();
+        let trainTxt = document.createElement('input');
+        document.querySelector('#train').appendChild(trainTxt);
+
+        document.querySelector('#agendaList').remove();
+
+        document.querySelector('#closingTxt').remove();
+        let closingTxt = document.createElement('input');
+        closingTxt.value = 'By invitation';
+        document.querySelector('#cp').appendChild(closingTxt);
+    });
+}
+
 if (document.querySelector('#delete')) {
     document.querySelector('#delete').addEventListener('click', async () => {
-        console.log(date);
-        const res = await deleteWardCouncilDoc(date);
-        if (!res.error && res) {
-            location = '/rdpUtilities/wardCouncil/';
+        let deleteDoc = document.createElement('div');
+        deleteDoc.id = 'doc-delete';
+        
+        let deleteWrapper = document.createElement('div');
+        deleteWrapper.id = 'doc-delete-wrapper';
+        
+        let confirm = document.createElement('p');
+        confirm.textContent = 'Are you sure you want to delete this document?';
+        confirm.id = 'delete-warning';
+        
+                let confirmBtn = document.createElement('button');
+                confirmBtn.textContent = 'Confirm';
+                confirmBtn.className = 'btn btn-delete';
+
+        let cancelBtn = document.createElement('button');
+        cancelBtn.textContent = 'Cancel';
+        cancelBtn.className = 'btn btn-blue';
+
+        deleteWrapper.appendChild(confirm);
+        deleteWrapper.appendChild(confirmBtn);
+        deleteWrapper.appendChild(cancelBtn);
+
+        deleteDoc.appendChild(deleteWrapper);
+
+        wrapper.appendChild(deleteDoc);
+
+        confirmBtn.onclick = async () => {
+            console.log(date);
+            const res = await deleteWardCouncilDoc(date);
+            if (!res.error && res) {
+                location = '/rdpUtilities/wardCouncil/';
+            }
+        }
+
+        cancelBtn.onclick = () => {
+            wrapper.removeChild(deleteDoc);
         }
     });
 }

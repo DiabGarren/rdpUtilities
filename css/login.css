@@ -17,7 +17,7 @@
     font-size: 18px;
 }
 
-.login-btn, .sign-btn {
-    width: 100% !important;
+.login-wrapper button, .login-wrapper a {
     text-align: center;
+    width: 100%;
 }
