@@ -19,7 +19,7 @@ const register = async () => {
         return;
     }
 
-    location = '/rdpUtilities/login';
+    location = '/rdpUtilities';
 };
 
 document.querySelector('#reg').addEventListener('click', register);

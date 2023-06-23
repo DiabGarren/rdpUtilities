@@ -1,0 +1,33 @@
+.print-heading {
+    font-size: 22px;
+    line-height: 50px;
+    font-weight: 500;
+}
+
+.print-subheading {
+    font-size: 20px;
+    line-height: 50px;
+    font-weight: 500;
+
+    margin: 20px 0 20px;
+}
+
+.print-item {
+    font-size: 18px;
+    line-height: 25px;
+
+    margin: 15px 0 15px;
+}
+
+.print-list {
+    font-size: 18px;
+    margin: 10px 0 10px;
+}
+
+.print-center {
+    text-align: center;
+}
+
+.print-font {
+    font-family: serif;
+}

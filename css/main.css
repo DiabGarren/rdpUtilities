@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&family=Quicksand&display=swap');
 @import url('./login.css');
-@import url('./wardCouncil.css');
+@import url('./doc.css');
+@import url('./print.css');
 
 :root {
     --dark-blue: #00799F;
@@ -148,4 +149,30 @@ h1 {
     border: 2px solid var(--dark-green);
     color: var(--dark-green);
     background: var(--light-green);
+}
+
+@media print{
+    header, footer, .no-print {
+        display: none;
+    }
+}
+
+footer {
+    height: 120px;
+    background: linear-gradient(white, 20%, var(--light-blue) , 50%, var(--dark-blue));
+    position: relative;
+    margin-top: 50px;
+}
+
+footer p{
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: white;
+}
+
+footer a {
+    color: white;
 }

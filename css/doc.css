@@ -1,13 +1,13 @@
-.ward_council-item {
+.doc-item {
     margin: 15px 0 0 0;
     max-width: 350px;
 }
 
-.ward_council-item * {
+.doc-item * {
     width: 100%;
 }
 
-.ward_council-item input {
+.doc-item input {
     height: 30px;
     border-radius: 5px;
     font-size: 18px;
