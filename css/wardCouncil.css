@@ -1,0 +1,33 @@
+.ward_council-item {
+    margin: 15px 0 0 0;
+}
+
+.ward_council-item:first-of-type {
+    margin: 50px 0 0 0;
+}
+
+.ward_council-item input {
+    width: 200px;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+#agendaList .items {
+    list-style-type: none;
+}
+
+#agendaList .items .item {
+    width: 350px;
+}
+
+#agendaList .items .removeItem {
+    width: 50px;
+    color: white;
+    background-color: var(--dark-red);
+}
+
+#agendaList .items .removeItem:hover {
+    color: var(--dark-red);
+    background-color: var(--light-red);
+}

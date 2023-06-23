@@ -4,23 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/rdpUtilities/css/main.css">
     <script src="/rdpUtilities/js/login.js" type="module"></script>
     <title>Login</title>
 </head>
 
 <body>
     <header>
+        <a href="/rdpUtilities/dashboard/" id="home">
+            <svg width="50" height="45" viewBox="0 0 50 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 16V43H25H40V16M2 15L25 2L48 15" stroke="white" stroke-width="3" stroke-linecap="round" />
+            </svg>
+        </a>
         <h1>Login</h1>
-        <a href="/rdpUtilities/">Home</a>
     </header>
     <main>
-        <p class="form-warning" id="message"></p>
-        <label for="username/email">Username/Email</label>
-        <input type="text" name="username/email" id="username">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
-        <button id="login">Login</button>
-        <a id="reg" href="/rdpUtilities/register/">Sign Up</a>
+        <div class="wrapper login-wrapper">
+            <h3 class="form-warning" id="message"></h3>
+            <label for="username/email">Username/Email</label>
+            <input type="text" name="username/email" id="username">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+            <a href="#" id="login" class="btn login-btn">Login</a>
+            <a href="/rdpUtilities/register/" id="reg" class="btn sign-btn">Sign Up</a>
+        </div>
     </main>
 </body>
 

@@ -1,0 +1,23 @@
+.login-wrapper {
+    max-width: 350px !important; 
+}
+
+.login-wrapper * {
+    display: block;
+}
+
+.login-wrapper input {
+    margin: 0 0 15px 0;
+    width: 100%;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.login-wrapper label, .login-wrapper input {
+    font-size: 18px;
+}
+
+.login-btn, .sign-btn {
+    width: 100% !important;
+    text-align: center;
+}

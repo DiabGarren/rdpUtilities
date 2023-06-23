@@ -4,29 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/rdpUtilities/css/main.css">
     <script src="/rdpUtilities/js/register.js" type="module"></script>
     <title>Register</title>
 </head>
 
 <body>
     <header>
+        <a href="/rdpUtilities/dashboard/" id="home">
+            <svg width="50" height="45" viewBox="0 0 50 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 16V43H25H40V16M2 15L25 2L48 15" stroke="white" stroke-width="3" stroke-linecap="round" />
+            </svg>
+        </a>
         <h1>Register</h1>
-        <a href="/rdpUtilities/">Home</a>
-        <a href="/rdpUtilities/login/">Login</a>
     </header>
     <main>
-        <p class="form-warning" id="message"></p>
-        <label for="firstName">First Name</label>
-        <input type="text" name="firstName" id="firstName" required>
-        <label for="lastName">Last Name</label>
-        <input type="text" name="lastName" id="lastName" required>
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" required>
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" required>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
-        <button id="reg">Register</button>
+        <div class="wrapper login-wrapper">
+            <h3 class="form-warning" id="message"></h3>
+            <label for="firstName">First Name</label>
+            <input type="text" name="firstName" id="firstName" required>
+            <label for="lastName">Last Name</label>
+            <input type="text" name="lastName" id="lastName" required>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+            <a href="#" id="reg" class="btn login-btn">Register</a>
+            <a href="/rdpUtilities/login/" class="btn login-btn">Login</a>
+        </div>
     </main>
 </body>
 

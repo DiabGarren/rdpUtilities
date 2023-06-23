@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Quicksand&display=swap');
+@import url('./login.css');
+@import url('./wardCouncil.css');
+
+:root {
+    --dark-blue: #00799F;
+    --light-blue: #BFDEE8;
+    --dark-red: #910505;
+    --light-red: #ff9393;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Inter;
+}
+
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+}
+
+.form-warning {
+    color: var(--dark-red);
+}
+
+header {
+    background: linear-gradient(to right, var(--dark-blue), var(--light-blue));
+    height: 80px;
+
+    display: grid;
+    grid-template-columns: 80px 1fr 65px;
+}
+
+#home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#home svg {
+    padding: 10px;
+    border-radius: 50%;
+    height: 50px;
+}
+
+#home:hover svg {
+    background: var(--light-blue);
+
+}
+
+#home:hover svg path {
+    stroke: var(--dark-blue);
+}
+
+h1 {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    color: white;
+    font-size: 50px;
+    font-weight: 700;
+}
+
+#profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: 65px;
+    height: 65px;
+
+    position: relative;
+    top: 8px;
+    right: 8px;
+
+    border-radius: 50%;
+
+    background: var(--dark-blue);
+    color: white;
+    font-size: 33px;
+    text-decoration: none;
+}
+
+#profile:hover {
+    color: var(--dark-blue);
+    background: var(--light-blue);
+    border: 2px solid var(--dark-blue);
+}
+
+.wrapper {
+    max-width: 1000px;
+    margin: 30px auto 0;
+}
+
+.btn {
+    display: block;
+    width: 200px;
+    margin: 10px 0 0 0;
+    padding: 5px;
+
+    font-size: 20px;
+
+    border-radius: 5px;
+    border: 2px solid var(--dark-blue);
+
+    color: white;
+    background-color: var(--dark-blue);
+    text-decoration: none;
+}
+
+.btn:hover {
+    color: var(--dark-blue);
+    background-color: var(--light-blue);
+}
+
+.delete-btn {
+    margin: 50px 0 0 0;
+}
+
+.delete-btn:hover {
+    border: 2px solid var(--dark-red);
+    color: var(--dark-red);
+    background: var(--light-red);
+}
