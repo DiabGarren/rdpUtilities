@@ -22,6 +22,11 @@ export function getLocalStorage(key) {
     return JSON.parse(localStorage.getItem(key));
 };
 
+export function getCurrentDate() {
+    const date = new Date();
+    return date;
+}
+
 export async function userLogin(username, email, password) {
     const res = await fetch(`${baseUrl}users/login`, {
         method: 'POST',
@@ -216,17 +221,35 @@ export function setTitle(firstName, lastName) {
 }
 
 export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
+    const currDate = getCurrentDate();
     let heading = document.createElement('h2');
     heading.textContent = 'Meetings';
     wrapper.appendChild(heading);
-
+    
     const docs = await getAllFunc();
-
+    
     docs.forEach((doc) => {
+        const docDate = new Date(doc.date)
         let wcDoc = document.createElement('a');
         wcDoc.href = `/rdpUtilities/${meeting}/?date=${doc.date}`;
         wcDoc.textContent = doc.date;
-        wcDoc.className = 'btn btn-blue';
+
+        if (docDate.getFullYear() < currDate.getFullYear()) {
+            wcDoc.className = 'btn btn-gray';
+        } else if (docDate.getFullYear() > currDate.getFullYear()) {
+            wcDoc.className = 'btn btn-blue';
+        } else if (docDate.getMonth() < currDate.getMonth()) {
+            wcDoc.className = 'btn btn-gray';
+        } else if (docDate.getMonth() > currDate.getMonth()) {
+            wcDoc.className = 'btn btn-blue';
+        } else if (docDate.getDate() < currDate.getDate()) {
+            wcDoc.className = 'btn btn-gray';
+        } else if (docDate.getDate() > currDate.getDate()) {
+            wcDoc.className = 'btn btn-blue';
+        } else {
+            wcDoc.className = 'btn btn-green';
+        }
+        
         wrapper.appendChild(wcDoc);
     });
     let createDoc = document.createElement('a');

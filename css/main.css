@@ -10,6 +10,8 @@
     --light-red: #ff9393;
     --dark-green: #028202;
     --light-green: #50f650;
+    --dark-gray: #707070;
+    --light-gray: #cccccc;
 }
 
 * {
@@ -138,6 +140,17 @@ h1 {
     border: 2px solid var(--dark-red);
     color: var(--dark-red);
     background: var(--light-red);
+}
+
+.btn-gray {
+    border: 2px solid var(--dark-gray);
+    background-color: var(--dark-gray);
+}
+
+.btn-gray:hover {
+    border: 2px solid var(--dark-gray);
+    color: var(--dark-gray);
+    background: var(--light-gray);
 }
 
 .btn-green {
