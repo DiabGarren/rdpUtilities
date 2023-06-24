@@ -28,19 +28,19 @@ const meeting = 'bishopric'
 const wrapper = document.querySelector('.wrapper');
 
 if (!id) {
-    location = '/rdpUtilities';
+    location = '/rdpUtilities/';
 }
 
 if (userData.level < '3') {
     location = '/rdpUtilities/restricted';
 }
 
-if (date && !update && !newDoc) {
-    await renderDocPage(meeting, userData, getBishopricDoc, date, wrapper);
-}
-
 if (!date && !update && !newDoc) {
     await renderBasepage(meeting, userData, getAllBishopricDocs, wrapper);
+}
+
+if (date && !update && !newDoc) {
+    await renderDocPage(meeting, userData, getBishopricDoc, date, wrapper);
 }
 
 if (newDoc && !update) {

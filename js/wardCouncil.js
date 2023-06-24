@@ -28,18 +28,18 @@ const meeting = 'wardCouncil';
 const wrapper = document.querySelector('.wrapper');
 
 if (!id) {
-    location = '/rdpUtilities';
+    location = '/rdpUtilities/';
 }
 if (userData.level < '2') {
     location = '/rdpUtilities/restricted/';
 }
 
-if (date && !update && !newDoc) {
-    await renderDocPage(meeting, userData, getWardCouncilDoc, date, wrapper);
-}
-
 if (!date && !update && !newDoc) {
     await renderBasepage(meeting, userData, getAllWardCouncilDocs, wrapper);
+}
+
+if (date && !update && !newDoc) {
+    await renderDocPage(meeting, userData, getWardCouncilDoc, date, wrapper);
 }
 
 if (newDoc && !update) {
