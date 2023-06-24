@@ -6,7 +6,7 @@ import {
 } from './utils.mjs';
 
 const id = getLocalStorage('id');
-const userData = getUserData(id);
+const userData = await getUserData(id);
 
 setTitle(userData.firstName, userData.lastName);
 
