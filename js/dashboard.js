@@ -1,4 +1,4 @@
-import { getParam, getUserData, getLocalStorage } from './utils.mjs';
+import { getUserData, getLocalStorage } from './utils.mjs';
 
 const id = getLocalStorage('id');
 
@@ -32,7 +32,13 @@ if (!id) {
             bishopric.textContent = 'Bishopric';
             bishopric.className = 'btn btn-blue';
 
+            let sacrament = document.createElement('a');
+            sacrament.href = '/rdpUtilities/sacrament';
+            sacrament.textContent = 'Sacrament';
+            sacrament.className = 'btn btn-blue';
+
             wrapper.appendChild(bishopric);
+            wrapper.appendChild(sacrament);
         }
     }
 }
