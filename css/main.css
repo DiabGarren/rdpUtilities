@@ -34,16 +34,17 @@ p {
 
 header {
     background: linear-gradient(to right, var(--dark-blue), var(--light-blue));
-    height: 80px;
+    height: 60px;
 
     display: grid;
-    grid-template-columns: 80px 1fr 65px;
+    grid-template-columns: 50px 1fr 50px;
 }
 
 #home {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 60px;
 }
 
 #home svg {
@@ -54,7 +55,6 @@ header {
 
 #home:hover svg {
     background: var(--light-blue);
-
 }
 
 #home:hover svg path {
@@ -68,7 +68,7 @@ h1 {
     justify-content: center;
 
     color: white;
-    font-size: 50px;
+    font-size: 35px;
     font-weight: 700;
 }
 
@@ -77,18 +77,18 @@ h1 {
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    width: 65px;
-    height: 65px;
+    width: 50px;
+    height: 50px;
 
     position: relative;
-    top: 8px;
-    right: 8px;
+    top: 5px;
+    right: 5px;
 
     border-radius: 50%;
 
     background: var(--dark-blue);
     color: white;
-    font-size: 33px;
+    font-size: 25px;
     text-decoration: none;
 }
 
@@ -99,16 +99,16 @@ h1 {
 }
 
 .wrapper {
-    max-width: 1000px;
-    margin: 30px auto 0;
+    margin: 30px 30px 0;
 }
 
 .btn {
     display: block;
-    max-width: 350px;
     width: 100%;
+    height: 45px;
+
     margin: 10px 0 0 0;
-    padding: 5px;
+    padding: 10px;
 
     font-size: 20px;
 
@@ -151,23 +151,18 @@ h1 {
     background: var(--light-green);
 }
 
-@media print{
-    header, footer, .no-print {
-        display: none;
-    }
-}
-
 footer {
-    height: 120px;
-    background: linear-gradient(white, 20%, var(--light-blue) , 50%, var(--dark-blue));
+    height: 150px;
+    background: linear-gradient(white, 20%, var(--light-blue), 50%, var(--dark-blue));
     position: relative;
     margin-top: 50px;
 }
 
-footer p{
+footer p {
     position: absolute;
-    bottom: 15px;
+    bottom: 20px;
     left: 50%;
+    width: 100%;
     transform: translateX(-50%);
     text-align: center;
     color: white;
@@ -175,4 +170,68 @@ footer p{
 
 footer a {
     color: white;
+}
+
+@media print {
+
+    header,
+    footer,
+    .no-print {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+
+    header {
+        background: linear-gradient(to right, var(--dark-blue), var(--light-blue));
+        height: 80px;
+
+        grid-template-columns: 80px 1fr 65px;
+    }
+
+    #home {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+
+    h1 {
+        font-size: 50px;
+    }
+
+    #profile {
+        width: 65px;
+        height: 65px;
+
+        top: 8px;
+        right: 8px;
+
+        font-size: 33px;
+    }
+
+    .wrapper {
+        max-width: 770px;
+        margin: 30px auto 0;
+    }
+
+    .btn {
+        max-width: 350px;
+        padding: 10px 25px;
+        text-align: left;
+    }
+
+    footer {
+        height: 120px;
+
+    }
+
+    footer p {
+        left: 50%;
+        width: 415px;
+        transform: translateX(-50%);
+
+    }
 }

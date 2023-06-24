@@ -1,4 +1,4 @@
-import { setLocalStorage, userLogin } from './utils.mjs';
+import { getLocalStorage, setLocalStorage, userLogin } from './utils.mjs';
 
 const uname = document.querySelector('#username');
 const pword = document.querySelector('#password');
@@ -7,6 +7,12 @@ const message = document.querySelector('#message');
 let username = '';
 let email = '';
 let password = '';
+
+const id = getLocalStorage('id');
+
+if (id) {
+    location = '/rdpUtilities/dashboard/';
+}
 
 const login = async () => {
     if (uname.value.includes('@')) {

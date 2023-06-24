@@ -248,10 +248,13 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
 
 export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper) {
     document.title += ` ${date}`;
-    document.querySelector('h1').textContent += ` ${date}`;
 
     const doc = await getDocFunc(date);
     if (doc.length > 0) {
+        let dateLab = document.createElement('h2');
+        dateLab.textContent = `Date: ${date}`;
+        dateLab.className = 'doc-item';
+
         let opening = document.createElement('div');
         opening.id = 'op';
         opening.className = 'doc-item';
@@ -336,6 +339,7 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
         delBtn.className = 'btn btn-red';
         delBtn.id = 'delete';
 
+        wrapper.appendChild(dateLab);
         wrapper.appendChild(opening);
         wrapper.appendChild(sp);
         wrapper.appendChild(train);
@@ -490,7 +494,9 @@ export function renderEditDocPage(meeting, wrapper, method) {
 
         let item = document.createElement('h3');
         item.textContent = 'Item';
-        let itemIn = document.createElement('input');
+        // let itemIn = document.createElement('input');
+        // itemIn.className = 'item';
+        let itemIn = document.createElement('textarea');
         itemIn.className = 'item';
 
         let removeItem = document.createElement('input');
@@ -559,9 +565,9 @@ export async function renderUpdateDocPage(meeting, getDocFunc, updateDocFunc, da
 
         let itemLab = document.createElement('h3');
         itemLab.textContent = 'Item';
-        let itemIn = document.createElement('input');
+        let itemIn = document.createElement('textarea');
         itemIn.className = 'item';
-        itemIn.value = item;
+        itemIn.textContent = item;
 
         let removeItem = document.createElement('input');
         removeItem.type = 'button';
