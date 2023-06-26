@@ -15,6 +15,9 @@ if (id) {
 }
 
 const login = async () => {
+    document.querySelector('#username').classList.add('login');
+    document.querySelector('#password').classList.add('login');
+    document.querySelector('#login').classList.add('login');
     if (uname.value.includes('@')) {
         email = uname.value.toLowerCase();
     } else {
@@ -25,11 +28,13 @@ const login = async () => {
     const res = await userLogin(username, email, password);
     if (res.error) {
         message.textContent = res.error;
+        document.querySelector('#username').classList.remove('login');
+        document.querySelector('#password').classList.remove('login');
+        document.querySelector('#login').classList.remove('login');
         return;
     }
 
     setLocalStorage('id', res.id);
-    
     location = `/rdpUtilities/dashboard`;
 };
 

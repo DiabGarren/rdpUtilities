@@ -21,3 +21,8 @@
     text-align: center;
     width: 100%;
 }
+
+.login, button.login, button.login:hover {
+    background: var(--light-grey);
+    color: black;
+}
