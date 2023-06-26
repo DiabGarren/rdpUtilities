@@ -235,15 +235,15 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
         wcDoc.textContent = `${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
 
         if (docDate.getFullYear() < currDate.getFullYear()) {
-            wcDoc.className = 'btn btn-gray';
+            wcDoc.className = 'btn btn-grey';
         } else if (docDate.getFullYear() > currDate.getFullYear()) {
             wcDoc.className = 'btn btn-blue';
         } else if (docDate.getMonth() < currDate.getMonth()) {
-            wcDoc.className = 'btn btn-gray';
+            wcDoc.className = 'btn btn-grey';
         } else if (docDate.getMonth() > currDate.getMonth()) {
             wcDoc.className = 'btn btn-blue';
         } else if (docDate.getDate() < currDate.getDate()) {
-            wcDoc.className = 'btn btn-gray';
+            wcDoc.className = 'btn btn-grey';
         } else if (docDate.getDate() > currDate.getDate()) {
             wcDoc.className = 'btn btn-blue';
         } else {

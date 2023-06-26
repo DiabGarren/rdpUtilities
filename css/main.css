@@ -10,8 +10,8 @@
     --light-red: #ff9393;
     --dark-green: #028202;
     --light-green: #50f650;
-    --dark-gray: #707070;
-    --light-gray: #cccccc;
+    --dark-grey: #707070;
+    --light-grey: #cccccc;
 }
 
 * {
@@ -142,15 +142,15 @@ h1 {
     background: var(--light-red);
 }
 
-.btn-gray {
-    border: 2px solid var(--dark-gray);
-    background-color: var(--dark-gray);
+.btn-grey {
+    border: 2px solid var(--dark-grey);
+    background-color: var(--dark-grey);
 }
 
-.btn-gray:hover {
-    border: 2px solid var(--dark-gray);
-    color: var(--dark-gray);
-    background: var(--light-gray);
+.btn-grey:hover {
+    border: 2px solid var(--dark-grey);
+    color: var(--dark-grey);
+    background: var(--light-grey);
 }
 
 .btn-green {
