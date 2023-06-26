@@ -225,14 +225,14 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
     let heading = document.createElement('h2');
     heading.textContent = 'Meetings';
     wrapper.appendChild(heading);
-    
+
     const docs = await getAllFunc();
-    
+
     docs.forEach((doc) => {
         const docDate = new Date(doc.date)
         let wcDoc = document.createElement('a');
         wcDoc.href = `/rdpUtilities/${meeting}/?date=${doc.date}`;
-        wcDoc.textContent = doc.date;
+        wcDoc.textContent = `${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
 
         if (docDate.getFullYear() < currDate.getFullYear()) {
             wcDoc.className = 'btn btn-gray';
@@ -249,7 +249,7 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
         } else {
             wcDoc.className = 'btn btn-green';
         }
-        
+
         wrapper.appendChild(wcDoc);
     });
     let createDoc = document.createElement('a');
@@ -274,8 +274,9 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
 
     const doc = await getDocFunc(date);
     if (doc.length > 0) {
+        const docDate = new Date(date);
         let dateLab = document.createElement('h2');
-        dateLab.textContent = `Date: ${date}`;
+        dateLab.textContent = `Date: ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
         dateLab.className = 'doc-item';
 
         let opening = document.createElement('div');
@@ -684,6 +685,7 @@ export async function deleteDoc(meeting, deleteDocFunc, date, wrapper) {
 
 export async function renderPrint(meeting, getDocFunc, date, wrapper) {
     const doc = await getDocFunc(date);
+    const docDate = new Date(date);
 
     let heading = document.createElement('h2');
     heading.innerHTML = 'THE ROODEPOORT STAKE<br>OF<br>THE CHURCH OF JESUS CHRIST OF LATTER-DAY SAINTS';
@@ -693,12 +695,12 @@ export async function renderPrint(meeting, getDocFunc, date, wrapper) {
     if (meeting == 'wardCouncil') {
         subHeading.innerHTML = `Roodepoort Ward<br>
         Ward Coucil Meeting Agenda<br>
-        7:00pm ${date}<br>
+        7:00pm ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}<br>
         Attendees: Bishopric, Elders Quorum, Relief Society, Young Woman, Primary`;
     } else if (meeting == 'bishopric') {
         subHeading.innerHTML = `Roodepoort Ward<br>
         Bishopric Meeting Agenda<br>
-        8:00am ${date}`;
+        8:00am ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
     }
     subHeading.classList = 'print-subheading print-center print-font';
 
