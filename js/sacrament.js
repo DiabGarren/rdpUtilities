@@ -1,7 +1,10 @@
 import {
+    getAllSacramentDocs,
     getLocalStorage,
     getParam,
     getUserData,
+    renderBasepage,
+    renderSacrament,
     setTitle
 } from './utils.mjs';
 
@@ -14,6 +17,7 @@ let date = getParam('date');
 const newDoc = getParam('new');
 const update = getParam('update');
 
+const meeting = 'sacrament';
 const wrapper = document.querySelector('.wrapper');
 
 if (!id) {
@@ -25,11 +29,11 @@ if (userData.level < 3) {
 }
 
 if (!date && !update && !newDoc) {
-
+    await renderBasepage(meeting, userData, getAllSacramentDocs, wrapper);
 }
 
 if (date && !update && !newDoc) {
-
+    await renderSacrament(userData, getAllSacramentDocs, date, wrapper);
 }
 
 if (newDoc && !update) {

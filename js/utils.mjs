@@ -25,7 +25,7 @@ export function getLocalStorage(key) {
 export function getCurrentDate() {
     const date = new Date();
     return date;
-}
+};
 
 export async function userLogin(username, email, password) {
     const res = await fetch(`${baseUrl}users/login`, {
@@ -43,7 +43,7 @@ export async function userLogin(username, email, password) {
 
     const data = await res.json();
     return data;
-}
+};
 
 export async function newUser(firstName, lastName, username, email, password) {
     const res = await fetch(`${baseUrl}users`, {
@@ -85,7 +85,7 @@ export async function updateUserData(userId, firstName, lastName, username, emai
 
     const data = await res;
     return data;
-}
+};
 
 export async function getAllWardCouncilDocs() {
     const res = await fetch(`${baseUrl}wardCouncil`);
@@ -140,7 +140,7 @@ export async function updateWardCouncilDoc(date, opening, st, train, agenda, clo
 
     const data = await res.json();
     return data;
-}
+};
 
 export async function deleteWardCouncilDoc(date) {
     const res = await fetch(`${baseUrl}wardCouncil/${date}`, {
@@ -149,7 +149,7 @@ export async function deleteWardCouncilDoc(date) {
 
     const data = res;
     return data;
-}
+};
 
 export async function getAllBishopricDocs() {
     const res = await fetch(`${baseUrl}bishopric`);
@@ -204,7 +204,7 @@ export async function updateBishopricDoc(date, opening, st, train, agenda, closi
 
     const data = await res.json();
     return data;
-}
+};
 
 export async function deleteBishopricDoc(date) {
     const res = await fetch(`${baseUrl}bishopric/${date}`, {
@@ -213,12 +213,94 @@ export async function deleteBishopricDoc(date) {
 
     const data = res;
     return data;
-}
+};
+
+
+export async function getAllSacramentDocs() {
+    const res = await fetch(`${baseUrl}sacrament`);
+    const data = await res.json();
+    return data;
+};
+
+export async function getSacramentDoc(date) {
+    const res = await fetch(`${baseUrl}sacrament/${date}`);
+    const data = await res.json();
+    return data;
+};
+
+export async function createSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, intermediateHymn, closingHymn, releases, sustainings, other, firstSpeaker, secondSpeaker, finalSpeaker, closingPrayer) {
+    const res = await fetch(`${baseUrl}sacrament`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'date': date,
+            'conducting': conducting,
+            'announcements': announcements,
+            'openingPrayer': openingPrayer,
+            'openingHymn': openingHymn,
+            'sacramentHymn': sacramentHymn,
+            'intermediateHymn': intermediateHymn,
+            'closingHymn': closingHymn,
+            'releases': releases,
+            'sustainings': sustainings,
+            'other': other,
+            'firstSpeaker': firstSpeaker,
+            'secondSpeaker': secondSpeaker,
+            'finalSpeaker': finalSpeaker,
+            'closingPrayer': closingPrayer
+        })
+    });
+
+    const data = await res.json();
+    return data;
+};
+
+export async function updateSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, intermediateHymn, closingHymn, releases, sustainings, other, firstSpeaker, secondSpeaker, finalSpeaker, closingPrayer) {
+    const res = await fetch(`${baseUrl}sacrament/${date}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'date': date,
+            'conducting': conducting,
+            'announcements': announcements,
+            'openingPrayer': openingPrayer,
+            'openingHymn': openingHymn,
+            'sacramentHymn': sacramentHymn,
+            'intermediateHymn': intermediateHymn,
+            'closingHymn': closingHymn,
+            'releases': releases,
+            'sustainings': sustainings,
+            'other': other,
+            'firstSpeaker': firstSpeaker,
+            'secondSpeaker': secondSpeaker,
+            'finalSpeaker': finalSpeaker,
+            'closingPrayer': closingPrayer
+        })
+    });
+
+    const data = await res.json();
+    return data;
+};
+
+export async function deleteSacramentDoc(date) {
+    const res = await fetch(`${baseUrl}sacrament/${date}`, {
+        method: 'DELETE'
+    });
+
+    const data = res;
+    return data;
+};
 
 export function setTitle(firstName, lastName) {
     document.title += ` ${firstName} ${lastName}`;
     document.querySelector('#profile').textContent = `${firstName[0]}${lastName[0]}`;
-}
+};
 
 export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
     const currDate = getCurrentDate();
@@ -267,7 +349,7 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
     }
 
     wrapper.appendChild(back);
-}
+};
 
 export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper) {
     document.title += ` ${date}`;
@@ -275,56 +357,51 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
     const doc = await getDocFunc(date);
     if (doc.length > 0) {
         const docDate = new Date(date);
-        let dateLab = document.createElement('h2');
-        dateLab.textContent = `Date: ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
-        dateLab.className = 'doc-item';
 
-        let opening = document.createElement('div');
-        opening.id = 'op';
-        opening.className = 'doc-item';
+        let heading = document.createElement('h2');
+        heading.innerHTML = 'THE ROODEPOORT STAKE<br>OF<br>THE CHURCH OF JESUS CHRIST OF LATTER-DAY SAINTS';
 
-        let openingLab = document.createElement('h2');
-        openingLab.textContent = 'Opening Prayer';
 
-        let openingTxt = document.createElement('p');
-        openingTxt.textContent = doc[0].openingPrayer;
-        openingTxt.id = 'openingTxt';
+        let subHeading = document.createElement('h3');
+        if (meeting == 'wardCouncil') {
+            subHeading.innerHTML = `Roodepoort Ward<br>
+        Ward Coucil Meeting Agenda<br>
+        7:00pm ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}<br>
+        Attendees: Bishopric, Elders Quorum, Relief Society, Young Woman, Primary`;
+        } else if (meeting == 'bishopric') {
+            subHeading.innerHTML = `Roodepoort Ward<br>
+        Bishopric Meeting Agenda<br>
+        8:00am ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
+        }
+        
+        let openCon = document.createElement('div');
+        let openLab = document.createElement('h2');
+        openLab.textContent = 'Opening Prayer';
+        let openTxt = document.createElement('p');
+        openTxt.textContent = doc[0].openingPrayer;
 
-        opening.appendChild(openingLab);
-        opening.appendChild(openingTxt);
+        openCon.appendChild(openLab);
+        openCon.appendChild(openTxt);
 
-        let sp = document.createElement('div');
-        sp.id = 'sp';
-        sp.className = 'doc-item';
-
+        let spCon = document.createElement('div');
         let spLab = document.createElement('h2');
         spLab.textContent = 'Spiritual Thought';
-
         let spTxt = document.createElement('p');
         spTxt.textContent = doc[0].spiritualThought;
-        spTxt.id = 'spTxt';
 
-        sp.appendChild(spLab);
-        sp.appendChild(spTxt);
+        spCon.appendChild(spLab);
+        spCon.appendChild(spTxt);
 
-        let train = document.createElement('div');
-        train.id = 'train';
-        train.className = 'doc-item';
-
+        let trainCon = document.createElement('div');
         let trainLab = document.createElement('h2');
         trainLab.textContent = 'Handbook Training';
-
         let trainTxt = document.createElement('p');
         trainTxt.textContent = doc[0].training;
-        trainTxt.id = 'trainTxt';
 
-        train.appendChild(trainLab);
-        train.appendChild(trainTxt);
+        trainCon.appendChild(trainLab);
+        trainCon.appendChild(trainTxt);
 
-        let agenda = document.createElement('div');
-        agenda.id = 'agenda';
-        agenda.className = 'doc-item';
-
+        let agendaCon = document.createElement('div');
         let agendaLab = document.createElement('h2');
         agendaLab.textContent = 'Agenda';
 
@@ -336,65 +413,65 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
             agendaList.appendChild(agendaItem);
         });
 
-        agenda.appendChild(agendaLab);
-        agenda.appendChild(agendaList);
+        agendaCon.appendChild(agendaLab);
+        agendaCon.appendChild(agendaList);
 
-        let closing = document.createElement('div');
-        closing.id = 'cp';
-        closing.className = 'doc-item';
-
+        let closeCon = document.createElement('div');
         let closingLab = document.createElement('h2');
         closingLab.textContent = 'Closing Prayer';
-
         let closingTxt = document.createElement('p');
         closingTxt.textContent = doc[0].closingPrayer;
-        closingTxt.id = 'closingTxt';
 
-        closing.appendChild(closingLab);
-        closing.appendChild(closingTxt);
+        closeCon.appendChild(closingLab);
+        closeCon.appendChild(closingTxt);
+
+        wrapper.appendChild(heading);
+        wrapper.appendChild(subHeading);
+        wrapper.appendChild(openCon);
+        wrapper.appendChild(spCon);
+        wrapper.appendChild(trainCon);
+        wrapper.appendChild(agendaCon);
+        wrapper.appendChild(closeCon);
 
         let updateBtn = document.createElement('a');
         updateBtn.href = `/rdpUtilities/${meeting}/?date=${date}&update=true`;
         updateBtn.textContent = 'Update document';
-        updateBtn.className = 'btn btn-green';
+        updateBtn.className = 'btn btn-green no-print';
 
         let delBtn = document.createElement('button');
         delBtn.textContent = 'Delete document';
-        delBtn.className = 'btn btn-red';
+        delBtn.className = 'btn btn-red no-print';
         delBtn.id = 'delete';
 
-        wrapper.appendChild(dateLab);
-        wrapper.appendChild(opening);
-        wrapper.appendChild(sp);
-        wrapper.appendChild(train);
-        wrapper.appendChild(agenda);
-        wrapper.appendChild(closing);
-
-        if (userData.level >= 3) {
-            wrapper.appendChild(updateBtn);
+        
+        let printBtn = document.createElement('button');
+        printBtn.textContent = 'Print';
+        printBtn.className = 'btn btn-blue no-print';
+        printBtn.onclick = () => {
+            window.print();
+        };
+        
+        wrapper.appendChild(updateBtn);
+        
+        if (userData.level >= 4) {
             wrapper.appendChild(delBtn);
         }
-
-        let printBtn = document.createElement('a');
-        printBtn.href = `/rdpUtilities/print/?type=${meeting}&date=${date}`;
-        printBtn.textContent = 'Print';
-        printBtn.className = 'btn btn-blue';
         wrapper.appendChild(printBtn);
-
+        
     } else {
         let error = document.createElement('h2');
         error.textContent = 'Cannot find document';
-
+        
         wrapper.appendChild(error);
     }
-
+    
     let back = document.createElement('a');
     back.href = `/rdpUtilities/${meeting}/`;
     back.textContent = 'Back';
-    back.className = 'btn btn-blue';
+    back.className = 'btn btn-blue no-print';
 
     wrapper.appendChild(back);
-}
+};
 
 export function renderEditDocPage(meeting, wrapper, method) {
     let warn = document.createElement('h3');
@@ -539,7 +616,7 @@ export function renderEditDocPage(meeting, wrapper, method) {
         });
 
     });
-}
+};
 
 export async function renderNewDocPage(meeting, createDocFunc, wrapper, method) {
     renderEditDocPage(meeting, wrapper, method);
@@ -572,7 +649,7 @@ export async function renderNewDocPage(meeting, createDocFunc, wrapper, method) 
             document.querySelector('#message').textContent = 'Please select a date';
         }
     });
-}
+};
 
 export async function renderUpdateDocPage(meeting, getDocFunc, updateDocFunc, date, wrapper, method) {
     renderEditDocPage(meeting, wrapper, method);
@@ -639,7 +716,7 @@ export async function renderUpdateDocPage(meeting, getDocFunc, updateDocFunc, da
             }
         });
     });
-}
+};
 
 export async function deleteDoc(meeting, deleteDocFunc, date, wrapper) {
     document.querySelector('#delete').addEventListener('click', async () => {
@@ -681,78 +758,237 @@ export async function deleteDoc(meeting, deleteDocFunc, date, wrapper) {
             wrapper.removeChild(deleteDoc);
         }
     });
-}
+};
 
-export async function renderPrint(meeting, getDocFunc, date, wrapper) {
+export async function renderSacrament(userData, getDocFunc, date, wrapper) {
+    document.title += ` ${date}`;
+
     const doc = await getDocFunc(date);
-    const docDate = new Date(date);
+    if (doc.length > 0) {
+        console.log(doc);
+        const docDate = new Date(date);
 
-    let heading = document.createElement('h2');
-    heading.innerHTML = 'THE ROODEPOORT STAKE<br>OF<br>THE CHURCH OF JESUS CHRIST OF LATTER-DAY SAINTS';
-    heading.className = 'print-heading print-center print-font';
+        let heading = document.createElement('h2');
+        heading.textContent = 'Roodepoort Ward Sacrament Meeting - Agenda';
 
-    let subHeading = document.createElement('h3');
-    if (meeting == 'wardCouncil') {
-        subHeading.innerHTML = `Roodepoort Ward<br>
-        Ward Coucil Meeting Agenda<br>
-        7:00pm ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}<br>
-        Attendees: Bishopric, Elders Quorum, Relief Society, Young Woman, Primary`;
-    } else if (meeting == 'bishopric') {
-        subHeading.innerHTML = `Roodepoort Ward<br>
-        Bishopric Meeting Agenda<br>
-        8:00am ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
+        let conductCon = document.createElement('div');
+        let conductLab = document.createElement('h2');
+        conductLab.textContent = 'Conducting:';
+        let conductTxt = document.createElement('p');
+        conductTxt.textContent = doc[0].conducting;
+
+        conductCon.appendChild(conductLab);
+        conductCon.appendChild(conductTxt);
+
+        let dateCon = document.createElement('div');
+        let dateLab = document.createElement('h2');
+        dateLab.textContent = 'Date:';
+        let dateTxt = document.createElement('p');
+        dateTxt.textContent = `${docDate.getDate()} ${docDate.toLocaleDateString('default', { month: 'long' })} ${docDate.getFullYear()}`;
+
+        dateCon.appendChild(dateLab);
+        dateCon.appendChild(dateTxt);
+
+        let presiding = document.createElement('h2');
+        presiding.textContent = 'Presiding: ';
+
+        let greeting = document.createElement('h2');
+        greeting.textContent = 'Greeting and Welcome (new members and visitors)';
+
+        let authority = document.createElement('h2');
+        authority.textContent = 'Acknowledge Visiting Authorities:';
+
+        let announceCon = document.createElement('div');
+        let announceLab = document.createElement('h2');
+        announceLab.textContent = 'Announcements:';
+        announceCon.appendChild(announceLab);
+        doc[0].announcements.forEach((item) => {
+            let announceTxt = document.createElement('p');
+            announceTxt.textContent = item;
+
+            announceCon.appendChild(announceTxt);
+        });
+
+        let openHymnCon = document.createElement('div');
+        let openHymnLab = document.createElement('h2');
+        openHymnLab.textContent = 'Opening Hymn:';
+        let openHymnTxt = document.createElement('p');
+        openHymnTxt.textContent = doc[0].hymns.openingHymn;
+
+        openHymnCon.appendChild(openHymnLab);
+        openHymnCon.appendChild(openHymnTxt);
+
+        let openPrayerCon = document.createElement('div');
+        let openPrayerlab = document.createElement('h2');
+        openPrayerlab.textContent = 'Invocation';
+        let openPrayerTxt = document.createElement('p');
+        openPrayerTxt.textContent = doc[0].openingPrayer;
+
+        openPrayerCon.appendChild(openPrayerlab);
+        openPrayerCon.appendChild(openPrayerTxt);
+
+        let businessCon = document.createElement('div');
+        let businessLab = document.createElement('h2');
+        businessLab.textContent = 'Ward Business';
+        let businessName = document.createElement('h2');
+        businessName.textContent = 'Name';
+
+        businessCon.appendChild(businessLab);
+        businessCon.appendChild(businessName);
+
+        let releaseCon = document.createElement('div');
+        let releaseInfo = document.createElement('div');
+
+        let releaseLab = document.createElement('h2');
+        releaseLab.textContent = 'Releases:';
+        let releaseExp = document.createElement('p');
+        releaseExp.innerHTML = `"We have released [name] as [position] and propse that he/she be given a vote of thanks for his/her service. All those who wish to wxpress their appreciation may do so by raising the right hand"<br>
+        Or<br>
+        "We have released the following individuals: [list names and positions]. We propose that they may be given a vote of thanks for their service. All those that wish to express their appreciation may do so by raising the right hand."`;
+        releaseInfo.appendChild(releaseLab);
+        releaseInfo.appendChild(releaseExp);
+
+        let releaseList = document.createElement('ul');
+        doc[0].wardBusiness.releases.forEach((item) => {
+            let releaseTxt = document.createElement('li');
+            releaseTxt.textContent = item;
+            releaseList.appendChild(releaseTxt);
+        });
+        releaseCon.appendChild(releaseInfo);
+        releaseCon.appendChild(releaseList);
+
+        let sustainCon = document.createElement('div');
+        let sustainInfo = document.createElement('div');
+
+        let sustainLab = document.createElement('h2');
+        sustainLab.textContent = 'Sustainings:';
+        let sustainExp = document.createElement('p');
+        sustainExp.innerHTML = `(Members should be asked to please stand and remain standing as their names and positions are presented to the congregation.)<br>
+        "We have called [name] as [position] and propose that he/she be sustained..."<br>
+        or<br>
+        "We have called the following individuals: [list names and positions]. We propose that they be sustained."`;
+        sustainInfo.appendChild(sustainLab);
+        sustainInfo.appendChild(sustainExp);
+
+        let sustainList = document.createElement('ul');
+        doc[0].wardBusiness.sustainings.forEach((item) => {
+            let sustainTxt = document.createElement('li');
+            sustainTxt.textContent = item;
+            sustainList.appendChild(sustainTxt);
+        });
+        sustainCon.appendChild(sustainInfo);
+        sustainCon.appendChild(sustainList);
+
+        let otherCon = document.createElement('div');
+        let otherInfo = document.createElement('div');
+
+        let otherLab = document.createElement('h2');
+        otherLab.textContent = 'Other:';
+        let otherExp = document.createElement('p');
+        otherExp.textContent = '(baby blessings/confirmations)';
+
+        otherInfo.appendChild(otherLab);
+        otherInfo.appendChild(otherExp);
+
+        let otherList = document.createElement('ul');
+        doc[0].wardBusiness.other.forEach((item) => {
+            let otherTxt = document.createElement('p');
+            otherTxt.textContent = item;
+            otherList.appendChild(otherTxt);
+        });
+
+        otherCon.appendChild(otherInfo);
+        otherCon.appendChild(otherList);
+
+        let sacHymnCon = document.createElement('div');
+        let sacHymnLab = document.createElement('h2');
+        sacHymnLab.textContent = 'Sacrament Hymn:';
+        let sacHymnTxt = document.createElement('p');
+        sacHymnTxt.textContent = doc[0].hymns.sacramentHymn;
+
+        sacHymnCon.appendChild(sacHymnLab);
+        sacHymnCon.appendChild(sacHymnTxt);
+
+        let sacProgCon = document.createElement('div');
+        let sacProgLab = document.createElement('h2');
+        sacProgLab.textContent = 'Sacrament Program';
+        let firstSpeakLab = document.createElement('h2');
+        firstSpeakLab.textContent = '1st Speaker:';
+        let firstSpeakTxt = document.createElement('p');
+        firstSpeakTxt.textContent = doc[0].program.firstSpeaker;
+        let secSpeakLab = document.createElement('h2');
+        secSpeakLab.textContent = '2nd Speaker:';
+        let secSpeakTxt = document.createElement('p');
+        secSpeakTxt.textContent = doc[0].program.secondSpeaker;
+        let interHymnLab = document.createElement('h2');
+        interHymnLab.textContent = 'Intermediate Hymn:';
+        let interHymnTxt = document.createElement('p');
+        interHymnTxt.textContent = doc[0].hymns.intermediateHymn;
+        let finSpeakLab = document.createElement('h2');
+        finSpeakLab.textContent = '3rd Speaker:';
+        let finSpeakTxt = document.createElement('p');
+        finSpeakTxt.textContent = doc[0].program.finalSpeaker;
+
+        sacProgCon.appendChild(sacProgLab);
+        sacProgCon.appendChild(firstSpeakLab);
+        sacProgCon.appendChild(firstSpeakTxt);
+        sacProgCon.appendChild(secSpeakLab);
+        sacProgCon.appendChild(secSpeakTxt);
+        sacProgCon.appendChild(interHymnLab);
+        sacProgCon.appendChild(interHymnTxt);
+        sacProgCon.appendChild(finSpeakLab);
+        sacProgCon.appendChild(finSpeakTxt);
+
+        let closeHymnCon = document.createElement('div');
+        let closeHymnLab = document.createElement('h2');
+        closeHymnLab.textContent = 'Closing Hymn:';
+        let closeHymnTxt = document.createElement('p');
+        closeHymnTxt.textContent = doc[0].hymns.closingHymn;
+
+        closeHymnCon.appendChild(closeHymnLab);
+        closeHymnCon.appendChild(closeHymnTxt);
+
+        let closePrayerCon = document.createElement('div');
+        let closePrayerLab = document.createElement('h2');
+        closePrayerLab.textContent = 'Benediction:';
+        let closePrayerTxt = document.createElement('p');
+        closePrayerTxt.textContent = doc[0].closingPrayer;
+
+        closePrayerCon.appendChild(closePrayerLab);
+        closePrayerCon.appendChild(closePrayerTxt);
+
+        wrapper.appendChild(heading);
+        wrapper.appendChild(conductCon);
+        wrapper.appendChild(dateCon);
+        wrapper.appendChild(presiding);
+        wrapper.appendChild(greeting);
+        wrapper.appendChild(authority);
+        wrapper.appendChild(announceCon);
+        wrapper.appendChild(openHymnCon);
+        wrapper.appendChild(openPrayerCon);
+        wrapper.appendChild(businessCon);
+        wrapper.appendChild(releaseCon);
+        wrapper.appendChild(sustainCon);
+        wrapper.appendChild(otherCon);
+        wrapper.appendChild(sacHymnCon);
+        wrapper.appendChild(sacProgCon);
+        wrapper.appendChild(closeHymnCon);
+        wrapper.appendChild(closePrayerCon);
+
+
+        let print = document.createElement('button');
+        print.textContent = 'Print';
+        print.className = 'btn btn-blue no-print';
+        print.onclick = () => {
+            window.print()
+        };
+
+        let back = document.createElement('a');
+        back.href = `/rdpUtilities/sacrament/`;
+        back.textContent = 'Back';
+        back.className = 'btn btn-blue no-print';
+
+        wrapper.appendChild(print);
+        wrapper.appendChild(back);
     }
-    subHeading.classList = 'print-subheading print-center print-font';
-
-    let opening = document.createElement('p');
-    opening.textContent = `Opening Prayer: ${doc[0].openingPrayer}`;
-    opening.className = 'print-item print-font';
-
-    let spirit = document.createElement('p');
-    spirit.textContent = `Spiritual Thought: ${doc[0].spiritualThought}`;
-    spirit.className = 'print-item print-font';
-
-    let training = document.createElement('p');
-    training.textContent = `Handbook Training: ${doc[0].training}`;
-    training.className = 'print-item print-font';
-
-    let agenda = document.createElement('p');
-    agenda.textContent = 'Agenda:';
-    let agendaList = document.createElement('ul');
-    doc[0].agenda.forEach((item) => {
-        let agendaItem = document.createElement('li');
-        agendaItem.textContent = item;
-        agendaItem.className = 'print-list print-font';
-        agendaList.appendChild(agendaItem);
-    });
-
-    let closing = document.createElement('p');
-    closing.innerHTML = `Closing Prayer: ${doc[0].closingPrayer}`;
-    closing.className = 'print-item print-font';
-
-    wrapper.appendChild(heading);
-    wrapper.appendChild(subHeading);
-    wrapper.appendChild(opening);
-    wrapper.appendChild(spirit);
-    wrapper.appendChild(training);
-    wrapper.appendChild(agenda);
-    wrapper.appendChild(agendaList);
-    wrapper.appendChild(closing);
-
-
-    let print = document.createElement('button');
-    print.textContent = 'Print';
-    print.className = 'btn btn-blue no-print';
-    print.onclick = () => {
-        window.print();
-    }
-
-
-    let back = document.createElement('a');
-    back.href = `/rdpUtilities/${meeting}/?date=${date}`;
-    back.textContent = 'Back';
-    back.className = 'btn btn-blue no-print'
-
-    wrapper.appendChild(print);
-    wrapper.appendChild(back);
-}
+};
