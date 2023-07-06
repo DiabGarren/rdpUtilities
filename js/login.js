@@ -18,6 +18,13 @@ const login = async () => {
     document.querySelector('#username').classList.add('login');
     document.querySelector('#password').classList.add('login');
     document.querySelector('#login').classList.add('login');
+
+    let load = document.createElement('img');
+    load.className = 'load';
+    load.src = '/rdpUtilities/images/load.svg';
+    load.alt = 'loading symbol';
+    document.querySelector('.login-wrapper').appendChild(load);
+
     if (uname.value.includes('@')) {
         email = uname.value.toLowerCase();
     } else {
@@ -31,6 +38,7 @@ const login = async () => {
         document.querySelector('#username').classList.remove('login');
         document.querySelector('#password').classList.remove('login');
         document.querySelector('#login').classList.remove('login');
+    document.querySelector('.login-wrapper').removeChild(load);
         return;
     }
 

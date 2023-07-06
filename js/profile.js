@@ -7,6 +7,7 @@ setTitle(userData.firstName, userData.lastName);
 
 const update = getParam('update');
 const wrapper = document.querySelector('.wrapper');
+document.querySelector('.load').remove();
 
 if (!id) {
     location = '/rdpUtilities';

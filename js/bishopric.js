@@ -26,6 +26,7 @@ const update = getParam('update');
 
 const meeting = 'bishopric'
 const wrapper = document.querySelector('.wrapper');
+document.querySelector('.load').remove();
 
 if (!id) {
     location = '/rdpUtilities/';

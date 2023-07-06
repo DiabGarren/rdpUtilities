@@ -185,6 +185,20 @@ footer a {
     color: white;
 }
 
+.load {
+    animation: load 2s linear infinite;
+}
+
+@keyframes load {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 @media print {
 
     header,

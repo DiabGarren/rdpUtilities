@@ -19,6 +19,7 @@ const update = getParam('update');
 
 const meeting = 'sacrament';
 const wrapper = document.querySelector('.wrapper');
+document.querySelector('.load').remove();
 
 if (!id) {
     location = '/rdpUtilities/';

@@ -10,7 +10,8 @@ if (!id) {
     document.title += ` ${userData.firstName} ${userData.lastName}`;
     document.querySelector('#profile').textContent = `${userData.firstName[0]}${userData.lastName[0]}`;
     const wrapper = document.querySelector('.wrapper');
-
+    document.querySelector('.load').remove();
+    
     if (userData.level == 1) {
         let blank = document.createElement('p');
         blank.textContent = 'There aren\'t any meetings you need to attend.';
