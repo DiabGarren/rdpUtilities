@@ -360,7 +360,7 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
 
         let heading = document.createElement('h2');
         heading.innerHTML = 'THE ROODEPOORT STAKE<br>OF<br>THE CHURCH OF JESUS CHRIST OF LATTER-DAY SAINTS';
-
+        heading.className = 'print-heading print-center print-font';
 
         let subHeading = document.createElement('h3');
         if (meeting == 'wardCouncil') {
@@ -373,37 +373,42 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
         Bishopric Meeting Agenda<br>
         8:00am ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
         }
+        subHeading.className = 'print-subheading print-center print-font';
+        
         
         let openCon = document.createElement('div');
         let openLab = document.createElement('h2');
-        openLab.textContent = 'Opening Prayer';
+        openLab.textContent = 'Opening Prayer:';
         let openTxt = document.createElement('p');
         openTxt.textContent = doc[0].openingPrayer;
 
         openCon.appendChild(openLab);
         openCon.appendChild(openTxt);
+        openCon.className = 'print-item print-font';
 
         let spCon = document.createElement('div');
         let spLab = document.createElement('h2');
-        spLab.textContent = 'Spiritual Thought';
+        spLab.textContent = 'Spiritual Thought:';
         let spTxt = document.createElement('p');
         spTxt.textContent = doc[0].spiritualThought;
 
         spCon.appendChild(spLab);
         spCon.appendChild(spTxt);
+        spCon.className = 'print-item print-font';
 
         let trainCon = document.createElement('div');
         let trainLab = document.createElement('h2');
-        trainLab.textContent = 'Handbook Training';
+        trainLab.textContent = 'Handbook Training:';
         let trainTxt = document.createElement('p');
         trainTxt.textContent = doc[0].training;
 
         trainCon.appendChild(trainLab);
         trainCon.appendChild(trainTxt);
+        trainCon.className = 'print-item print-font';
 
         let agendaCon = document.createElement('div');
         let agendaLab = document.createElement('h2');
-        agendaLab.textContent = 'Agenda';
+        agendaLab.textContent = 'Agenda:';
 
         let agendaList = document.createElement('ul');
         agendaList.id = 'agendaList';
@@ -415,15 +420,17 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
 
         agendaCon.appendChild(agendaLab);
         agendaCon.appendChild(agendaList);
+        agendaCon.className = 'print-list print-font';
 
         let closeCon = document.createElement('div');
         let closingLab = document.createElement('h2');
-        closingLab.textContent = 'Closing Prayer';
+        closingLab.textContent = 'Closing Prayer:';
         let closingTxt = document.createElement('p');
         closingTxt.textContent = doc[0].closingPrayer;
 
         closeCon.appendChild(closingLab);
         closeCon.appendChild(closingTxt);
+        closeCon.className = 'print-item print-font';
 
         wrapper.appendChild(heading);
         wrapper.appendChild(subHeading);
