@@ -228,7 +228,7 @@ export async function getSacramentDoc(date) {
     return data;
 };
 
-export async function createSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, intermediateHymn, closingHymn, releases, sustainings, other, firstSpeaker, secondSpeaker, finalSpeaker, closingPrayer) {
+export async function createSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer) {
     const res = await fetch(`${baseUrl}sacrament`, {
         method: 'POST',
         headers: {
@@ -242,14 +242,11 @@ export async function createSacramentDoc(date, conducting, announcements, openin
             'openingPrayer': openingPrayer,
             'openingHymn': openingHymn,
             'sacramentHymn': sacramentHymn,
-            'intermediateHymn': intermediateHymn,
             'closingHymn': closingHymn,
             'releases': releases,
             'sustainings': sustainings,
             'other': other,
-            'firstSpeaker': firstSpeaker,
-            'secondSpeaker': secondSpeaker,
-            'finalSpeaker': finalSpeaker,
+            'program': program,
             'closingPrayer': closingPrayer
         })
     });
@@ -258,7 +255,7 @@ export async function createSacramentDoc(date, conducting, announcements, openin
     return data;
 };
 
-export async function updateSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, intermediateHymn, closingHymn, releases, sustainings, other, firstSpeaker, secondSpeaker, finalSpeaker, closingPrayer) {
+export async function updateSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer) {
     const res = await fetch(`${baseUrl}sacrament/${date}`, {
         method: 'PUT',
         headers: {
@@ -272,14 +269,11 @@ export async function updateSacramentDoc(date, conducting, announcements, openin
             'openingPrayer': openingPrayer,
             'openingHymn': openingHymn,
             'sacramentHymn': sacramentHymn,
-            'intermediateHymn': intermediateHymn,
             'closingHymn': closingHymn,
             'releases': releases,
             'sustainings': sustainings,
             'other': other,
-            'firstSpeaker': firstSpeaker,
-            'secondSpeaker': secondSpeaker,
-            'finalSpeaker': finalSpeaker,
+            'program': program,
             'closingPrayer': closingPrayer
         })
     });
@@ -777,8 +771,14 @@ export async function renderSacrament(userData, getDocFunc, date, wrapper) {
 
         let heading = document.createElement('h2');
         heading.textContent = 'Roodepoort Ward Sacrament Meeting - Agenda';
+        heading.className = 'sac-heading print-font';
+
+        let topCon = document.createElement('div');
+        topCon.className = 'sac-top';
+
 
         let conductCon = document.createElement('div');
+        conductCon.className = 'sac-item print-font';
         let conductLab = document.createElement('h2');
         conductLab.textContent = 'Conducting:';
         let conductTxt = document.createElement('p');
@@ -788,35 +788,62 @@ export async function renderSacrament(userData, getDocFunc, date, wrapper) {
         conductCon.appendChild(conductTxt);
 
         let dateCon = document.createElement('div');
+        dateCon.className = 'sac-item print-font';
         let dateLab = document.createElement('h2');
         dateLab.textContent = 'Date:';
+        
         let dateTxt = document.createElement('p');
         dateTxt.textContent = `${docDate.getDate()} ${docDate.toLocaleDateString('default', { month: 'long' })} ${docDate.getFullYear()}`;
 
         dateCon.appendChild(dateLab);
         dateCon.appendChild(dateTxt);
 
-        let presiding = document.createElement('h2');
-        presiding.textContent = 'Presiding: ';
+        topCon.appendChild(conductCon);
+        topCon.appendChild(dateCon);
 
-        let greeting = document.createElement('h2');
-        greeting.textContent = 'Greeting and Welcome (new members and visitors)';
+        let presidingCon = document.createElement('div');
+        presidingCon.className = 'sac-item print-font';
+        let presidingLab = document.createElement('h2')
+        presidingLab.textContent = 'Presiding:';
 
-        let authority = document.createElement('h2');
-        authority.textContent = 'Acknowledge Visiting Authorities:';
+        presidingCon.appendChild(presidingLab);
+
+        let greetingCon = document.createElement('div');
+        greetingCon.className = 'sac-item print-font';
+        let greetingLab = document.createElement('p')
+        greetingLab.textContent = 'Greeting and Welcome (new members and visitors)';
+
+        greetingCon.appendChild(greetingLab);
+
+
+        let authorityCon = document.createElement('div');
+        authorityCon.className = 'sac-item print-font';
+        let authorityLab = document.createElement('h2')
+        authorityLab.textContent = 'Acknowledge Visiting Authorities:';
+
+        authorityCon.appendChild(authorityLab);
 
         let announceCon = document.createElement('div');
+        announceCon.className = 'sac-list print-font';
         let announceLab = document.createElement('h2');
         announceLab.textContent = 'Announcements:';
-        announceCon.appendChild(announceLab);
+        
+        let announceList = document.createElement('ul');
         doc[0].announcements.forEach((item) => {
-            let announceTxt = document.createElement('p');
-            announceTxt.textContent = item;
-
-            announceCon.appendChild(announceTxt);
+            let announceItem = document.createElement('li');
+            announceItem.textContent = item;
+            announceList.appendChild(announceItem);
+            
         });
 
+        announceCon.appendChild(announceLab);
+        announceCon.appendChild(announceList);
+
+        let openCon = document.createElement('div');
+        openCon.className = 'sac-bus';
+        
         let openHymnCon = document.createElement('div');
+        openHymnCon.className = 'sac-item print-font';
         let openHymnLab = document.createElement('h2');
         openHymnLab.textContent = 'Opening Hymn:';
         let openHymnTxt = document.createElement('p');
@@ -826,22 +853,35 @@ export async function renderSacrament(userData, getDocFunc, date, wrapper) {
         openHymnCon.appendChild(openHymnTxt);
 
         let openPrayerCon = document.createElement('div');
+        openPrayerCon.className = 'sac-item print-font';
         let openPrayerlab = document.createElement('h2');
-        openPrayerlab.textContent = 'Invocation';
+        openPrayerlab.textContent = 'Invocation:';
         let openPrayerTxt = document.createElement('p');
         openPrayerTxt.textContent = doc[0].openingPrayer;
 
         openPrayerCon.appendChild(openPrayerlab);
         openPrayerCon.appendChild(openPrayerTxt);
 
-        let businessCon = document.createElement('div');
+        openCon.appendChild(openHymnCon);
+        openCon.appendChild(openPrayerCon);
+
+        let wardBus = document.createElement('div');
+        wardBus.className = 'sac-bus';
+        let businessLabCon = document.createElement('div');
+        businessLabCon.className = 'sac-item print-font';
         let businessLab = document.createElement('h2');
         businessLab.textContent = 'Ward Business';
+        businessLabCon.appendChild(businessLab);
+
+        let businessNameCon = document.createElement('div');
+        businessNameCon.className = 'sac-item print-font';
         let businessName = document.createElement('h2');
         businessName.textContent = 'Name';
 
-        businessCon.appendChild(businessLab);
-        businessCon.appendChild(businessName);
+        businessNameCon.appendChild(businessName);
+
+        wardBus.appendChild(businessLabCon);
+        wardBus.appendChild(businessNameCon);
 
         let releaseCon = document.createElement('div');
         let releaseInfo = document.createElement('div');
@@ -919,32 +959,18 @@ export async function renderSacrament(userData, getDocFunc, date, wrapper) {
         let sacProgCon = document.createElement('div');
         let sacProgLab = document.createElement('h2');
         sacProgLab.textContent = 'Sacrament Program';
-        let firstSpeakLab = document.createElement('h2');
-        firstSpeakLab.textContent = '1st Speaker:';
-        let firstSpeakTxt = document.createElement('p');
-        firstSpeakTxt.textContent = doc[0].program.firstSpeaker;
-        let secSpeakLab = document.createElement('h2');
-        secSpeakLab.textContent = '2nd Speaker:';
-        let secSpeakTxt = document.createElement('p');
-        secSpeakTxt.textContent = doc[0].program.secondSpeaker;
-        let interHymnLab = document.createElement('h2');
-        interHymnLab.textContent = 'Intermediate Hymn:';
-        let interHymnTxt = document.createElement('p');
-        interHymnTxt.textContent = doc[0].hymns.intermediateHymn;
-        let finSpeakLab = document.createElement('h2');
-        finSpeakLab.textContent = '3rd Speaker:';
-        let finSpeakTxt = document.createElement('p');
-        finSpeakTxt.textContent = doc[0].program.finalSpeaker;
-
         sacProgCon.appendChild(sacProgLab);
-        sacProgCon.appendChild(firstSpeakLab);
-        sacProgCon.appendChild(firstSpeakTxt);
-        sacProgCon.appendChild(secSpeakLab);
-        sacProgCon.appendChild(secSpeakTxt);
-        sacProgCon.appendChild(interHymnLab);
-        sacProgCon.appendChild(interHymnTxt);
-        sacProgCon.appendChild(finSpeakLab);
-        sacProgCon.appendChild(finSpeakTxt);
+
+        doc[0].program.forEach((item) => {
+            let progLab = document.createElement('h2');
+            progLab.textContent = item.substring(0, item.indexOf(":")+1);
+            let progTxt = document.createElement('p');
+            progTxt.textContent = item.substring(item.indexOf(":")+2);
+
+            sacProgCon.appendChild(progLab);
+            sacProgCon.appendChild(progTxt);
+        })
+
 
         let closeHymnCon = document.createElement('div');
         let closeHymnLab = document.createElement('h2');
@@ -965,15 +991,13 @@ export async function renderSacrament(userData, getDocFunc, date, wrapper) {
         closePrayerCon.appendChild(closePrayerTxt);
 
         wrapper.appendChild(heading);
-        wrapper.appendChild(conductCon);
-        wrapper.appendChild(dateCon);
-        wrapper.appendChild(presiding);
-        wrapper.appendChild(greeting);
-        wrapper.appendChild(authority);
+        wrapper.appendChild(topCon);
+        wrapper.appendChild(presidingCon);
+        wrapper.appendChild(greetingCon);
+        wrapper.appendChild(authorityCon);
         wrapper.appendChild(announceCon);
-        wrapper.appendChild(openHymnCon);
-        wrapper.appendChild(openPrayerCon);
-        wrapper.appendChild(businessCon);
+        wrapper.appendChild(openCon);
+        wrapper.appendChild(wardBus);
         wrapper.appendChild(releaseCon);
         wrapper.appendChild(sustainCon);
         wrapper.appendChild(otherCon);
@@ -999,3 +1023,370 @@ export async function renderSacrament(userData, getDocFunc, date, wrapper) {
         wrapper.appendChild(back);
     }
 };
+
+export async function renderEditSacrament(wrapper, method) {
+    let warn = document.createElement('h3');
+    warn.className = 'form-warning';
+    warn.id = 'message';
+
+    let heading = document.createElement('h2');
+    heading.textContent = `${method} meeting`;
+
+    wrapper.appendChild(heading);
+
+    let dateCon = document.createElement('div');
+    dateCon.className = 'doc-item';
+    let dateLab = document.createElement('h2');
+    dateLab.textContent = 'Date:';
+    let dateTxt = document.createElement('input');
+    dateTxt.type = 'date';
+    dateTxt.id = 'date';
+
+    dateCon.appendChild(dateLab);
+    dateCon.appendChild(dateTxt);
+
+    let conductCon = document.createElement('div');
+    conductCon.className = 'doc-item';
+    let conductLab = document.createElement('h2');
+    conductLab.textContent = 'Conducting:';
+    let conductTxt = document.createElement('input');
+    conductTxt.id = 'conduct';
+
+    conductCon.appendChild(conductLab);
+    conductCon.appendChild(conductTxt);
+
+    let announceCon = document.createElement('div');
+    announceCon.className = 'doc-item';
+    let announceLab = document.createElement('h2');
+    announceLab.textContent = 'Announcements:';
+    let addAnnItem = document.createElement('button');
+    addAnnItem.textContent = 'Add item';
+    addAnnItem.id = 'addAnnItem';
+    addAnnItem.className = 'btn btn-blue';
+    let announceList = document.createElement('ul');
+    announceList.id = 'announceList';
+    
+    announceCon.appendChild(announceLab);
+    announceCon.appendChild(addAnnItem);
+    announceCon.appendChild(announceList);
+
+    let openHymnCon = document.createElement('div');
+    openHymnCon.className = 'doc-item';
+    let openHymnLab = document.createElement('h2');
+    openHymnLab.textContent = 'Opening Hymn:';
+    let openHymnTxt = document.createElement('input');
+    openHymnTxt.id = 'openHymn';
+
+    openHymnCon.appendChild(openHymnLab);
+    openHymnCon.appendChild(openHymnTxt);
+
+    let openPrayerCon = document.createElement('div');
+    openPrayerCon.className = 'doc-item';
+    let openPrayerlab = document.createElement('h2');
+    openPrayerlab.textContent = 'Invocation';
+    let openPrayerTxt = document.createElement('input');
+    openPrayerTxt.id = 'openPrayer';
+
+    openPrayerCon.appendChild(openPrayerlab);
+    openPrayerCon.appendChild(openPrayerTxt);
+
+    let businessCon = document.createElement('div');
+    let businessLab = document.createElement('h2');
+    businessLab.textContent = 'Ward Business';
+
+    businessCon.appendChild(businessLab);
+
+    let releaseCon = document.createElement('div');
+    releaseCon.className = 'doc-item';
+    let releaseLab = document.createElement('h2');
+    releaseLab.textContent = 'Releases:';
+    let addRelItem = document.createElement('button');
+    addRelItem.textContent = 'Add item';
+    addRelItem.id = 'addRelItem';
+    addRelItem.className = 'btn btn-blue';
+    let releaseList = document.createElement('ul');
+    releaseList.id = 'releaseList';
+
+    releaseCon.appendChild(releaseLab);
+    releaseCon.appendChild(addRelItem);
+    releaseCon.appendChild(releaseList);
+
+    let sustainCon = document.createElement('div');
+    sustainCon.className = 'doc-item';
+    let sustainLab = document.createElement('h2');
+    sustainLab.textContent = 'Sustainings:';
+    let addSusItem = document.createElement('button');
+    addSusItem.textContent = 'Add item';
+    addSusItem.id = 'addSusItem';
+    addSusItem.className = 'btn btn-blue';
+    let sustainList = document.createElement('ul');
+    sustainList.id = 'sustainList';
+    
+    sustainCon.appendChild(sustainLab);
+    sustainCon.appendChild(addSusItem);
+    sustainCon.appendChild(sustainList);
+    
+    let otherCon = document.createElement('div');
+    otherCon.className = 'doc-item';
+    let otherLab = document.createElement('h2');
+    otherLab.textContent = 'Other:';
+    let addOtherItem = document.createElement('button');
+    addOtherItem.textContent = 'Add item';
+    addOtherItem.id = 'addOtherItem';
+    addOtherItem.className = 'btn btn-blue';
+    let otherList = document.createElement('ul');
+    otherList.id = 'otherList';
+    
+    otherCon.appendChild(otherLab);
+    otherCon.appendChild(addOtherItem);
+    otherCon.appendChild(otherList);
+    
+    let sacHymnCon = document.createElement('div');
+    sacHymnCon.className = 'doc-item';
+    let sacHymnLab = document.createElement('h2');
+    sacHymnLab.textContent = 'Sacrament Hymn:';
+    let sacHymnTxt = document.createElement('input');
+    sacHymnTxt.id = 'sacHymn';
+        
+    sacHymnCon.appendChild(sacHymnLab);
+    sacHymnCon.appendChild(sacHymnTxt);
+    
+    let sacProgCon = document.createElement('div');
+    sacProgCon.className = 'doc-item';
+    let sacProgLab = document.createElement('h2');
+    sacProgLab.textContent = 'Sacrament Program';
+    let addSacItem = document.createElement('button');
+    addSacItem.textContent = 'Add item';
+    addSacItem.id = 'addSacItem';
+    addSacItem.className = 'btn btn-blue';
+    let sacList = document.createElement('ul');
+    sacList.id = 'sacList';
+
+    sacProgCon.appendChild(sacProgLab);
+    sacProgCon.appendChild(addSacItem);
+    sacProgCon.appendChild(sacList);
+
+
+    let closeHymnCon = document.createElement('div');
+    closeHymnCon.className = 'doc-item';
+    let closeHymnLab = document.createElement('h2');
+    closeHymnLab.textContent = 'Closing Hymn:';
+    let closeHymnTxt = document.createElement('input');
+    closeHymnTxt.id = 'closeHymn';
+
+    closeHymnCon.appendChild(closeHymnLab);
+    closeHymnCon.appendChild(closeHymnTxt);
+
+    let closePrayerCon = document.createElement('div');
+    closePrayerCon.className = 'doc-item';
+    let closePrayerLab = document.createElement('h2');
+    closePrayerLab.textContent = 'Benediction:';
+    let closePrayerTxt = document.createElement('input');
+    closePrayerTxt.id = 'closePrayer';
+
+    closePrayerCon.appendChild(closePrayerLab);
+    closePrayerCon.appendChild(closePrayerTxt);
+
+    wrapper.appendChild(heading);
+    wrapper.appendChild(warn);
+    wrapper.appendChild(dateCon);
+    wrapper.appendChild(conductCon);
+    wrapper.appendChild(announceCon);
+    wrapper.appendChild(openHymnCon);
+    wrapper.appendChild(openPrayerCon);
+    wrapper.appendChild(businessCon);
+    wrapper.appendChild(releaseCon);
+    wrapper.appendChild(sustainCon);
+    wrapper.appendChild(otherCon);
+    wrapper.appendChild(sacHymnCon);
+    wrapper.appendChild(sacProgCon);
+    wrapper.appendChild(closeHymnCon);
+    wrapper.appendChild(closePrayerCon);
+
+    let submit = document.createElement('a');
+    submit.textContent = 'Submit';
+    submit.className = 'btn btn-green';
+    submit.id = 'submit';
+
+    let back = document.createElement('a');
+    back.href = `/rdpUtilities/sacrament/`;
+    back.textContent = 'Back';
+    back.className = 'btn btn-blue';
+
+    wrapper.appendChild(submit);
+    wrapper.appendChild(back);
+
+    document.querySelector('#addAnnItem').addEventListener('click', () => {
+        let list = document.createElement('li');
+        list.className = 'items';
+
+        let item = document.createElement('h3');
+        item.textContent = 'Item';
+        let itemIn = document.createElement('textarea');
+        itemIn.className = 'announceItem';
+
+        let removeItem = document.createElement('input');
+        removeItem.type = 'button';
+        removeItem.className = 'removeItem';
+        removeItem.value = 'X';
+
+        list.appendChild(item);
+        list.appendChild(itemIn);
+        list.appendChild(removeItem);
+        announceList.appendChild(list);
+        itemIn.focus();
+
+        removeItem.addEventListener('click', () => {
+            announceList.removeChild(list);
+        });
+    });
+
+    document.querySelector('#addRelItem').addEventListener('click', () => {
+        let list = document.createElement('li');
+        list.className = 'items';
+
+        let item = document.createElement('h3');
+        item.textContent = 'Item';
+        let itemIn = document.createElement('textarea');
+        itemIn.className = 'releaseItem';
+
+        let removeItem = document.createElement('input');
+        removeItem.type = 'button';
+        removeItem.className = 'removeItem';
+        removeItem.value = 'X';
+
+        list.appendChild(item);
+        list.appendChild(itemIn);
+        list.appendChild(removeItem);
+        releaseList.appendChild(list);
+        itemIn.focus();
+
+        removeItem.addEventListener('click', () => {
+            releaseList.removeChild(list);
+        });
+    });
+
+    document.querySelector('#addSusItem').addEventListener('click', () => {
+        let list = document.createElement('li');
+        list.className = 'items';
+
+        let item = document.createElement('h3');
+        item.textContent = 'Item';
+        let itemIn = document.createElement('textarea');
+        itemIn.className = 'sustainItem';
+
+        let removeItem = document.createElement('input');
+        removeItem.type = 'button';
+        removeItem.className = 'removeItem';
+        removeItem.value = 'X';
+
+        list.appendChild(item);
+        list.appendChild(itemIn);
+        list.appendChild(removeItem);
+        sustainList.appendChild(list);
+        itemIn.focus();
+
+        removeItem.addEventListener('click', () => {
+            sustainList.removeChild(list);
+        });
+    });
+
+    document.querySelector('#addOtherItem').addEventListener('click', () => {
+        let list = document.createElement('li');
+        list.className = 'items';
+
+        let item = document.createElement('h3');
+        item.textContent = 'Item';
+        let itemIn = document.createElement('textarea');
+        itemIn.className = 'otherItem';
+
+        let removeItem = document.createElement('input');
+        removeItem.type = 'button';
+        removeItem.className = 'removeItem';
+        removeItem.value = 'X';
+
+        list.appendChild(item);
+        list.appendChild(itemIn);
+        list.appendChild(removeItem);
+        otherList.appendChild(list);
+        itemIn.focus();
+
+        removeItem.addEventListener('click', () => {
+            otherList.removeChild(list);
+        });
+    });
+
+    document.querySelector('#addSacItem').addEventListener('click', () => {
+        let list = document.createElement('li');
+        list.className = 'items';
+
+        let item = document.createElement('h3');
+        item.textContent = 'Item';
+        let itemIn = document.createElement('textarea');
+        itemIn.className = 'sacItem';
+
+        let removeItem = document.createElement('input');
+        removeItem.type = 'button';
+        removeItem.className = 'removeItem';
+        removeItem.value = 'X';
+
+        list.appendChild(item);
+        list.appendChild(itemIn);
+        list.appendChild(removeItem);
+        sacList.appendChild(list);
+        itemIn.focus();
+
+        removeItem.addEventListener('click', () => {
+            sacList.removeChild(list);
+        });
+    });
+}
+
+export async function renderNewSacrament(createDocFunc, wrapper, method) {
+    renderEditSacrament(wrapper, method);
+    document.querySelector('#submit').addEventListener('click', async () => {
+        console.log(document.querySelector('#date').value);
+        if (document.querySelector('#date').value) {
+            console.log('Create new doc');
+            const date = document.querySelector('#date').value;
+            const conduct = document.querySelector('#conduct').value;
+            const openHymn = document.querySelector('#openHymn').value;
+            const openPrayer = document.querySelector('#openPrayer').value;
+            const sacHymn = document.querySelector('#sacHymn').value;
+            const closeHymn = document.querySelector('#closeHymn').value;
+            const closePrayer = document.querySelector('#closePrayer').value;
+
+            let announceItems = [];
+            document.querySelectorAll('.announceItem').forEach((input) => {
+                announceItems.push(input.value);
+            });
+
+            let releaseItems = []
+            document.querySelectorAll('.releaseItem').forEach((input) => {
+                releaseItems.push(input.value);
+            });
+
+            let sustainItems = []
+            document.querySelectorAll('.sustainItem').forEach((input) => {
+                sustainItems.push(input.value);
+            });
+
+            let otherItems = []
+            document.querySelectorAll('.otherItem').forEach((input) => {
+                otherItems.push(input.value);
+            });
+
+            let sacItems = []
+            document.querySelectorAll('.sacItem').forEach((input) => {
+                sacItems.push(input.value);
+            });
+
+            const res = await createDocFunc(date, conduct, announceItems, openPrayer, openHymn, sacHymn, closeHymn, releaseItems, sustainItems, otherItems, sacItems, closePrayer);
+            if (!res.error && res) {
+                location = `/rdpUtilities/sacrament/`;
+            }
+        } else {
+            document.querySelector('#message').textContent = 'Please select a date';
+        }
+    });
+}

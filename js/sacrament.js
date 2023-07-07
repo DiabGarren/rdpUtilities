@@ -1,9 +1,12 @@
 import {
+    createSacramentDoc,
     getAllSacramentDocs,
     getLocalStorage,
     getParam,
+    getSacramentDoc,
     getUserData,
     renderBasepage,
+    renderNewSacrament,
     renderSacrament,
     setTitle
 } from './utils.mjs';
@@ -34,11 +37,11 @@ if (!date && !update && !newDoc) {
 }
 
 if (date && !update && !newDoc) {
-    await renderSacrament(userData, getAllSacramentDocs, date, wrapper);
+    await renderSacrament(userData, getSacramentDoc, date, wrapper);
 }
 
 if (newDoc && !update) {
-
+    await renderNewSacrament(createSacramentDoc, wrapper, 'New');
 }
 
 if (!newDoc && update) {
