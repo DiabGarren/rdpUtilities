@@ -8,7 +8,9 @@ import {
     renderBasepage,
     renderNewSacrament,
     renderSacrament,
-    setTitle
+    renderUpdateSacrament,
+    setTitle,
+    updateSacramentDoc
 } from './utils.mjs';
 
 const id = getLocalStorage('id');
@@ -45,7 +47,7 @@ if (newDoc && !update) {
 }
 
 if (!newDoc && update) {
-
+    await renderUpdateSacrament(getSacramentDoc, updateSacramentDoc, date, wrapper, 'Update');
 }
 
 if (newDoc && update) {

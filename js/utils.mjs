@@ -368,8 +368,8 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
         8:00am ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
         }
         subHeading.className = 'print-subheading print-center print-font';
-        
-        
+
+
         let openCon = document.createElement('div');
         let openLab = document.createElement('h2');
         openLab.textContent = 'Opening Prayer:';
@@ -444,28 +444,28 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
         delBtn.className = 'btn btn-red no-print';
         delBtn.id = 'delete';
 
-        
+
         let printBtn = document.createElement('button');
         printBtn.textContent = 'Print';
         printBtn.className = 'btn btn-blue no-print';
         printBtn.onclick = () => {
             window.print();
         };
-        
+
         wrapper.appendChild(updateBtn);
-        
+
         if (userData.level >= 4) {
             wrapper.appendChild(delBtn);
         }
         wrapper.appendChild(printBtn);
-        
+
     } else {
         let error = document.createElement('h2');
         error.textContent = 'Cannot find document';
-        
+
         wrapper.appendChild(error);
     }
-    
+
     let back = document.createElement('a');
     back.href = `/rdpUtilities/${meeting}/`;
     back.textContent = 'Back';
@@ -769,258 +769,153 @@ export async function renderSacrament(userData, getDocFunc, date, wrapper) {
         console.log(doc);
         const docDate = new Date(date);
 
-        let heading = document.createElement('h2');
-        heading.textContent = 'Roodepoort Ward Sacrament Meeting - Agenda';
-        heading.className = 'sac-heading print-font';
+        const printItems = (items) => {
+            let out = '<p>';
+            items.forEach((item) => {
+                out += `${item} <br>`;
+            });
+            out = `${out.substring(0, out.length - 4)}</p>`;
+            return out;
+        }
 
-        let topCon = document.createElement('div');
-        topCon.className = 'sac-top';
+        const printList = (list) => {
+            let out = '<ul>';
+            list.forEach((item) => {
+                out += `<li>${item}</li>`;
+            });
+            out += `</ul>`;
+            return out;
+        }
 
+        const printSacList = (list) => {
+            let out = '';
+            list.forEach((item) => {
+                out += `<div><hi>${item.item}:</hi> <pi>${item.name}</pi></div>`;
+            });
+            return out;
+        }
 
-        let conductCon = document.createElement('div');
-        conductCon.className = 'sac-item print-font';
-        let conductLab = document.createElement('h2');
-        conductLab.textContent = 'Conducting:';
-        let conductTxt = document.createElement('p');
-        conductTxt.textContent = doc[0].conducting;
+        let output = '';
 
-        conductCon.appendChild(conductLab);
-        conductCon.appendChild(conductTxt);
+        output += `
+        <table class="print-font">
+            <tr>
+                <td colspan=2>
+                    <h2>Roodepoort Ward Sacrament Meeting - Agenda</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <hi>Conducting:</hi>
+                    <pi>${doc[0].conducting}</pi>
+                </td>
+                <td>
+                    <hi>Date:</hi>
+                    <pi>${doc[0].date}</pi>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <h>Presiding:</h>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <p>Greetings and Welcome (new members and visitors)</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <h>Acknowledge Visiting Authorities:</h>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <h3>Announcements:</h3>
+                    ${printItems(doc[0].announcements)}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <hi>Opening Hymn:</hi>
+                    <pi>${doc[0].hymns.openingHymn}</pi>
+                </td>
+                <td>
+                    <hi>Invocation:</hi>
+                    <pi>${doc[0].openingPrayer}</pi>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h>Ward Business</h>
+                </td>
+                <td>
+                    <h>Name</h>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h>Releases</h>
+                    <p>"We have released [name] as [position] and propse that he/she be given a vote of thanks for his/her service. All those who wish to wxpress their appreciation may do so by raising the right hand"<br>
+                    Or<br>
+                    "We have released the following individuals: [list names and positions]. We propose that they may be given a vote of thanks for their service. All those that wish to express their appreciation may do so by raising the right hand."</p>
+                </td>
+                <td>
+                    ${printList(doc[0].wardBusiness.releases)}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h>Sustaining's:</h>
+                    <p>(Members should be asked to please stand and remain standing as their names and positions are presented to the congregation.)<br>
+                    "We have called [name] as [position] and propose that he/she be sustained..."<br>
+                    or<br>
+                    "We have called the following individuals: [list names and positions]. We propose that they be sustained."</p>
+                </td>
+                <td>
+                    ${printList(doc[0].wardBusiness.sustainings)}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h>Other (baby blessings/confirmations):</h>
+                </td>
+                <td>
+                    ${printList(doc[0].wardBusiness.other)}
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <hi>Sacrament Hymn:</hi>
+                    <pi>${doc[0].hymns.sacramentHymn}</pi>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <h>Sacrament Program</h>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    ${printSacList(doc[0].program)}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <hi>Closing Hymn:</hi>
+                    <pi>${doc[0].hymns.closingHymn}</pi>
+                </td>
+                <td>
+                    <hi>Benediction:</hi>
+                    <pi>${doc[0].closingPrayer}</pi>
+                </td>
+            </tr>
+        </table>
+        <a class="btn btn-green no-print" href="/rdpUtilities/sacrament/?date=${doc[0].date}&update=true">Update</a>
+        <button class="btn btn-blue no-print" onclick="window.print()">Print</button>
+        <a class="btn btn-blue no-print" href="/rdpUtilities/sacrament" >Back<a>`;
 
-        let dateCon = document.createElement('div');
-        dateCon.className = 'sac-item print-font';
-        let dateLab = document.createElement('h2');
-        dateLab.textContent = 'Date:';
-        
-        let dateTxt = document.createElement('p');
-        dateTxt.textContent = `${docDate.getDate()} ${docDate.toLocaleDateString('default', { month: 'long' })} ${docDate.getFullYear()}`;
-
-        dateCon.appendChild(dateLab);
-        dateCon.appendChild(dateTxt);
-
-        topCon.appendChild(conductCon);
-        topCon.appendChild(dateCon);
-
-        let presidingCon = document.createElement('div');
-        presidingCon.className = 'sac-item print-font';
-        let presidingLab = document.createElement('h2')
-        presidingLab.textContent = 'Presiding:';
-
-        presidingCon.appendChild(presidingLab);
-
-        let greetingCon = document.createElement('div');
-        greetingCon.className = 'sac-item print-font';
-        let greetingLab = document.createElement('p')
-        greetingLab.textContent = 'Greeting and Welcome (new members and visitors)';
-
-        greetingCon.appendChild(greetingLab);
-
-
-        let authorityCon = document.createElement('div');
-        authorityCon.className = 'sac-item print-font';
-        let authorityLab = document.createElement('h2')
-        authorityLab.textContent = 'Acknowledge Visiting Authorities:';
-
-        authorityCon.appendChild(authorityLab);
-
-        let announceCon = document.createElement('div');
-        announceCon.className = 'sac-list print-font';
-        let announceLab = document.createElement('h2');
-        announceLab.textContent = 'Announcements:';
-        
-        let announceList = document.createElement('ul');
-        doc[0].announcements.forEach((item) => {
-            let announceItem = document.createElement('li');
-            announceItem.textContent = item;
-            announceList.appendChild(announceItem);
-            
-        });
-
-        announceCon.appendChild(announceLab);
-        announceCon.appendChild(announceList);
-
-        let openCon = document.createElement('div');
-        openCon.className = 'sac-bus';
-        
-        let openHymnCon = document.createElement('div');
-        openHymnCon.className = 'sac-item print-font';
-        let openHymnLab = document.createElement('h2');
-        openHymnLab.textContent = 'Opening Hymn:';
-        let openHymnTxt = document.createElement('p');
-        openHymnTxt.textContent = doc[0].hymns.openingHymn;
-
-        openHymnCon.appendChild(openHymnLab);
-        openHymnCon.appendChild(openHymnTxt);
-
-        let openPrayerCon = document.createElement('div');
-        openPrayerCon.className = 'sac-item print-font';
-        let openPrayerlab = document.createElement('h2');
-        openPrayerlab.textContent = 'Invocation:';
-        let openPrayerTxt = document.createElement('p');
-        openPrayerTxt.textContent = doc[0].openingPrayer;
-
-        openPrayerCon.appendChild(openPrayerlab);
-        openPrayerCon.appendChild(openPrayerTxt);
-
-        openCon.appendChild(openHymnCon);
-        openCon.appendChild(openPrayerCon);
-
-        let wardBus = document.createElement('div');
-        wardBus.className = 'sac-bus';
-        let businessLabCon = document.createElement('div');
-        businessLabCon.className = 'sac-item print-font';
-        let businessLab = document.createElement('h2');
-        businessLab.textContent = 'Ward Business';
-        businessLabCon.appendChild(businessLab);
-
-        let businessNameCon = document.createElement('div');
-        businessNameCon.className = 'sac-item print-font';
-        let businessName = document.createElement('h2');
-        businessName.textContent = 'Name';
-
-        businessNameCon.appendChild(businessName);
-
-        wardBus.appendChild(businessLabCon);
-        wardBus.appendChild(businessNameCon);
-
-        let releaseCon = document.createElement('div');
-        let releaseInfo = document.createElement('div');
-
-        let releaseLab = document.createElement('h2');
-        releaseLab.textContent = 'Releases:';
-        let releaseExp = document.createElement('p');
-        releaseExp.innerHTML = `"We have released [name] as [position] and propse that he/she be given a vote of thanks for his/her service. All those who wish to wxpress their appreciation may do so by raising the right hand"<br>
-        Or<br>
-        "We have released the following individuals: [list names and positions]. We propose that they may be given a vote of thanks for their service. All those that wish to express their appreciation may do so by raising the right hand."`;
-        releaseInfo.appendChild(releaseLab);
-        releaseInfo.appendChild(releaseExp);
-
-        let releaseList = document.createElement('ul');
-        doc[0].wardBusiness.releases.forEach((item) => {
-            let releaseTxt = document.createElement('li');
-            releaseTxt.textContent = item;
-            releaseList.appendChild(releaseTxt);
-        });
-        releaseCon.appendChild(releaseInfo);
-        releaseCon.appendChild(releaseList);
-
-        let sustainCon = document.createElement('div');
-        let sustainInfo = document.createElement('div');
-
-        let sustainLab = document.createElement('h2');
-        sustainLab.textContent = 'Sustainings:';
-        let sustainExp = document.createElement('p');
-        sustainExp.innerHTML = `(Members should be asked to please stand and remain standing as their names and positions are presented to the congregation.)<br>
-        "We have called [name] as [position] and propose that he/she be sustained..."<br>
-        or<br>
-        "We have called the following individuals: [list names and positions]. We propose that they be sustained."`;
-        sustainInfo.appendChild(sustainLab);
-        sustainInfo.appendChild(sustainExp);
-
-        let sustainList = document.createElement('ul');
-        doc[0].wardBusiness.sustainings.forEach((item) => {
-            let sustainTxt = document.createElement('li');
-            sustainTxt.textContent = item;
-            sustainList.appendChild(sustainTxt);
-        });
-        sustainCon.appendChild(sustainInfo);
-        sustainCon.appendChild(sustainList);
-
-        let otherCon = document.createElement('div');
-        let otherInfo = document.createElement('div');
-
-        let otherLab = document.createElement('h2');
-        otherLab.textContent = 'Other:';
-        let otherExp = document.createElement('p');
-        otherExp.textContent = '(baby blessings/confirmations)';
-
-        otherInfo.appendChild(otherLab);
-        otherInfo.appendChild(otherExp);
-
-        let otherList = document.createElement('ul');
-        doc[0].wardBusiness.other.forEach((item) => {
-            let otherTxt = document.createElement('p');
-            otherTxt.textContent = item;
-            otherList.appendChild(otherTxt);
-        });
-
-        otherCon.appendChild(otherInfo);
-        otherCon.appendChild(otherList);
-
-        let sacHymnCon = document.createElement('div');
-        let sacHymnLab = document.createElement('h2');
-        sacHymnLab.textContent = 'Sacrament Hymn:';
-        let sacHymnTxt = document.createElement('p');
-        sacHymnTxt.textContent = doc[0].hymns.sacramentHymn;
-
-        sacHymnCon.appendChild(sacHymnLab);
-        sacHymnCon.appendChild(sacHymnTxt);
-
-        let sacProgCon = document.createElement('div');
-        let sacProgLab = document.createElement('h2');
-        sacProgLab.textContent = 'Sacrament Program';
-        sacProgCon.appendChild(sacProgLab);
-
-        doc[0].program.forEach((item) => {
-            let progLab = document.createElement('h2');
-            progLab.textContent = item.substring(0, item.indexOf(":")+1);
-            let progTxt = document.createElement('p');
-            progTxt.textContent = item.substring(item.indexOf(":")+2);
-
-            sacProgCon.appendChild(progLab);
-            sacProgCon.appendChild(progTxt);
-        })
-
-
-        let closeHymnCon = document.createElement('div');
-        let closeHymnLab = document.createElement('h2');
-        closeHymnLab.textContent = 'Closing Hymn:';
-        let closeHymnTxt = document.createElement('p');
-        closeHymnTxt.textContent = doc[0].hymns.closingHymn;
-
-        closeHymnCon.appendChild(closeHymnLab);
-        closeHymnCon.appendChild(closeHymnTxt);
-
-        let closePrayerCon = document.createElement('div');
-        let closePrayerLab = document.createElement('h2');
-        closePrayerLab.textContent = 'Benediction:';
-        let closePrayerTxt = document.createElement('p');
-        closePrayerTxt.textContent = doc[0].closingPrayer;
-
-        closePrayerCon.appendChild(closePrayerLab);
-        closePrayerCon.appendChild(closePrayerTxt);
-
-        wrapper.appendChild(heading);
-        wrapper.appendChild(topCon);
-        wrapper.appendChild(presidingCon);
-        wrapper.appendChild(greetingCon);
-        wrapper.appendChild(authorityCon);
-        wrapper.appendChild(announceCon);
-        wrapper.appendChild(openCon);
-        wrapper.appendChild(wardBus);
-        wrapper.appendChild(releaseCon);
-        wrapper.appendChild(sustainCon);
-        wrapper.appendChild(otherCon);
-        wrapper.appendChild(sacHymnCon);
-        wrapper.appendChild(sacProgCon);
-        wrapper.appendChild(closeHymnCon);
-        wrapper.appendChild(closePrayerCon);
-
-
-        let print = document.createElement('button');
-        print.textContent = 'Print';
-        print.className = 'btn btn-blue no-print';
-        print.onclick = () => {
-            window.print()
-        };
-
-        let back = document.createElement('a');
-        back.href = `/rdpUtilities/sacrament/`;
-        back.textContent = 'Back';
-        back.className = 'btn btn-blue no-print';
-
-        wrapper.appendChild(print);
-        wrapper.appendChild(back);
+        wrapper.innerHTML = output;
     }
 };
 
@@ -1065,7 +960,7 @@ export async function renderEditSacrament(wrapper, method) {
     addAnnItem.className = 'btn btn-blue';
     let announceList = document.createElement('ul');
     announceList.id = 'announceList';
-    
+
     announceCon.appendChild(announceLab);
     announceCon.appendChild(addAnnItem);
     announceCon.appendChild(announceList);
@@ -1121,11 +1016,11 @@ export async function renderEditSacrament(wrapper, method) {
     addSusItem.className = 'btn btn-blue';
     let sustainList = document.createElement('ul');
     sustainList.id = 'sustainList';
-    
+
     sustainCon.appendChild(sustainLab);
     sustainCon.appendChild(addSusItem);
     sustainCon.appendChild(sustainList);
-    
+
     let otherCon = document.createElement('div');
     otherCon.className = 'doc-item';
     let otherLab = document.createElement('h2');
@@ -1136,21 +1031,21 @@ export async function renderEditSacrament(wrapper, method) {
     addOtherItem.className = 'btn btn-blue';
     let otherList = document.createElement('ul');
     otherList.id = 'otherList';
-    
+
     otherCon.appendChild(otherLab);
     otherCon.appendChild(addOtherItem);
     otherCon.appendChild(otherList);
-    
+
     let sacHymnCon = document.createElement('div');
     sacHymnCon.className = 'doc-item';
     let sacHymnLab = document.createElement('h2');
     sacHymnLab.textContent = 'Sacrament Hymn:';
     let sacHymnTxt = document.createElement('input');
     sacHymnTxt.id = 'sacHymn';
-        
+
     sacHymnCon.appendChild(sacHymnLab);
     sacHymnCon.appendChild(sacHymnTxt);
-    
+
     let sacProgCon = document.createElement('div');
     sacProgCon.className = 'doc-item';
     let sacProgLab = document.createElement('h2');
@@ -1163,8 +1058,8 @@ export async function renderEditSacrament(wrapper, method) {
     sacList.id = 'sacList';
 
     sacProgCon.appendChild(sacProgLab);
-    sacProgCon.appendChild(addSacItem);
     sacProgCon.appendChild(sacList);
+    sacProgCon.appendChild(addSacItem);
 
 
     let closeHymnCon = document.createElement('div');
@@ -1318,12 +1213,16 @@ export async function renderEditSacrament(wrapper, method) {
 
     document.querySelector('#addSacItem').addEventListener('click', () => {
         let list = document.createElement('li');
-        list.className = 'items';
+        list.className = 'items sacItem';
 
         let item = document.createElement('h3');
         item.textContent = 'Item';
-        let itemIn = document.createElement('textarea');
-        itemIn.className = 'sacItem';
+        let itemIn = document.createElement('input');
+        itemIn.className = 'sacItemType';
+        let itemName = document.createElement('h3');
+        itemName.textContent = 'Item';
+        let itemInName = document.createElement('textarea');
+        itemInName.className = 'sacItemName';
 
         let removeItem = document.createElement('input');
         removeItem.type = 'button';
@@ -1332,6 +1231,8 @@ export async function renderEditSacrament(wrapper, method) {
 
         list.appendChild(item);
         list.appendChild(itemIn);
+        list.appendChild(itemName);
+        list.appendChild(itemInName);
         list.appendChild(removeItem);
         sacList.appendChild(list);
         itemIn.focus();
@@ -1377,9 +1278,17 @@ export async function renderNewSacrament(createDocFunc, wrapper, method) {
             });
 
             let sacItems = []
-            document.querySelectorAll('.sacItem').forEach((input) => {
-                sacItems.push(input.value);
-            });
+            document.querySelectorAll('.sacItem').forEach((item) => {
+                const sacList = item.children;
+                console.log(sacList);
+                let sacItem = { item: '', name: '' };
+                for (let i = 0; i < sacList.length; i++) {
+                    if (sacList[i].className == 'sacItemType') sacItem.item = sacList[i].value;
+                    if (sacList[i].className == 'sacItemName') sacItem.name = sacList[i].value;
+                }
+                sacItems.push(sacItem);
+            })
+
 
             const res = await createDocFunc(date, conduct, announceItems, openPrayer, openHymn, sacHymn, closeHymn, releaseItems, sustainItems, otherItems, sacItems, closePrayer);
             if (!res.error && res) {
@@ -1389,4 +1298,18 @@ export async function renderNewSacrament(createDocFunc, wrapper, method) {
             document.querySelector('#message').textContent = 'Please select a date';
         }
     });
+}
+
+export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wrapper, method) {
+    renderEditSacrament(wrapper, method);
+    const doc = await getDocFunc(date);
+    console.log(doc[0]);
+
+    document.querySelector('#date').value = doc[0].date;
+    document.querySelector('#conduct').value = doc[0].conducting;
+    document.querySelector('#openHymn').value = doc[0].hymns.openingHymn;
+    document.querySelector('#openPrayer').value = doc[0].openingPrayer;
+    document.querySelector('#sacHymn').value = doc[0].hymns.sacramentHymn;
+    document.querySelector('#closeHymn').value = doc[0].hymns.closingHymn;
+    document.querySelector('#closePrayer').value = doc[0].closingPrayer;
 }
