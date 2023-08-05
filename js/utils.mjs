@@ -1,5 +1,5 @@
-const baseUrl = 'https://rdputilities-api.onrender.com/';
-// const baseUrl = 'http://156.155.158.70:1830/';
+// const baseUrl = 'https://rdputilities-api.onrender.com/';
+const baseUrl = 'http://156.155.158.70:1830/';
 
 export function getParam(param) {
     const queryString = window.location.search;
@@ -292,7 +292,6 @@ export async function deleteSacramentDoc(date) {
 };
 
 export function setTitle(firstName, lastName) {
-    document.title += ` ${firstName} ${lastName}`;
     document.querySelector('#profile').textContent = `${firstName[0]}${lastName[0]}`;
 };
 
@@ -346,308 +345,156 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
 };
 
 export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper) {
-    document.title += ` ${date}`;
+    const docDate = new Date(date);
+    document.title += ` - ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'short' })} ${docDate.getFullYear()}`;
 
     const doc = await getDocFunc(date);
     if (doc.length > 0) {
-        const docDate = new Date(date);
 
-        let heading = document.createElement('h2');
-        heading.innerHTML = 'THE ROODEPOORT STAKE<br>OF<br>THE CHURCH OF JESUS CHRIST OF LATTER-DAY SAINTS';
-        heading.className = 'print-heading print-center print-font';
-
-        let subHeading = document.createElement('h3');
-        if (meeting == 'wardCouncil') {
-            subHeading.innerHTML = `Roodepoort Ward<br>
-        Ward Coucil Meeting Agenda<br>
-        7:00pm ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}<br>
-        Attendees: Bishopric, Elders Quorum, Relief Society, Young Woman, Primary`;
-        } else if (meeting == 'bishopric') {
-            subHeading.innerHTML = `Roodepoort Ward<br>
-        Bishopric Meeting Agenda<br>
-        8:00am ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
+        const meetingType = () => {
+            if (meeting.toLowerCase() === 'bishopric') {
+                return `Roodepoort Ward<br>
+                Bishopric Meeting Agenda<br>
+                8:00am ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
+            } else if (meeting.toLowerCase() === 'wardcouncil') {
+                return `Roodepoort Ward<br>
+                Ward Coucil Meeting Agenda<br>
+                7:00pm ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}<br>
+                Attendees: Bishopric, Elders Quorum, Relief Society, Young Woman, Primary`;
+            }
         }
-        subHeading.className = 'print-subheading print-center print-font';
 
-
-        let openCon = document.createElement('div');
-        let openLab = document.createElement('h2');
-        openLab.textContent = 'Opening Prayer:';
-        let openTxt = document.createElement('p');
-        openTxt.textContent = doc[0].openingPrayer;
-
-        openCon.appendChild(openLab);
-        openCon.appendChild(openTxt);
-        openCon.className = 'print-item print-font';
-
-        let spCon = document.createElement('div');
-        let spLab = document.createElement('h2');
-        spLab.textContent = 'Spiritual Thought:';
-        let spTxt = document.createElement('p');
-        spTxt.textContent = doc[0].spiritualThought;
-
-        spCon.appendChild(spLab);
-        spCon.appendChild(spTxt);
-        spCon.className = 'print-item print-font';
-
-        let trainCon = document.createElement('div');
-        let trainLab = document.createElement('h2');
-        trainLab.textContent = 'Handbook Training:';
-        let trainTxt = document.createElement('p');
-        trainTxt.textContent = doc[0].training;
-
-        trainCon.appendChild(trainLab);
-        trainCon.appendChild(trainTxt);
-        trainCon.className = 'print-item print-font';
-
-        let agendaCon = document.createElement('div');
-        let agendaLab = document.createElement('h2');
-        agendaLab.textContent = 'Agenda:';
-
-        let agendaList = document.createElement('ul');
-        agendaList.id = 'agendaList';
-        doc[0].agenda.forEach((item) => {
-            let agendaItem = document.createElement('li');
-            agendaItem.textContent = item;
-            agendaList.appendChild(agendaItem);
-        });
-
-        agendaCon.appendChild(agendaLab);
-        agendaCon.appendChild(agendaList);
-        agendaCon.className = 'print-list print-font';
-
-        let closeCon = document.createElement('div');
-        let closingLab = document.createElement('h2');
-        closingLab.textContent = 'Closing Prayer:';
-        let closingTxt = document.createElement('p');
-        closingTxt.textContent = doc[0].closingPrayer;
-
-        closeCon.appendChild(closingLab);
-        closeCon.appendChild(closingTxt);
-        closeCon.className = 'print-item print-font';
-
-        wrapper.appendChild(heading);
-        wrapper.appendChild(subHeading);
-        wrapper.appendChild(openCon);
-        wrapper.appendChild(spCon);
-        wrapper.appendChild(trainCon);
-        wrapper.appendChild(agendaCon);
-        wrapper.appendChild(closeCon);
-
-        let updateBtn = document.createElement('a');
-        updateBtn.href = `/rdpUtilities/${meeting}/?date=${date}&update=true`;
-        updateBtn.textContent = 'Update document';
-        updateBtn.className = 'btn btn-green no-print';
-
-        let delBtn = document.createElement('button');
-        delBtn.textContent = 'Delete document';
-        delBtn.className = 'btn btn-red no-print';
-        delBtn.id = 'delete';
-
-
-        let printBtn = document.createElement('button');
-        printBtn.textContent = 'Print';
-        printBtn.className = 'btn btn-blue no-print';
-        printBtn.onclick = () => {
-            window.print();
-        };
-
-        wrapper.appendChild(updateBtn);
-
-        if (userData.level >= 4) {
-            wrapper.appendChild(delBtn);
+        const agendaItems = () => {
+            let out = '<ul>'
+            doc[0].agenda.forEach((item) => {
+                out += `<li>${item}</li>`;
+            });
+            out += '</ul>';
+            return out;
         }
-        wrapper.appendChild(printBtn);
 
-    } else {
-        let error = document.createElement('h2');
-        error.textContent = 'Cannot find document';
+        let output = `
+        <div class='print-font'>
+        <h2 id="doc-heading">THE ROODEPOORT STAKE<br>OF<br>THE CHURCH OF JESUS CHRIST OF LATTER-DAY SAINTS</h2>
+        <h3 id="doc-subheading">${meetingType()}</h3>
+        <div class="doc-item">
+            <h3>Opening Prayer:</h3>
+            <p>${doc[0].openingPrayer}</p>
+        </div>
+        <div class="doc-item">
+            <h3>Spiritual Thought:</h3>
+            <p>${doc[0].spiritualThought}</p>
+        </div>
+        <div class="doc-item">
+            <h3>Handbook Training:</h3>
+            <p>${doc[0].training}</p>
+        </div>
+        <div class="doc-item">
+            <h3>Agenda:</h3>
+            ${agendaItems()}
+        </div>
+        <div class="doc-item">
+            <h3>Closing Prayer:</h3>
+            <p>${doc[0].closingPrayer}</p>
+        </div>
+        </div>
+        <a class="btn btn-green no-print" href="/rdpUtilities/${meeting}/?date=${date}&update=true">Update Document</a>
+        <button id="delete" class="btn btn-red no-print">Delete Document</button>
+        <button class="btn btn-blue no-print" onclick="window.print()">Print</button>
+        <a class="btn btn-blue no-print" href="/rdpUtilities/${meeting}/">Back</a>
+        `;
 
-        wrapper.appendChild(error);
+        wrapper.innerHTML = output;
     }
-
-    let back = document.createElement('a');
-    back.href = `/rdpUtilities/${meeting}/`;
-    back.textContent = 'Back';
-    back.className = 'btn btn-blue no-print';
-
-    wrapper.appendChild(back);
-};
+}
 
 export function renderEditDocPage(meeting, wrapper, method) {
-    let warn = document.createElement('h3');
-    warn.className = 'form-warning';
-    warn.id = 'message';
+    let today = new Date();
 
-    let heading = document.createElement('h2');
-    heading.textContent = `${method} meeting`;
+    if (meeting.toLowerCase() === 'bishopric') {
+        if (today.getDay() != 7) {
+            const sun = 7 - today.getDay();
+            today = new Date(today.getFullYear(), today.getMonth(), today.getDate() + sun + 1).toISOString().slice(0, 10);
+        }
+    } else if (meeting.toLowerCase() === 'wardcouncil') {
+        if (today.getDay() != 4) {
+            const thurs = 4 - today.getDay();
+            today = new Date(today.getFullYear(), today.getMonth(), today.getDate() + thurs + 1).toISOString().slice(0, 10);
+        }
+    }
 
-    wrapper.appendChild(heading);
+    const addItem = () => {
+        let li = document.createElement('li');
+        let input = document.createElement('textarea');
+        let button = document.createElement('button');
+        button.setAttribute('onclick', 'this.parentNode.remove()');
+        button.textContent = 'X';
 
-    let dateContainer = document.createElement('div');
-    dateContainer.className = 'doc-item';
+        li.appendChild(input);
+        li.appendChild(button);
+        return li;
+    }
 
-    let dateLab = document.createElement('h3');
-    dateLab.textContent = 'Date';
+    let output = `
+    <h2>${method} Meeting<h2>
+    <h3>Date</h3>
+    <input id="date" type="date" value="${today}">
+    <h3>Opening Prayer</h3>
+    <input id="openingPrayer" value="By invitation">
+    <h3>Spiritual Thought</h3>
+    <input id="spiritualThought">
+    <h3>Handbook Training</h3>
+    <input id="training">
+    <h3>Agenda</h3>
+    <ul id="agenda-list"></ul>
+    <button id="agenda-add" class="btn btn-blue">Add Item</button>
+    <h3>Closing Prayer</h3>
+    <input id="closingPrayer" value="By invitation">
+    <button id="submit" class="btn btn-green">Submit</button>
+    <a class="btn btn-blue" href="/rdpUtilities/${meeting}">Back</a>
+    `;
 
-    let dateTxt = document.createElement('input');
-    dateTxt.type = 'date';
-    dateTxt.id = 'date';
+    wrapper.innerHTML = output;
 
-    dateContainer.appendChild(dateLab);
-    dateContainer.appendChild(dateTxt);
-
-    let opening = document.createElement('div');
-    opening.id = 'op';
-    opening.className = 'doc-item';
-
-    let openingLab = document.createElement('h3');
-    openingLab.textContent = 'Opening Prayer';
-
-    let openingTxt = document.createElement('input');
-    openingTxt.id = 'open';
-    openingTxt.value = 'By invitation';
-
-    opening.appendChild(openingLab);
-    opening.appendChild(openingTxt);
-
-    let sp = document.createElement('div');
-    sp.id = 'sp';
-    sp.className = 'doc-item';
-
-    let spLab = document.createElement('h3');
-    spLab.textContent = 'Spiritual Thought';
-
-    let spTxt = document.createElement('input');
-    spTxt.id = 'st';
-
-    sp.appendChild(spLab);
-    sp.appendChild(spTxt);
-
-    let train = document.createElement('div');
-    train.id = 'train';
-    train.className = 'doc-item';
-
-    let trainLab = document.createElement('h3');
-    trainLab.textContent = 'Handbook Training';
-
-    let trainTxt = document.createElement('input');
-    trainTxt.id = 'training';
-    train.appendChild(trainLab);
-    train.appendChild(trainTxt);
-
-    let agenda = document.createElement('div');
-    agenda.id = 'agenda';
-    agenda.className = 'doc-item';
-
-    let agendaLab = document.createElement('h3');
-    agendaLab.textContent = 'Agenda';
-
-    let addItem = document.createElement('button');
-    addItem.textContent = 'Add item';
-    addItem.id = 'addItem';
-    addItem.className = 'btn btn-blue';
-
-    let agendaList = document.createElement('ul');
-    agendaList.id = 'agendaList';
-
-    agenda.appendChild(agendaLab);
-    agenda.appendChild(addItem);
-    agenda.appendChild(agendaList);
-
-    let closing = document.createElement('div');
-    closing.id = 'cp';
-    closing.className = 'doc-item';
-
-    let closingLab = document.createElement('h3');
-    closingLab.textContent = 'Closing Prayer';
-
-    let closingTxt = document.createElement('input');
-    closingTxt.id = 'close';
-    closingTxt.value = 'By invitation';
-
-    closing.appendChild(closingLab);
-    closing.appendChild(closingTxt);
-
-    wrapper.appendChild(warn);
-    wrapper.appendChild(dateContainer);
-    wrapper.appendChild(opening);
-    wrapper.appendChild(sp);
-    wrapper.appendChild(train);
-    wrapper.appendChild(agenda);
-    wrapper.appendChild(closing);
-
-    let submit = document.createElement('a');
-    submit.textContent = 'Submit';
-    submit.className = 'btn btn-green';
-    submit.id = 'submit';
-
-    let back = document.createElement('a');
-    back.href = `/rdpUtilities/${meeting}/`;
-    back.textContent = 'Back';
-    back.className = 'btn btn-blue';
-
-    wrapper.appendChild(submit);
-    wrapper.appendChild(back);
-
-    document.querySelector('#addItem').addEventListener('click', () => {
-        let list = document.createElement('li');
-        list.className = 'items';
-
-        let item = document.createElement('h3');
-        item.textContent = 'Item';
-        // let itemIn = document.createElement('input');
-        // itemIn.className = 'item';
-        let itemIn = document.createElement('textarea');
-        itemIn.className = 'item';
-
-        let removeItem = document.createElement('input');
-        removeItem.type = 'button';
-        removeItem.className = 'removeItem';
-        removeItem.value = 'X';
-
-        list.appendChild(item);
-        list.appendChild(itemIn);
-        list.appendChild(removeItem);
-        agendaList.appendChild(list);
-        itemIn.focus();
-
-        removeItem.addEventListener('click', () => {
-            agendaList.removeChild(list);
-        });
-
+    document.querySelector('#agenda-add').addEventListener('click', () => {
+        const li = addItem();
+        document.querySelector('#agenda-list').appendChild(li);
     });
 };
 
 export async function renderNewDocPage(meeting, createDocFunc, wrapper, method) {
     renderEditDocPage(meeting, wrapper, method);
+
+    const addItem = (child, list) => {
+        child.childNodes.forEach((child) => {
+            if (child.nodeName == 'TEXTAREA') {
+                list.push(child.value);
+            }
+        })
+    }
+
     document.querySelector('#submit').addEventListener('click', async () => {
-        console.log(document.querySelector('#date').value);
-        if (document.querySelector('#date').value) {
-            console.log('Create new doc');
-            let agendaItems = []
-            document.querySelectorAll('.item').forEach((input) => {
-                agendaItems.push(input.value);
-            });
+        const date = document.querySelector('#date').value;
+        const openingPrayer = document.querySelector('#openingPrayer').value;
+        let spiritualThought = document.querySelector('#spiritualThought').value;
+        let training = document.querySelector('#training').value;
+        const closingPrayer = document.querySelector('#closingPrayer').value;
 
-            const date = document.querySelector('#date').value;
-            const open = document.querySelector('#open').value;
-            let st = document.querySelector('#st').value;
-            if (!st) {
-                st = 'N/A';
-            }
-            let train = document.querySelector('#training').value;
-            if (!train) {
-                train = 'N/A';
-            }
-            const close = document.querySelector('#close').value;
+        if (!spiritualThought) {
+            spiritualThought = 'N/A';
+        }
+        if (!training) {
+            training = 'N/A';
+        }
 
-            const res = await createDocFunc(date, open, st, train, agendaItems, close, '');
-            if (!res.error && res) {
-                location = `/rdpUtilities/${meeting}/`;
-            }
-        } else {
-            document.querySelector('#message').textContent = 'Please select a date';
+        let agenda = [];
+        document.querySelector('#agenda-list').childNodes.forEach((child) => {
+            addItem(child, agenda)
+        });
+
+        const res = await createDocFunc(date, openingPrayer, spiritualThought, training, agenda, closingPrayer, '');
+        if (!res.error && res) {
+            location = `/rdpUtilities/${meeting}/`;
         }
     });
 };
@@ -656,66 +503,57 @@ export async function renderUpdateDocPage(meeting, getDocFunc, updateDocFunc, da
     renderEditDocPage(meeting, wrapper, method);
     const doc = await getDocFunc(date);
     console.log(doc[0]);
+
+    const addItem = (element, list) => {
+        list.forEach((item) => {
+            let li = document.createElement('li');
+            let input = document.createElement('textarea');
+            input.value = item;
+
+            let button = document.createElement('button');
+            button.setAttribute('onclick', 'this.parentNode.remove()');
+            button.textContent = 'X';
+
+            li.appendChild(input);
+            li.appendChild(button);
+
+            element.appendChild(li);
+        })
+    }
+
     document.querySelector('#date').value = doc[0].date;
-    document.querySelector('#open').value = doc[0].openingPrayer;
-    document.querySelector('#st').value = doc[0].spiritualThought;
+    document.querySelector('#openingPrayer').value = doc[0].openingPrayer;
+    document.querySelector('#spiritualThought').value = doc[0].spiritualThought;
     document.querySelector('#training').value = doc[0].training;
+    document.querySelector('#closingPrayer').value = doc[0].closingPrayer;
 
-    doc[0].agenda.forEach((item) => {
-        let list = document.createElement('li');
-        list.className = 'items';
+    addItem(document.querySelector('#agenda-list'), doc[0].agenda);
 
-        let itemLab = document.createElement('h3');
-        itemLab.textContent = 'Item';
-        let itemIn = document.createElement('textarea');
-        itemIn.className = 'item';
-        itemIn.textContent = item;
+    document.querySelector('#submit').addEventListener('click', async () => {
 
-        let removeItem = document.createElement('input');
-        removeItem.type = 'button';
-        removeItem.className = 'removeItem';
-        removeItem.value = 'X';
+        const addItem = (child, list) => {
+            child.childNodes.forEach((child) => {
+                if (child.nodeName == 'TEXTAREA') {
+                    list.push(child.value);
+                }
+            });
+        }
 
-        list.appendChild(itemLab);
-        list.appendChild(itemIn);
-        list.appendChild(removeItem);
-        agendaList.appendChild(list);
+        const date = document.querySelector('#date').value;
+        const openingPrayer = document.querySelector('#openingPrayer').value;
+        let spiritualThought = document.querySelector('#spiritualThought').value;
+        let training = document.querySelector('#training').value;
+        const closingPrayer = document.querySelector('#closingPrayer').value;
 
-        removeItem.addEventListener('click', () => {
-            agendaList.removeChild(list);
+        let agenda = []
+        document.querySelector('#agenda-list').childNodes.forEach((child) => {
+            addItem(child, agenda);
         });
 
-        agenda.appendChild(agendaList);
-
-        document.querySelector('#submit').addEventListener('click', async () => {
-            console.log(document.querySelector('#date').value);
-            if (document.querySelector('#date').value) {
-                console.log('Create new doc');
-                let agendaItems = []
-                document.querySelectorAll('.item').forEach((input) => {
-                    agendaItems.push(input.value);
-                });
-
-                const date = document.querySelector('#date').value;
-                const open = document.querySelector('#open').value;
-                let st = document.querySelector('#st').value;
-                if (!st) {
-                    st = 'N/A';
-                }
-                let train = document.querySelector('#training').value;
-                if (!train) {
-                    train = 'N/A';
-                }
-                const close = document.querySelector('#close').value;
-
-                const res = await updateDocFunc(date, open, st, train, agendaItems, close, '');
-                if (!res.error && res) {
-                    location = `/rdpUtilities/${meeting}/`;
-                }
-            } else {
-                document.querySelector('#message').textContent = 'Please select a date';
-            }
-        });
+        const res = await updateDocFunc(date, openingPrayer, spiritualThought, training, agenda, closingPrayer, '');
+        if (!res.error && res) {
+            location = `/rdpUtilities/${meeting}/`;
+        }
     });
 };
 
@@ -761,13 +599,13 @@ export async function deleteDoc(meeting, deleteDocFunc, date, wrapper) {
     });
 };
 
-export async function renderSacrament(userData, getDocFunc, date, wrapper) {
-    document.title += ` ${date}`;
+export async function renderSacrament(getDocFunc, date, wrapper) {
+    const docDate = new Date(date);
+    document.title += ` - ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'short' })} ${docDate.getFullYear()}`;
 
     const doc = await getDocFunc(date);
     if (doc.length > 0) {
         console.log(doc);
-        const docDate = new Date(date);
 
         const printItems = (items) => {
             let out = '<p>';
@@ -790,14 +628,23 @@ export async function renderSacrament(userData, getDocFunc, date, wrapper) {
         const printSacList = (list) => {
             let out = '';
             list.forEach((item) => {
-                out += `<div><hi>${item.item}:</hi> <pi>${item.name}</pi></div>`;
+                if (item.name == '') {
+                    out += ` <div><hi>${item.item}</hi>`;
+                } else {
+                    out += `<div><hi>${item.item}:</hi> <pi>${item.name}</pi></div>`;
+                }
             });
             return out;
+        }
+
+        const deleteDoc = () => {
+            return '<button id="delete" class="btn btn-red no-print">Delete</button>';
         }
 
         let output = '';
 
         output += `
+        <div id='print'>
         <table class="print-font">
             <tr>
                 <td colspan=2>
@@ -811,7 +658,7 @@ export async function renderSacrament(userData, getDocFunc, date, wrapper) {
                 </td>
                 <td>
                     <hi>Date:</hi>
-                    <pi>${doc[0].date}</pi>
+                    <pi>${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}</pi>
                 </td>
             </tr>
             <tr>
@@ -911,7 +758,9 @@ export async function renderSacrament(userData, getDocFunc, date, wrapper) {
                 </td>
             </tr>
         </table>
+        </div>
         <a class="btn btn-green no-print" href="/rdpUtilities/sacrament/?date=${doc[0].date}&update=true">Update</a>
+        ${deleteDoc()}
         <button class="btn btn-blue no-print" onclick="window.print()">Print</button>
         <a class="btn btn-blue no-print" href="/rdpUtilities/sacrament" >Back<a>`;
 
@@ -929,7 +778,7 @@ export async function renderEditSacrament(wrapper, method) {
 
     const addItem = () => {
         let li = document.createElement('li');
-        let input = document.createElement('input');
+        let input = document.createElement('textarea');
         let button = document.createElement('button');
         button.setAttribute('onclick', 'this.parentNode.remove()');
         button.textContent = 'X';
@@ -945,7 +794,7 @@ export async function renderEditSacrament(wrapper, method) {
         itemLab.textContent = 'Item';
         let item = document.createElement('input');
         item.id = "sac-prog-item";
-        
+
         let nameLab = document.createElement('h4');
         nameLab.textContent = 'Name';
         let name = document.createElement('input');
@@ -971,7 +820,7 @@ export async function renderEditSacrament(wrapper, method) {
     <input id="conducting">
     <h3>Announcements:</h3>
     <ul id="announce-list"></ul>
-    <button class="btn btn-blue" id="announce-add">Add Item</button>
+    <button id="announce-add" class="btn btn-blue">Add Item</button>
     <h3>Opening Hymn:</h3>
     <input id="openingHymn">
     <h3>Invocation</h3>
@@ -979,18 +828,18 @@ export async function renderEditSacrament(wrapper, method) {
     <h3>Ward Business</h3>
     <h3>Releases:</h3>
     <ul id="release-list"></ul>
-    <button class="btn btn-blue" id="release-add">Add Item</button>
+    <button id="release-add" class="btn btn-blue">Add Item</button>
     <h3>Sustainings:</h3>
     <ul id="sustain-list"></ul>
-    <button class="btn btn-blue" id="sustain-add">Add Item</button>
+    <button id="sustain-add" class="btn btn-blue">Add Item</button>
     <h3>Other:</h3>
     <ul id="other-list"></ul>
-    <button class="btn btn-blue" id="other-add">Add Item</button>
+    <button id="other-add" class="btn btn-blue">Add Item</button>
     <h3>Sacrament Hymn</h3>
     <input id="sacramentHymn">
     <h3>Sacrament Program</h3>
     <ul id="sac-list"></ul>
-    <button class="btn btn-blue" id="sac-add">Add Item</button>
+    <button id="sac-add" class="btn btn-blue">Add Item</button>
     <h3>Closing Hymn</h3>
     <input id="closingHymn">
     <h3>Benediction</h3>
@@ -1028,7 +877,7 @@ export async function renderNewSacrament(createDocFunc, wrapper, method) {
 
     const addItem = (child, list) => {
         child.childNodes.forEach((child) => {
-            if (child.nodeName == 'INPUT') {
+            if (child.nodeName == 'TEXTAREA') {
                 list.push(child.value);
             }
         })
@@ -1062,19 +911,19 @@ export async function renderNewSacrament(createDocFunc, wrapper, method) {
 
         const program = [];
         document.querySelector('#sac-list').childNodes.forEach((child) => {
-            let item = {item: '', name: ''};
+            let item = { item: '', name: '' };
             child.childNodes.forEach((child) => {
-                if (child.id == 'sac-prog-item') item.item = child.value; 
+                if (child.id == 'sac-prog-item') item.item = child.value;
                 if (child.id == 'sac-prog-name') item.name = child.value;
             });
-            program.push(item); 
+            program.push(item);
         });
 
         const res = await createDocFunc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer);
         if (!res.error && res) {
             location = `/rdpUtilities/sacrament/`;
         }
-    })
+    });
 }
 
 export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wrapper, method) {
@@ -1082,11 +931,117 @@ export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wra
     const doc = await getDocFunc(date);
     console.log(doc[0]);
 
+    const addItem = (element, list) => {
+        list.forEach((item) => {
+            let li = document.createElement('li');
+            let input = document.createElement('textarea');
+            input.value = item;
+
+            let button = document.createElement('button');
+            button.setAttribute('onclick', 'this.parentNode.remove()');
+            button.textContent = 'X';
+
+            li.appendChild(input);
+            li.appendChild(button);
+
+            element.appendChild(li);
+        });
+    }
+
+    const addSacItem = (element, list) => {
+        list.forEach((sacItem) => {
+
+            let li = document.createElement('li');
+            let itemLab = document.createElement('h4');
+            itemLab.textContent = 'Item';
+            let item = document.createElement('input');
+            item.id = "sac-prog-item";
+            item.value = sacItem.item;
+
+            let nameLab = document.createElement('h4');
+            nameLab.textContent = 'Name';
+            let name = document.createElement('input');
+            name.id = "sac-prog-name";
+            name.value = sacItem.name;
+
+            let button = document.createElement('button');
+            button.setAttribute('onclick', 'this.parentNode.remove()');
+            button.textContent = 'X';
+
+            li.appendChild(itemLab);
+            li.appendChild(item);
+            li.appendChild(nameLab);
+            li.appendChild(name);
+            li.appendChild(button);
+
+            element.appendChild(li);
+        });
+    }
+
     document.querySelector('#date').value = doc[0].date;
-    document.querySelector('#conduct').value = doc[0].conducting;
-    document.querySelector('#openHymn').value = doc[0].hymns.openingHymn;
-    document.querySelector('#openPrayer').value = doc[0].openingPrayer;
-    document.querySelector('#sacHymn').value = doc[0].hymns.sacramentHymn;
-    document.querySelector('#closeHymn').value = doc[0].hymns.closingHymn;
-    document.querySelector('#closePrayer').value = doc[0].closingPrayer;
+    document.querySelector('#conducting').value = doc[0].conducting;
+    document.querySelector('#openingHymn').value = doc[0].hymns.openingHymn;
+    document.querySelector('#openingPrayer').value = doc[0].openingPrayer;
+    document.querySelector('#sacramentHymn').value = doc[0].hymns.sacramentHymn;
+    document.querySelector('#closingHymn').value = doc[0].hymns.closingHymn;
+    document.querySelector('#closingPrayer').value = doc[0].closingPrayer;
+
+    addItem(document.querySelector('#announce-list'), doc[0].announcements);
+    addItem(document.querySelector('#release-list'), doc[0].wardBusiness.releases);
+    addItem(document.querySelector('#sustain-list'), doc[0].wardBusiness.sustainings);
+    addItem(document.querySelector('#other-list'), doc[0].wardBusiness.other);
+
+    addSacItem(document.querySelector('#sac-list'), doc[0].program);
+
+    document.querySelector('#submit').addEventListener('click', async () => {
+
+        const addItem = (child, list) => {
+            child.childNodes.forEach((child) => {
+                if (child.nodeName == 'TEXTAREA') {
+                    list.push(child.value);
+                }
+            });
+        }
+
+        const date = document.querySelector('#date').value;
+        const conducting = document.querySelector('#conducting').value;
+        const openingHymn = document.querySelector('#openingHymn').value;
+        const openingPrayer = document.querySelector('#openingPrayer').value;
+        const sacramentHymn = document.querySelector('#sacramentHymn').value;
+        const closingHymn = document.querySelector('#closingHymn').value;
+        const closingPrayer = document.querySelector('#closingPrayer').value;
+
+        const announcements = [];
+        document.querySelector('#announce-list').childNodes.forEach((child) => {
+            addItem(child, announcements);
+        });
+        const releases = [];
+        document.querySelector('#release-list').childNodes.forEach((child) => {
+            addItem(child, releases);
+        });
+        const sustainings = [];
+        document.querySelector('#sustain-list').childNodes.forEach((child) => {
+            addItem(child, sustainings);
+        });
+        const other = [];
+        document.querySelector('#other-list').childNodes.forEach((child) => {
+            addItem(child, other);
+        });
+
+        const program = [];
+        document.querySelector('#sac-list').childNodes.forEach((child) => {
+            let item = { item: '', name: '' };
+            child.childNodes.forEach((child) => {
+                if (child.id == 'sac-prog-item') item.item = child.value;
+                if (child.id == 'sac-prog-name') item.name = child.value;
+            });
+            program.push(item);
+        });
+
+        // console.log(announcements);
+        const res = await updateDocFunc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer);
+        if (!res.error && res) {
+            location = `/rdpUtilities/sacrament/`;
+        }
+    })
 }

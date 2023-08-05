@@ -16,6 +16,10 @@ import {
 } from './utils.mjs';
 
 const id = getLocalStorage('id');
+if (!id) {
+    location = '/rdpUtilities/';
+}
+
 const userData = await getUserData(id);
 
 setTitle(userData.firstName, userData.lastName);
@@ -27,10 +31,6 @@ const update = getParam('update');
 const meeting = 'bishopric'
 const wrapper = document.querySelector('.wrapper');
 document.querySelector('.load').remove();
-
-if (!id) {
-    location = '/rdpUtilities/';
-}
 
 if (userData.level < '3') {
     location = '/rdpUtilities/restricted';

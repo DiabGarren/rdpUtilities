@@ -1,5 +1,7 @@
 import {
     createSacramentDoc,
+    deleteDoc,
+    deleteSacramentDoc,
     getAllSacramentDocs,
     getLocalStorage,
     getParam,
@@ -14,6 +16,10 @@ import {
 } from './utils.mjs';
 
 const id = getLocalStorage('id');
+if (!id) {
+    location = '/rdpUtilities/';
+}
+
 const userData = await getUserData(id);
 
 setTitle(userData.firstName, userData.lastName);
@@ -26,9 +32,7 @@ const meeting = 'sacrament';
 const wrapper = document.querySelector('.wrapper');
 document.querySelector('.load').remove();
 
-if (!id) {
-    location = '/rdpUtilities/';
-}
+
 
 if (userData.level < 3) {
     location = '/rdpUtilities/restricted/';
@@ -39,7 +43,7 @@ if (!date && !update && !newDoc) {
 }
 
 if (date && !update && !newDoc) {
-    await renderSacrament(userData, getSacramentDoc, date, wrapper);
+    await renderSacrament(getSacramentDoc, date, wrapper);
 }
 
 if (newDoc && !update) {
@@ -52,4 +56,8 @@ if (!newDoc && update) {
 
 if (newDoc && update) {
     location = '/rdpUtilities/dashboard/';
+}
+
+if (document.querySelector('#delete')) {
+    await deleteDoc(meeting, deleteSacramentDoc, date, wrapper);
 }

@@ -16,6 +16,10 @@ import {
 } from './utils.mjs';
 
 const id = getLocalStorage('id');
+if (!id) {
+    location = '/rdpUtilities/';
+}
+
 const userData = await getUserData(id);
 
 setTitle(userData.firstName, userData.lastName);
@@ -28,9 +32,6 @@ const meeting = 'wardCouncil';
 const wrapper = document.querySelector('.wrapper');
 document.querySelector('.load').remove();
 
-if (!id) {
-    location = '/rdpUtilities/';
-}
 if (userData.level < '2') {
     location = '/rdpUtilities/restricted/';
 }

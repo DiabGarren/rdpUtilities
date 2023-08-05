@@ -1,46 +1,47 @@
-.doc-item {
-    margin: 15px 0 0 0;
-    max-width: 350px;
+#doc-heading {
+    text-align: center;
+    font-size: 22px;
+    font-weight: normal;
+    line-height: 50px;
 }
 
-.doc-item * {
+h3#doc-subheading {
+    display: block;
+    margin: 10px 0;
+
+    text-align: center;
+    font-size: 20px;
+    line-height: 50px;
+    font-weight: 500;
+
+}
+
+div.doc-item {
     width: 100%;
+    margin: 30px 0 30px 0;
 }
 
-.doc-item input {
-    height: 30px;
-    border-radius: 5px;
+.doc-item h3 {
+    display: inline-block;
+    font-size: 18px;
+
+}
+
+.doc-item p {
+    display: inline-block;
+    margin-inline-start: 7px;
     font-size: 18px;
 }
 
-#agendaList {
+.doc-item ul {
+    width: 100%;
+    margin: 16px 0 16px 30px;
     padding: 0;
 }
 
-.items {
-    list-style-type: none;
-}
-
-.items .item {
-    max-width: 100%;
-    min-width: 100%;
-    min-height: 40px;
-    height: 50px;
+.doc-item ul li {
     font-size: 18px;
-
-    padding: 5px 5px 0;
-    border-radius: 5px;
-}
-
-.items .removeItem {
-    width: 50px;
-    color: white;
-    background-color: var(--dark-red);
-}
-
-.items .removeItem:hover {
-    color: var(--dark-red);
-    background-color: var(--light-red);
+    margin: 10px 0;
 }
 
 #doc-delete {
