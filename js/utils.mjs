@@ -602,7 +602,7 @@ export async function deleteDoc(meeting, deleteDocFunc, date, wrapper) {
 export async function renderSacrament(getDocFunc, date, wrapper) {
     const docDate = new Date(date);
     document.title += ` - ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'short' })} ${docDate.getFullYear()}`;
-
+ 
     const doc = await getDocFunc(date);
     if (doc.length > 0) {
         console.log(doc);
