@@ -1103,77 +1103,117 @@ export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wra
 
 export async function renderAssignPage(userData, wrapper) {
     let output = '';
-    if (userData.level >= 4) {
-        const allAssign = await getAllAssignments();
-        const allUsers = await getAllUsers();
+    let allAssign = await getAllAssignments();
+    const allUsers = await getAllUsers();
 
-        if (allAssign.length == 0) {
-            output += '<h2>There are no assignments</h2>';
-        } else {
-            output += '<h2>All assignments</h2>';
-            const assignments = [];
-            allAssign.forEach((assignment) => {
+    const renderAllAssignments = async () => {
+        output = '<h2>All assignments</h2>';
+        wrapper.innerHTML = output;
+        let assignments = [];
+        allAssign = await getAllAssignments();
+        allAssign.forEach((assignment) => {
 
-                allUsers.forEach((user) => {
-                    let active = false;
-                    assignments.forEach((item) => {
+            allUsers.forEach((user) => {
+                let active = false;
+                assignments.forEach((item) => {
+                    if (assignment._id != item._id) {
                         if (item.userId === user._id) {
                             active = true;
                             if (assignment.userId === user._id) {
                                 item.assignments.push(assignment);
                             }
                         }
-                    });
-                    if (!active) {
-                        if (assignment.userId === user._id) {
-                            assignments.push({ userId: user._id, name: `${user.firstName} ${user.lastName}`, assignments: [assignment] });
-                        }
                     }
                 });
+                if (!active) {
+                    if (assignment.userId === user._id) {
+                        assignments.push({ userId: user._id, name: `${user.firstName} ${user.lastName}`, assignments: [assignment] });
+                    }
+                }
             });
+        });
+        assignments.forEach((item) => {
+            // output += `<h2>${item.name}</h2>`;
+            let name = document.createElement('h2');
+            name.textContent = item.name;
 
-            assignments.forEach((item) => {
-                output += `<h2>${item.name}</h2>`;
-                const todo = [];
-                const complete = [];
-                item.assignments.forEach((assignment) => {
-                    if (assignment.completed) {
-                        complete.push(`<label class="assignment"><input class="assignment-check" type="checkbox" checked data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}"><p>${assignment.assignment}</p></label>`);
-                    } else {
-                        todo.push(`<label class="assignment"><input class="assignment-check" type="checkbox" data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}"><p>${assignment.assignment}</p></label>`);
-                    }
+            wrapper.appendChild(name);
+
+            const todo = [];
+            const complete = [];
+            item.assignments.forEach((assignment) => {
+                let label = document.createElement('label');
+                label.className = 'assignment';
+
+                let check = document.createElement('input');
+                check.setAttribute('type', 'checkbox');
+                check.setAttribute('data-id', assignment._id);
+                check.setAttribute('data-userId', assignment.userId);
+                check.setAttribute('data-assignment', assignment.assignment);
+
+                check.addEventListener('click', async (event) => {
+                    await updateAssignment(event.target.dataset.id, event.target.dataset.userid, event.target.dataset.assignment, event.target.checked);
+                    wrapper.childNodes.forEach(childNode => {
+                        wrapper.removeChild(childNode);
+                    })
+                    renderAllAssignments();
                 });
-                output += '<h3>To Do:</h3>';
-                if (todo.length == 0) {
-                    output += '<p>No items</p>';
+
+                let p = document.createElement('p');
+                p.textContent = assignment.assignment;
+
+                if (assignment.completed) {
+                    check.checked = true;
+                    label.appendChild(check);
+                    label.appendChild(p);
+                    complete.push(label);
                 } else {
-                    todo.forEach(item => {
-                        output += item;
-                    });
-                }
-                output += '<h3>Complete:</h3>';
-                if (complete.length == 0) {
-                    output += '<p>No items</p>';
-                } else {
-                    complete.forEach(item => {
-                        output += item;
-                    });
+                    label.appendChild(check);
+                    label.appendChild(p);
+                    todo.push(label);
                 }
             });
-            console.log(assignments);
+            let todoH = document.createElement('h3');
+            todoH.textContent = 'To Do:';
+            wrapper.appendChild(todoH);
+            if (todo.length == 0) {
+                let p = document.createElement('p');
+                p.textContent = 'No items';
+                wrapper.appendChild(p);
+            } else {
+                todo.forEach(item => {
+                    wrapper.appendChild(item);
+                });
+            }
+            let completeH = document.createElement('h3');
+            completeH.textContent = 'Completed:';
+            wrapper.appendChild(completeH);
+            if (complete.length == 0) {
+                let p = document.createElement('p');
+                p.textContent = 'No items';
+                wrapper.appendChild(p);
+            } else {
+                complete.forEach(item => {
+                    wrapper.appendChild(item);
+                });
+            }
+        });
+    }
+
+    if (userData.level >= 4) {
+
+
+        if (allAssign.length == 0) {
+            output += '<h2>There are no assignments</h2>';
+            wrapper.innerHTML = output;
+        } else {
+
+            renderAllAssignments();
         }
     }
 
-    output += '<button id="new-assign" class="btn btn-blue">Create Assignment</button>';
+    // output += '<button id="new-assign" class="btn btn-blue">Create Assignment</button>';
 
-    wrapper.innerHTML = output;
-
-    document.querySelectorAll('.assignment-check').forEach(element => {
-
-        element.addEventListener('click', async (event) => {
-            const res = await updateAssignment(event.target.dataset.id, event.target.dataset.userid, event.target.dataset.assignment, event.target.checked);
-        });
-    })
 
     // document.querySelector('#new-assign').addEventListener('click', () => {
     //     if (userData.level >= 4) {
