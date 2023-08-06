@@ -11,35 +11,21 @@ if (!id) {
     document.querySelector('#profile').textContent = `${userData.firstName[0]}${userData.lastName[0]}`;
     const wrapper = document.querySelector('.wrapper');
     document.querySelector('.load').remove();
-    
-    if (userData.level == 1) {
-        let blank = document.createElement('p');
-        blank.textContent = 'There aren\'t any meetings you need to attend.';
 
-        wrapper.appendChild(blank);
+    let output = '<h2>Resources</h2>';
+
+    if (userData.level == 1) {
+        output += "<p>There aren't any meetings you need to attend.<br>If you need access to certain resources, please contact Garren Diab.</p>";
     }
     if (userData.level >= 2) {
-        let wc = document.createElement('a');
-        wc.href = '/rdpUtilities/wardCouncil';
-        wc.textContent = 'Ward Council';
-        wc.className = 'btn btn-blue';
-
-        wrapper.appendChild(wc);
+        output += '<a class="btn btn-blue" href="/rdpUtilities/wardCouncil/">Ward Council</a>';
 
         if (userData.level >= 3) {
-
-            let bishopric = document.createElement('a');
-            bishopric.href = '/rdpUtilities/bishopric';
-            bishopric.textContent = 'Bishopric';
-            bishopric.className = 'btn btn-blue';
-
-            let sacrament = document.createElement('a');
-            sacrament.href = '/rdpUtilities/sacrament';
-            sacrament.textContent = 'Sacrament';
-            sacrament.className = 'btn btn-blue';
-
-            wrapper.appendChild(bishopric);
-            wrapper.appendChild(sacrament);
+            output += `<a class="btn btn-blue" href="/rdpUtilities/bishopric/">Bishopric</a>
+            <a class="btn btn-blue" href="/rdpUtilities/sacrament/">Sacrament</a>`;
         }
+
+        output += `<a class="btn btn-blue" href="/rdpUtilities/assignments/">Assignments</a>`
     }
+    wrapper.innerHTML = output;
 }

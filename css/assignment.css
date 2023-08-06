@@ -1,0 +1,3 @@
+.assignment:has(.assignment-check:checked) p{
+    color: #c6c6c6;
+}

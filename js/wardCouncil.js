@@ -2,7 +2,7 @@ import {
     getLocalStorage,
     getUserData,
     getParam,
-    setTitle,
+    setProfile,
     getAllWardCouncilDocs,
     getWardCouncilDoc,
     createWardCouncilDoc,
@@ -22,7 +22,7 @@ if (!id) {
 
 const userData = await getUserData(id);
 
-setTitle(userData.firstName, userData.lastName);
+setProfile(userData.firstName, userData.lastName);
 
 let date = getParam('date');
 const newDoc = getParam('new');

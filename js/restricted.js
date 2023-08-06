@@ -1,10 +1,10 @@
 import {
     getLocalStorage,
     getUserData,
-    setTitle
+    setProfile
 } from './utils.mjs';
 
 const id = getLocalStorage('id');
 const userData = await getUserData(id);
 
-setTitle(userData.firstName, userData.lastName);
+setProfile(userData.firstName, userData.lastName);

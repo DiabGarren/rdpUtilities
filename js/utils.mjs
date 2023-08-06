@@ -6,26 +6,31 @@ export function getParam(param) {
     const urlParams = new URLSearchParams(queryString);
     const product = urlParams.get(param);
     return product;
-};
+}
+
+export async function getAllUsers() {
+    const res = await fetch(`${baseUrl}users`);
+    const data = await res.json();
+    return data;
+}
 
 export async function getUserData(userId) {
     const res = await fetch(`${baseUrl}users/${userId}`);
     const data = await res.json();
     return data;
-};
+}
 
 export function setLocalStorage(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
-};
+}
 
 export function getLocalStorage(key) {
     return JSON.parse(localStorage.getItem(key));
-};
+}
 
-export function getCurrentDate() {
-    const date = new Date();
-    return date;
-};
+export function setProfile(firstName, lastName) {
+    document.querySelector('#profile').textContent = `${firstName[0]}${lastName[0]}`;
+}
 
 export async function userLogin(username, email, password) {
     const res = await fetch(`${baseUrl}users/login`, {
@@ -43,7 +48,7 @@ export async function userLogin(username, email, password) {
 
     const data = await res.json();
     return data;
-};
+}
 
 export async function newUser(firstName, lastName, username, email, password) {
     const res = await fetch(`${baseUrl}users`, {
@@ -64,7 +69,7 @@ export async function newUser(firstName, lastName, username, email, password) {
 
     const data = await res.json();
     return data;
-};
+}
 
 export async function updateUserData(userId, firstName, lastName, username, email, password, level) {
     const res = await fetch(`${baseUrl}users/${userId}`, {
@@ -83,21 +88,21 @@ export async function updateUserData(userId, firstName, lastName, username, emai
         })
     });
 
-    const data = await res;
+    const data = await res.json();
     return data;
-};
+}
 
 export async function getAllWardCouncilDocs() {
     const res = await fetch(`${baseUrl}wardCouncil`);
     const data = await res.json();
     return data;
-};
+}
 
 export async function getWardCouncilDoc(date) {
     const res = await fetch(`${baseUrl}wardCouncil/${date}`);
     const data = await res.json();
     return data;
-};
+}
 
 export async function createWardCouncilDoc(date, opening, st, train, agenda, closing, notes) {
     const res = await fetch(`${baseUrl}wardCouncil`, {
@@ -119,7 +124,7 @@ export async function createWardCouncilDoc(date, opening, st, train, agenda, clo
 
     const data = await res.json();
     return data;
-};
+}
 
 export async function updateWardCouncilDoc(date, opening, st, train, agenda, closing, notes) {
     const res = await fetch(`${baseUrl}wardCouncil/${date}`, {
@@ -140,28 +145,28 @@ export async function updateWardCouncilDoc(date, opening, st, train, agenda, clo
 
     const data = await res.json();
     return data;
-};
+}
 
 export async function deleteWardCouncilDoc(date) {
     const res = await fetch(`${baseUrl}wardCouncil/${date}`, {
         method: 'DELETE'
     });
 
-    const data = res;
+    const data = await res.json();
     return data;
-};
+}
 
 export async function getAllBishopricDocs() {
     const res = await fetch(`${baseUrl}bishopric`);
     const data = await res.json();
     return data;
-};
+}
 
 export async function getBishopricDoc(date) {
     const res = await fetch(`${baseUrl}bishopric/${date}`);
     const data = await res.json();
     return data;
-};
+}
 
 export async function createBishopricDoc(date, opening, st, train, agenda, closing, notes) {
     const res = await fetch(`${baseUrl}bishopric`, {
@@ -183,7 +188,7 @@ export async function createBishopricDoc(date, opening, st, train, agenda, closi
 
     const data = await res.json();
     return data;
-};
+}
 
 export async function updateBishopricDoc(date, opening, st, train, agenda, closing, notes) {
     const res = await fetch(`${baseUrl}bishopric/${date}`, {
@@ -204,29 +209,29 @@ export async function updateBishopricDoc(date, opening, st, train, agenda, closi
 
     const data = await res.json();
     return data;
-};
+}
 
 export async function deleteBishopricDoc(date) {
     const res = await fetch(`${baseUrl}bishopric/${date}`, {
         method: 'DELETE'
     });
 
-    const data = res;
+    const data = await res.json();
     return data;
-};
+}
 
 
 export async function getAllSacramentDocs() {
     const res = await fetch(`${baseUrl}sacrament`);
     const data = await res.json();
     return data;
-};
+}
 
 export async function getSacramentDoc(date) {
     const res = await fetch(`${baseUrl}sacrament/${date}`);
     const data = await res.json();
     return data;
-};
+}
 
 export async function createSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer) {
     const res = await fetch(`${baseUrl}sacrament`, {
@@ -253,7 +258,7 @@ export async function createSacramentDoc(date, conducting, announcements, openin
 
     const data = await res.json();
     return data;
-};
+}
 
 export async function updateSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer) {
     const res = await fetch(`${baseUrl}sacrament/${date}`, {
@@ -280,23 +285,73 @@ export async function updateSacramentDoc(date, conducting, announcements, openin
 
     const data = await res.json();
     return data;
-};
+}
 
 export async function deleteSacramentDoc(date) {
     const res = await fetch(`${baseUrl}sacrament/${date}`, {
         method: 'DELETE'
     });
 
-    const data = res;
+    const data = await res.json();
     return data;
-};
+}
 
-export function setTitle(firstName, lastName) {
-    document.querySelector('#profile').textContent = `${firstName[0]}${lastName[0]}`;
-};
+export async function getAllAssignments() {
+    const res = await fetch(`${baseUrl}assignments`);
+    const data = await res.json();
+    return data;
+}
+
+export async function getAssignments(userId) {
+    const res = await fetch(`${baseUrl}assignments/${userId}`);
+    const data = await res.json();
+    return data;
+}
+
+export async function createAssignment(userId, assignment, completed) {
+    const res = await fetch(`${baseUrl}assignments/`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'userId': userId,
+            'assignment': assignment,
+            'completed': completed
+        })
+    });
+    const data = await res.json();
+    return data;
+}
+
+export async function updateAssignment(assignmentId, userId, assignment, completed) {
+    const res = await fetch(`${baseUrl}assignments/${assignmentId}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'userId': userId,
+            'assignment': assignment,
+            'completed': completed
+        })
+    });
+    const data = await res.json();
+    return data;
+}
+
+export async function deleteAssignment(assignmentId) {
+    const res = await fetch(`${baseUrl}assignments/${assignmentId}`, {
+        method: 'DELETE'
+    });
+    const data = await res.json();
+    return data;
+}
 
 export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
-    const currDate = getCurrentDate();
+    const currDate = new Date();
     let heading = document.createElement('h2');
     heading.textContent = 'Meetings';
     wrapper.appendChild(heading);
@@ -342,7 +397,7 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
     }
 
     wrapper.appendChild(back);
-};
+}
 
 export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper) {
     const docDate = new Date(date);
@@ -460,7 +515,7 @@ export function renderEditDocPage(meeting, wrapper, method) {
         const li = addItem();
         document.querySelector('#agenda-list').appendChild(li);
     });
-};
+}
 
 export async function renderNewDocPage(meeting, createDocFunc, wrapper, method) {
     renderEditDocPage(meeting, wrapper, method);
@@ -497,7 +552,7 @@ export async function renderNewDocPage(meeting, createDocFunc, wrapper, method) 
             location = `/rdpUtilities/${meeting}/`;
         }
     });
-};
+}
 
 export async function renderUpdateDocPage(meeting, getDocFunc, updateDocFunc, date, wrapper, method) {
     renderEditDocPage(meeting, wrapper, method);
@@ -555,7 +610,7 @@ export async function renderUpdateDocPage(meeting, getDocFunc, updateDocFunc, da
             location = `/rdpUtilities/${meeting}/`;
         }
     });
-};
+}
 
 export async function deleteDoc(meeting, deleteDocFunc, date, wrapper) {
     document.querySelector('#delete').addEventListener('click', async () => {
@@ -597,12 +652,12 @@ export async function deleteDoc(meeting, deleteDocFunc, date, wrapper) {
             wrapper.removeChild(deleteDoc);
         }
     });
-};
+}
 
 export async function renderSacrament(getDocFunc, date, wrapper) {
     const docDate = new Date(date);
     document.title += ` - ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'short' })} ${docDate.getFullYear()}`;
- 
+
     const doc = await getDocFunc(date);
     if (doc.length > 0) {
         console.log(doc);
@@ -766,7 +821,7 @@ export async function renderSacrament(getDocFunc, date, wrapper) {
 
         wrapper.innerHTML = output;
     }
-};
+}
 
 export async function renderEditSacrament(wrapper, method) {
     let today = new Date();
@@ -1044,4 +1099,86 @@ export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wra
             location = `/rdpUtilities/sacrament/`;
         }
     })
+}
+
+export async function renderAssignPage(userData, wrapper) {
+    let output = '';
+    if (userData.level >= 4) {
+        const allAssign = await getAllAssignments();
+        const allUsers = await getAllUsers();
+
+        if (allAssign.length == 0) {
+            output += '<h2>There are no assignments</h2>';
+        } else {
+            output += '<h2>All assignments</h2>';
+            const assignments = [];
+            allAssign.forEach((assignment) => {
+
+                allUsers.forEach((user) => {
+                    let active = false;
+                    assignments.forEach((item) => {
+                        if (item.userId === user._id) {
+                            active = true;
+                            if (assignment.userId === user._id) {
+                                item.assignments.push(assignment);
+                            }
+                        }
+                    });
+                    if (!active) {
+                        if (assignment.userId === user._id) {
+                            assignments.push({ userId: user._id, name: `${user.firstName} ${user.lastName}`, assignments: [assignment] });
+                        }
+                    }
+                });
+            });
+
+            assignments.forEach((item) => {
+                output += `<h2>${item.name}</h2>`;
+                const todo = [];
+                const complete = [];
+                item.assignments.forEach((assignment) => {
+                    if (assignment.completed) {
+                        complete.push(`<label class="assignment"><input class="assignment-check" type="checkbox" checked data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}"><p>${assignment.assignment}</p></label>`);
+                    } else {
+                        todo.push(`<label class="assignment"><input class="assignment-check" type="checkbox" data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}"><p>${assignment.assignment}</p></label>`);
+                    }
+                });
+                output += '<h3>To Do:</h3>';
+                if (todo.length == 0) {
+                    output += '<p>No items</p>';
+                } else {
+                    todo.forEach(item => {
+                        output += item;
+                    });
+                }
+                output += '<h3>Complete:</h3>';
+                if (complete.length == 0) {
+                    output += '<p>No items</p>';
+                } else {
+                    complete.forEach(item => {
+                        output += item;
+                    });
+                }
+            });
+            console.log(assignments);
+        }
+    }
+
+    output += '<button id="new-assign" class="btn btn-blue">Create Assignment</button>';
+
+    wrapper.innerHTML = output;
+
+    document.querySelectorAll('.assignment-check').forEach(element => {
+
+        element.addEventListener('click', async (event) => {
+            const res = await updateAssignment(event.target.dataset.id, event.target.dataset.userid, event.target.dataset.assignment, event.target.checked);
+        });
+    })
+
+    // document.querySelector('#new-assign').addEventListener('click', () => {
+    //     if (userData.level >= 4) {
+    //         output += '<label'
+    //     }
+    // })
+    // wrapper.innerHTML = output;
 }
