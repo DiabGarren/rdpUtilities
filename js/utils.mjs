@@ -1,5 +1,5 @@
-const baseUrl = 'https://rdputilities-api.onrender.com/';
-// const baseUrl = 'http://156.155.158.70:1830/';
+// const baseUrl = 'https://rdputilities-api.onrender.com/';
+const baseUrl = 'http://156.155.158.70:1830/';
 
 export function getParam(param) {
     const queryString = window.location.search;
@@ -1131,6 +1131,17 @@ export async function renderAssignPage(userData, wrapper) {
                     }
                 });
             });
+
+            // Display current user's assignments first
+            for (let i = 0; i < assignments.length; i++) {
+                if (assignments[i].userId == userData._id) {
+                    let temp = [];
+                    temp.push(assignments[0]);
+                    assignments[0] = assignments[i];
+                    assignments[i] = temp[0];
+                }
+            }
+
 
             assignments.forEach((item) => {
                 output += `<h3>${item.name}</h3>`;
