@@ -480,11 +480,17 @@ export function renderEditDocPage(meeting, wrapper, method) {
 
     const addItem = () => {
         let li = document.createElement('li');
+        li.className = 'update-list-item';
+        let move = document.createElement('div');
+        move.className = 'move-item';
+        move.innerHTML = '<svg width="18" height="24" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 17H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 12H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M9 0.72111L12.1551 4H5.84489L9 0.72111Z" fill="black" stroke="black"/><path d="M9 23.2789L5.84489 20H12.1551L9 23.2789Z" fill="black" stroke="black"/></svg>';
         let input = document.createElement('textarea');
         let button = document.createElement('button');
         button.setAttribute('onclick', 'this.parentNode.remove()');
         button.textContent = 'X';
+        button.className = 'btn btn-red';
 
+        li.appendChild(move)
         li.appendChild(input);
         li.appendChild(button);
         return li;
@@ -562,13 +568,20 @@ export async function renderUpdateDocPage(meeting, getDocFunc, updateDocFunc, da
     const addItem = (element, list) => {
         list.forEach((item) => {
             let li = document.createElement('li');
+            li.className = 'update-list-item';
+            let move = document.createElement('div');
+            move.className = 'move-item';
+            move.innerHTML = '<svg width="18" height="24" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 17H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 12H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M9 0.72111L12.1551 4H5.84489L9 0.72111Z" fill="black" stroke="black"/><path d="M9 23.2789L5.84489 20H12.1551L9 23.2789Z" fill="black" stroke="black"/></svg>';
+
             let input = document.createElement('textarea');
             input.value = item;
 
             let button = document.createElement('button');
             button.setAttribute('onclick', 'this.parentNode.remove()');
             button.textContent = 'X';
+            button.className = 'btn btn-red'
 
+            li.appendChild(move);
             li.appendChild(input);
             li.appendChild(button);
 
@@ -833,11 +846,17 @@ export async function renderEditSacrament(wrapper, method) {
 
     const addItem = () => {
         let li = document.createElement('li');
+        li.className = 'update-list-item';
+        let move = document.createElement('div');
+        move.className = 'move-item';
+        move.innerHTML = '<svg width="18" height="24" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 17H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 12H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M9 0.72111L12.1551 4H5.84489L9 0.72111Z" fill="black" stroke="black"/><path d="M9 23.2789L5.84489 20H12.1551L9 23.2789Z" fill="black" stroke="black"/></svg>';
         let input = document.createElement('textarea');
         let button = document.createElement('button');
         button.setAttribute('onclick', 'this.parentNode.remove()');
         button.textContent = 'X';
+        button.className = 'btn btn-red';
 
+        li.appendChild(move)
         li.appendChild(input);
         li.appendChild(button);
         return li;
@@ -845,26 +864,35 @@ export async function renderEditSacrament(wrapper, method) {
 
     const addSacItem = () => {
         let li = document.createElement('li');
-        let itemLab = document.createElement('h4');
-        itemLab.textContent = 'Item';
-        let item = document.createElement('input');
-        item.id = "sac-prog-item";
+            li.className = 'update-sac-item';
+            let move = document.createElement('div');
+            move.className = 'move-item';
+            move.innerHTML = '<svg width="18" height="24" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 17H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 12H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M9 0.72111L12.1551 4H5.84489L9 0.72111Z" fill="black" stroke="black"/><path d="M9 23.2789L5.84489 20H12.1551L9 23.2789Z" fill="black" stroke="black"/></svg>';
+            
+            let itemLab = document.createElement('h4');
+            itemLab.textContent = 'Item';
+            let item = document.createElement('input');
+            item.id = "sac-prog-item";
 
-        let nameLab = document.createElement('h4');
-        nameLab.textContent = 'Name';
-        let name = document.createElement('input');
-        name.id = "sac-prog-name";
+            let nameLab = document.createElement('h4');
+            nameLab.textContent = 'Name';
+            let name = document.createElement('input');
+            name.id = "sac-prog-name";
 
-        let button = document.createElement('button');
-        button.setAttribute('onclick', 'this.parentNode.remove()');
-        button.textContent = 'X';
+            let button = document.createElement('button');
+            button.setAttribute('onclick', 'this.parentNode.remove()');
+            button.textContent = 'X';
+            button.className = 'btn btn-red'
 
-        li.appendChild(itemLab);
-        li.appendChild(item);
-        li.appendChild(nameLab);
-        li.appendChild(name);
-        li.appendChild(button);
-        return li;
+            li.appendChild(move);
+
+            li.appendChild(itemLab);
+            li.appendChild(item);
+            li.appendChild(nameLab);
+            li.appendChild(name);
+            li.appendChild(button);
+
+            return li;
     }
 
     let output = `
@@ -989,13 +1017,20 @@ export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wra
     const addItem = (element, list) => {
         list.forEach((item) => {
             let li = document.createElement('li');
+            li.className = 'update-list-item';
+            let move = document.createElement('div');
+            move.className = 'move-item';
+            move.innerHTML = '<svg width="18" height="24" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 17H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 12H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M9 0.72111L12.1551 4H5.84489L9 0.72111Z" fill="black" stroke="black"/><path d="M9 23.2789L5.84489 20H12.1551L9 23.2789Z" fill="black" stroke="black"/></svg>';
+
             let input = document.createElement('textarea');
             input.value = item;
 
             let button = document.createElement('button');
             button.setAttribute('onclick', 'this.parentNode.remove()');
             button.textContent = 'X';
+            button.className = 'btn btn-red'
 
+            li.appendChild(move);
             li.appendChild(input);
             li.appendChild(button);
 
@@ -1005,8 +1040,12 @@ export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wra
 
     const addSacItem = (element, list) => {
         list.forEach((sacItem) => {
-
             let li = document.createElement('li');
+            li.className = 'update-sac-item';
+            let move = document.createElement('div');
+            move.className = 'move-item';
+            move.innerHTML = '<svg width="18" height="24" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 17H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M1 12H17" stroke="black" stroke-width="2" stroke-linecap="round"/><path d="M9 0.72111L12.1551 4H5.84489L9 0.72111Z" fill="black" stroke="black"/><path d="M9 23.2789L5.84489 20H12.1551L9 23.2789Z" fill="black" stroke="black"/></svg>';
+            
             let itemLab = document.createElement('h4');
             itemLab.textContent = 'Item';
             let item = document.createElement('input');
@@ -1022,6 +1061,9 @@ export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wra
             let button = document.createElement('button');
             button.setAttribute('onclick', 'this.parentNode.remove()');
             button.textContent = 'X';
+            button.className = 'btn btn-red'
+
+            li.appendChild(move);
 
             li.appendChild(itemLab);
             li.appendChild(item);

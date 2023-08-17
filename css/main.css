@@ -4,6 +4,7 @@
 @import url('./print.css');
 @import url('./sacrament.css');
 @import url('./assignment.css');
+@import url('./editDoc.css');
 
 :root {
     --dark-blue: #00799F;
