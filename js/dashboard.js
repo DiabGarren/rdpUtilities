@@ -25,7 +25,7 @@ if (!id) {
             <a class="btn btn-blue" href="/rdpUtilities/sacrament/">Sacrament</a>`;
         }
 
-        output += `<a class="btn btn-blue" href="/rdpUtilities/assignments/">Assignments</a>`
+        // output += `<a class="btn btn-blue" href="/rdpUtilities/assignments/">Assignments</a>`
     }
     wrapper.innerHTML = output;
 }

@@ -1113,7 +1113,6 @@ export async function renderAssignPage(userData, wrapper) {
             output += '<h2>All assignments</h2>';
             const assignments = [];
             allAssign.forEach((assignment) => {
-
                 allUsers.forEach((user) => {
                     let active = false;
                     assignments.forEach((item) => {
