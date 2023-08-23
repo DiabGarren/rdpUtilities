@@ -1,5 +1,5 @@
-const baseUrl = 'https://rdputilities-api.onrender.com/';
-// const baseUrl = 'http://156.155.158.70:1830/';
+// const baseUrl = 'https://rdputilities-api.onrender.com/';
+const baseUrl = 'http://156.155.158.70:1830/';
 
 export function getParam(param) {
     const queryString = window.location.search;
@@ -85,6 +85,29 @@ export async function updateUserData(userId, firstName, lastName, username, emai
             'email': email,
             'password': password,
             'level': level
+        })
+    });
+
+    const data = await res.json();
+    return data;
+}
+
+export async function resetPassword(email) {
+    const userRes = await fetch(`${baseUrl}users/email/${email}`);
+    const user = await userRes.json();
+
+    console.log(user);
+
+    const res = await fetch(`${baseUrl}reset/`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'id': user._id,
+            'user': `${user.firstName} ${user.lastName}`,
+            'email': email,
         })
     });
 

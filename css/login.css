@@ -1,5 +1,5 @@
 .login-wrapper {
-    max-width: 350px !important; 
+    max-width: 350px !important;
 }
 
 .login-wrapper * {
@@ -13,16 +13,59 @@
     border-radius: 5px;
 }
 
-.login-wrapper label, .login-wrapper input {
+.login-wrapper label,
+.login-wrapper input {
     font-size: 18px;
 }
 
-.login-wrapper button, .login-wrapper a {
+.login-wrapper button,
+.login-wrapper a {
     text-align: center;
     width: 100%;
 }
 
-.login, button.login, button.login:hover {
+.login,
+button.login,
+button.login:hover {
     background: var(--light-grey);
     color: black;
+}
+
+#reg-btn {
+    display: flex;
+}
+
+#reg-btn p {
+    display: inline;
+}
+
+#reg-btn a {
+    color: #551a8b;
+    width: 20%;
+    text-decoration: none;
+}
+
+#reg-btn a:hover {
+    color: var(--dark-blue);
+    text-decoration: underline;
+}
+
+#password {
+    margin-bottom: 0px;
+}
+
+#reset-pass {
+    color: #551a8b;
+    width: fit-content;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    margin: 0;
+    font-size: 14px;
+}
+
+#reset-pass:hover {
+    color: var(--dark-blue);
+    text-decoration: underline;
 }

@@ -1,9 +1,15 @@
-import { getLocalStorage, getParam, getUserData, setTitle, updateUserData } from "./utils.mjs";
+import { 
+    getLocalStorage, 
+    getParam, 
+    getUserData, 
+    setProfile, 
+    updateUserData 
+} from "./utils.mjs";
 
 const id = getLocalStorage('id');
 const userData = await getUserData(id);
 
-setTitle(userData.firstName, userData.lastName);
+setProfile(userData.firstName, userData.lastName);
 
 const update = getParam('update');
 const wrapper = document.querySelector('.wrapper');
