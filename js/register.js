@@ -12,10 +12,16 @@ const register = async () => {
         message.textContent = 'Please complete all the fields';
         return;
     }
-    console.log(firstName.value, lastName.value, username.value, email.value, password.value);
+    let load = document.createElement('img');
+    load.className = 'load';
+    load.src = '/rdpUtilities/images/load.svg';
+    load.alt = 'loading symbol';
+    document.querySelector('.login-wrapper').appendChild(load);
     const res = await newUser(firstName.value, lastName.value, username.value, email.value, password.value);
+
     if (res.error) {
         message.textContent = res.error;
+        document.querySelector('.login-wrapper').removeChild(load);
         return;
     }
 
