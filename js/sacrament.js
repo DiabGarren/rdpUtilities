@@ -11,7 +11,9 @@ import {
     renderNewSacrament,
     renderSacrament,
     renderUpdateSacrament,
+    setIcon,
     setProfile,
+    subpageHeader,
     updateSacramentDoc
 } from './utils.mjs';
 
@@ -21,6 +23,8 @@ if (!id) {
 }
 
 const userData = await getUserData(id);
+document.querySelector('header').innerHTML = subpageHeader('Sacrament', userData.level);
+document.querySelector('#subpage').addEventListener('click', setIcon);
 
 setProfile(userData.firstName, userData.lastName);
 

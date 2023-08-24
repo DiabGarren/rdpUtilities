@@ -1,5 +1,6 @@
-import { getUserData, getLocalStorage } from './utils.mjs';
+import { getUserData, getLocalStorage, header } from './utils.mjs';
 
+document.querySelector('header').innerHTML = header('Dashboard');
 const id = getLocalStorage('id');
 
 if (!id) {

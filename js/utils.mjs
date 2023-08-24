@@ -1,5 +1,5 @@
-const baseUrl = 'https://rdputilities-api.onrender.com/';
-// const baseUrl = 'http://156.155.158.70:1830/';
+const baseUrl = 'https://rdputilities-api.onrender.com';
+// const baseUrl = 'http://156.155.158.70:1830';
 
 export function getParam(param) {
     const queryString = window.location.search;
@@ -9,13 +9,13 @@ export function getParam(param) {
 }
 
 export async function getAllUsers() {
-    const res = await fetch(`${baseUrl}users`);
+    const res = await fetch(`${baseUrl}/users`);
     const data = await res.json();
     return data;
 }
 
 export async function getUserData(userId) {
-    const res = await fetch(`${baseUrl}users/${userId}`);
+    const res = await fetch(`${baseUrl}/users/${userId}`);
     const data = await res.json();
     return data;
 }
@@ -33,7 +33,7 @@ export function setProfile(firstName, lastName) {
 }
 
 export async function userLogin(username, email, password) {
-    const res = await fetch(`${baseUrl}users/login`, {
+    const res = await fetch(`${baseUrl}/users/login`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -51,7 +51,7 @@ export async function userLogin(username, email, password) {
 }
 
 export async function newUser(firstName, lastName, username, email, password) {
-    const res = await fetch(`${baseUrl}users`, {
+    const res = await fetch(`${baseUrl}/users`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -72,7 +72,7 @@ export async function newUser(firstName, lastName, username, email, password) {
 }
 
 export async function updateUserData(userId, firstName, lastName, username, email, password, level) {
-    const res = await fetch(`${baseUrl}users/${userId}`, {
+    const res = await fetch(`${baseUrl}/users/${userId}`, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -88,17 +88,15 @@ export async function updateUserData(userId, firstName, lastName, username, emai
         })
     });
 
-    const data = await res.json();
+    const data = await res;
     return data;
 }
 
 export async function resetPassword(email) {
-    const userRes = await fetch(`${baseUrl}users/email/${email}`);
+    const userRes = await fetch(`${baseUrl}/users/email/${email}`);
     const user = await userRes.json();
 
-    console.log(user);
-
-    const res = await fetch(`${baseUrl}reset/`, {
+    const res = await fetch(`${baseUrl}/reset/`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -116,19 +114,19 @@ export async function resetPassword(email) {
 }
 
 export async function getAllWardCouncilDocs() {
-    const res = await fetch(`${baseUrl}wardCouncil`);
+    const res = await fetch(`${baseUrl}/wardCouncil`);
     const data = await res.json();
     return data;
 }
 
 export async function getWardCouncilDoc(date) {
-    const res = await fetch(`${baseUrl}wardCouncil/${date}`);
+    const res = await fetch(`${baseUrl}/wardCouncil/${date}`);
     const data = await res.json();
     return data;
 }
 
 export async function createWardCouncilDoc(date, opening, st, train, agenda, closing, notes) {
-    const res = await fetch(`${baseUrl}wardCouncil`, {
+    const res = await fetch(`${baseUrl}/wardCouncil`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -150,7 +148,7 @@ export async function createWardCouncilDoc(date, opening, st, train, agenda, clo
 }
 
 export async function updateWardCouncilDoc(date, opening, st, train, agenda, closing, notes) {
-    const res = await fetch(`${baseUrl}wardCouncil/${date}`, {
+    const res = await fetch(`${baseUrl}/wardCouncil/${date}`, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -171,7 +169,7 @@ export async function updateWardCouncilDoc(date, opening, st, train, agenda, clo
 }
 
 export async function deleteWardCouncilDoc(date) {
-    const res = await fetch(`${baseUrl}wardCouncil/${date}`, {
+    const res = await fetch(`${baseUrl}/wardCouncil/${date}`, {
         method: 'DELETE'
     });
 
@@ -180,19 +178,19 @@ export async function deleteWardCouncilDoc(date) {
 }
 
 export async function getAllBishopricDocs() {
-    const res = await fetch(`${baseUrl}bishopric`);
+    const res = await fetch(`${baseUrl}/bishopric`);
     const data = await res.json();
     return data;
 }
 
 export async function getBishopricDoc(date) {
-    const res = await fetch(`${baseUrl}bishopric/${date}`);
+    const res = await fetch(`${baseUrl}/bishopric/${date}`);
     const data = await res.json();
     return data;
 }
 
 export async function createBishopricDoc(date, opening, st, train, agenda, closing, notes) {
-    const res = await fetch(`${baseUrl}bishopric`, {
+    const res = await fetch(`${baseUrl}/bishopric`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -214,7 +212,7 @@ export async function createBishopricDoc(date, opening, st, train, agenda, closi
 }
 
 export async function updateBishopricDoc(date, opening, st, train, agenda, closing, notes) {
-    const res = await fetch(`${baseUrl}bishopric/${date}`, {
+    const res = await fetch(`${baseUrl}/bishopric/${date}`, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -235,7 +233,7 @@ export async function updateBishopricDoc(date, opening, st, train, agenda, closi
 }
 
 export async function deleteBishopricDoc(date) {
-    const res = await fetch(`${baseUrl}bishopric/${date}`, {
+    const res = await fetch(`${baseUrl}/bishopric/${date}`, {
         method: 'DELETE'
     });
 
@@ -245,19 +243,19 @@ export async function deleteBishopricDoc(date) {
 
 
 export async function getAllSacramentDocs() {
-    const res = await fetch(`${baseUrl}sacrament`);
+    const res = await fetch(`${baseUrl}/sacrament`);
     const data = await res.json();
     return data;
 }
 
 export async function getSacramentDoc(date) {
-    const res = await fetch(`${baseUrl}sacrament/${date}`);
+    const res = await fetch(`${baseUrl}/sacrament/${date}`);
     const data = await res.json();
     return data;
 }
 
 export async function createSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer) {
-    const res = await fetch(`${baseUrl}sacrament`, {
+    const res = await fetch(`${baseUrl}/sacrament`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -284,7 +282,7 @@ export async function createSacramentDoc(date, conducting, announcements, openin
 }
 
 export async function updateSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer) {
-    const res = await fetch(`${baseUrl}sacrament/${date}`, {
+    const res = await fetch(`${baseUrl}/sacrament/${date}`, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -311,7 +309,7 @@ export async function updateSacramentDoc(date, conducting, announcements, openin
 }
 
 export async function deleteSacramentDoc(date) {
-    const res = await fetch(`${baseUrl}sacrament/${date}`, {
+    const res = await fetch(`${baseUrl}/sacrament/${date}`, {
         method: 'DELETE'
     });
 
@@ -320,19 +318,19 @@ export async function deleteSacramentDoc(date) {
 }
 
 export async function getAllAssignments() {
-    const res = await fetch(`${baseUrl}assignments`);
+    const res = await fetch(`${baseUrl}/assignments`);
     const data = await res.json();
     return data;
 }
 
 export async function getAssignments(userId) {
-    const res = await fetch(`${baseUrl}assignments/${userId}`);
+    const res = await fetch(`${baseUrl}/assignments/${userId}`);
     const data = await res.json();
     return data;
 }
 
 export async function createAssignment(userId, assignment, completed) {
-    const res = await fetch(`${baseUrl}assignments/`, {
+    const res = await fetch(`${baseUrl}/assignments/`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -349,7 +347,7 @@ export async function createAssignment(userId, assignment, completed) {
 }
 
 export async function updateAssignment(assignmentId, userId, assignment, completed) {
-    const res = await fetch(`${baseUrl}assignments/${assignmentId}`, {
+    const res = await fetch(`${baseUrl}/assignments/${assignmentId}`, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -366,11 +364,69 @@ export async function updateAssignment(assignmentId, userId, assignment, complet
 }
 
 export async function deleteAssignment(assignmentId) {
-    const res = await fetch(`${baseUrl}assignments/${assignmentId}`, {
+    const res = await fetch(`${baseUrl}/assignments/${assignmentId}`, {
         method: 'DELETE'
     });
     const data = await res.json();
     return data;
+}
+
+export function header(page) {
+    return `
+    <a href="/rdpUtilities/dashboard/" id="home">
+        <svg width="55" height="50" viewBox="0 0 50 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 16V43H25H40V16M2 15L25 2L48 15" stroke="white" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+    </a>
+    <h1>${page}</h1>
+    <a href="/rdpUtilities/profile" id="profile"></a>`;
+}
+
+export function subpageHeader(currPage, level) {
+    const pages = [['dashboard', 'Dashboard'], ['wardCouncil', 'Ward Council'], ['bishopric', 'Bishopric'], ['sacrament', 'Sacrament']];
+    const dropdown = () => {
+        let output = '';
+        for (const page of pages) {
+            if (page[1] === currPage) {
+                output += `<a href="/rdpUtilities/${page[0]}" class="active">${page[1]}</a>`
+            } else {
+                output += `<a href="/rdpUtilities/${page[0]}">${page[1]}</a>`
+            }
+        }
+        return output;
+    }
+    return `
+    <a id="subpage">
+        <svg width="55" height="50" viewBox="0 0 65 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 5H60" stroke="white" stroke-width="9" stroke-linecap="round"/>
+            <path d="M5 55H60" stroke="white" stroke-width="9" stroke-linecap="round"/>
+            <path d="M5 30H60" stroke="white" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+    </a>
+    <div id="page-navi" style="display: none">
+        ${dropdown()}
+    </div>
+    <h1>${currPage}</h1>
+    <a href="/rdpUtilities/profile" id="profile"></a>`;
+}
+
+export function setIcon() {
+    const icon = document.querySelector('#subpage');
+    const drop = document.querySelector('#page-navi');
+    if (drop.getAttribute('style') == 'display: none') {
+        icon.innerHTML = `<svg width="55" height="50" viewBox="0 0 65 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 5L60 55M5 55L60 5" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`;
+        drop.setAttribute('style', 'display: flex');
+    } else {
+        icon.innerHTML = `<svg width="55" height="50" viewBox="0 0 65 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 5H60" stroke="white" stroke-width="9" stroke-linecap="round"/>
+        <path d="M5 55H60" stroke="white" stroke-width="9" stroke-linecap="round"/>
+        <path d="M5 30H60" stroke="white" stroke-width="9" stroke-linecap="round"/>
+    </svg>`;
+        drop.setAttribute('style', 'display: none');
+    }
+
 }
 
 export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {

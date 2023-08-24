@@ -5,6 +5,7 @@
 @import url('./sacrament.css');
 @import url('./assignment.css');
 @import url('./editDoc.css');
+@import url('./profile.css');
 
 :root {
     --dark-blue: #00799F;
@@ -45,26 +46,60 @@ header {
     grid-template-columns: 50px 1fr 50px;
 }
 
-#home {
+#home,
+#subpage {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60px;
+    height: 100%;
+    cursor: pointer;
 }
 
-#home svg {
+#home svg,
+#subpage svg {
     padding: 10px;
     border-radius: 50%;
-    height: 50px;
+    height: 55px;
 }
 
-#home:hover svg {
+#subpage svg {
+    border-radius: 15px;
+}
+
+#home:hover svg,
+#subpage:hover svg {
     background: var(--light-blue);
 }
 
-#home:hover svg path {
+#home:hover svg path,
+#subpage:hover svg path {
     stroke: var(--dark-blue);
 }
+
+#page-navi {
+    position: absolute;
+    top: 60px;
+    width: 100%;
+    flex-direction: column;
+    background-color: var(--dark-blue);
+}
+
+#page-navi a {
+    display: block;
+    padding: 15px;
+    width: 100%;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+}
+
+#page-navi .active,
+#page-navi a:hover {
+    background-color: var(--light-blue);
+    color: var(--dark-blue);
+}
+
 
 h1 {
     grid-column: 2;
@@ -220,11 +255,30 @@ footer a {
         grid-template-columns: 80px 1fr 65px;
     }
 
-    #home {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
+    #page-navi {
+        position: absolute;
+        top: 80px;
+        width: 200px;
+        flex-direction: column;
+        background-color: var(--dark-blue);
+        border-radius: 0 0 15px;
+    }
+    
+    #page-navi a {
+        display: block;
+        text-decoration: none;
+        padding: 10px 20px;
+        color: white;
+    }
+    
+    #page-navi .active,
+    #page-navi a:hover {
+        background-color: var(--light-blue);
+        color: var(--dark-blue);
+    }
+    
+    #page-navi a:last-child {
+        border-radius: 0 0 14px;
     }
 
 

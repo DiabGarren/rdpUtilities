@@ -12,7 +12,9 @@ import {
     renderDocPage,
     renderNewDocPage,
     renderUpdateDocPage,
-    deleteDoc
+    deleteDoc,
+    subpageHeader,
+    setIcon
 } from './utils.mjs';
 
 const id = getLocalStorage('id');
@@ -21,6 +23,8 @@ if (!id) {
 }
 
 const userData = await getUserData(id);
+document.querySelector('header').innerHTML = subpageHeader('Ward Council', userData.level);
+document.querySelector('#subpage').addEventListener('click', setIcon);
 
 setProfile(userData.firstName, userData.lastName);
 

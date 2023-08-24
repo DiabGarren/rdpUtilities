@@ -51,6 +51,10 @@ textarea {
     padding-left: 5px;
 }
 
+input {
+    margin-bottom: 15px;
+}
+
 textarea {
     min-height: 45px;
 }

@@ -1,4 +1,4 @@
-.login-wrapper {
+.login-wrapper, .reset-wrapper {
     max-width: 350px !important;
 }
 
@@ -63,6 +63,7 @@ button.login:hover {
     text-align: left;
     margin: 0;
     font-size: 14px;
+    text-decoration: none;
 }
 
 #reset-pass:hover {
