@@ -11,9 +11,9 @@ if (id) {
     let output = `
     <h3 class="form-warning"></h3>
     <label>Enter your new password</label>
-    <input id="password" type="text" />
+    <input id="password" type="password" />
     <label>Confirm your new password</label>
-    <input id="confirm" type="text" />
+    <input id="confirm" type="password" />
     <button id="reset" class="btn btn-green">Reset Password</button>
     <a href="/rdpUtilities" class="btn btn-blue">Back</a>
     `;

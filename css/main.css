@@ -43,7 +43,7 @@ header {
     height: 60px;
 
     display: grid;
-    grid-template-columns: 50px 1fr 50px;
+    grid-template-columns: 60px 1fr 50px;
 }
 
 #home,
@@ -59,7 +59,8 @@ header {
 #subpage svg {
     padding: 10px;
     border-radius: 50%;
-    height: 55px;
+    height: 50px;
+    margin-inline: 5px;
 }
 
 #subpage svg {
@@ -92,11 +93,14 @@ header {
     text-align: center;
     text-decoration: none;
     color: white;
+    background-image: url('data:image/svg+xml,<svg width="2103" height="166" viewBox="0 0 2103 166" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="2103" height="166" fill="url(%23paint0_linear_104_2)"/><defs><linearGradient id="paint0_linear_104_2" x1="1399.5" y1="-3.4113e-05" x2="698.5" y2="9.09349e-05" gradientUnits="userSpaceOnUse"><stop stop-color="%2300799F"/><stop offset="1" stop-color="%23BFDEE8"/></linearGradient></defs></svg>');
+    background-position: 100%;
+    transition: background-position .5s, color .5s;
 }
 
 #page-navi .active,
 #page-navi a:hover {
-    background-color: var(--light-blue);
+    background-position: 0%;
     color: var(--dark-blue);
 }
 
@@ -154,52 +158,53 @@ h1 {
 
     border-radius: 5px;
     cursor: pointer;
+    text-align: center;
     color: white;
     text-decoration: none;
-    text-align: center;
+
+    transition: background-position .5s, color .5s;
+    background-position: 100%;
+}
+
+.btn:hover {
+    background-position: 0%;
 }
 
 .btn-blue {
     border: 2px solid var(--dark-blue);
-    background-color: var(--dark-blue);
+    background-image: url('data:image/svg+xml,<svg width="2103" height="166" viewBox="0 0 2103 166" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="2103" height="166" fill="url(%23paint0_linear_104_2)"/><defs><linearGradient id="paint0_linear_104_2" x1="1399.5" y1="-3.4113e-05" x2="698.5" y2="9.09349e-05" gradientUnits="userSpaceOnUse"><stop stop-color="%2300799F"/><stop offset="1" stop-color="%23BFDEE8"/></linearGradient></defs></svg>');
+
 }
 
 .btn-blue:hover {
     color: var(--dark-blue);
-    background-color: var(--light-blue);
 }
 
 .btn-red {
     border: 2px solid var(--dark-red);
-    background-color: var(--dark-red);
+    background-image: url('data:image/svg+xml,<svg width="2103" height="166" viewBox="0 0 2103 166" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="2103" height="166" fill="url(%23paint0_linear_104_6)"/><defs><linearGradient id="paint0_linear_104_6" x1="1399.5" y1="-3.4113e-05" x2="698.5" y2="9.09349e-05" gradientUnits="userSpaceOnUse"><stop stop-color="%23910505"/><stop offset="1" stop-color="%23FF9393"/></linearGradient></defs></svg>');
 }
 
 .btn-red:hover {
-    border: 2px solid var(--dark-red);
     color: var(--dark-red);
-    background: var(--light-red);
-}
-
-.btn-grey {
-    border: 2px solid var(--dark-grey);
-    background-color: var(--dark-grey);
-}
-
-.btn-grey:hover {
-    border: 2px solid var(--dark-grey);
-    color: var(--dark-grey);
-    background: var(--light-grey);
 }
 
 .btn-green {
     border: 2px solid var(--dark-green);
-    background-color: var(--dark-green);
+    background-image: url('data:image/svg+xml,<svg width="2103" height="166" viewBox="0 0 2103 166" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="2103" height="166" fill="url(%23paint0_linear_104_7)"/><defs><linearGradient id="paint0_linear_104_7" x1="1399.5" y1="-3.4113e-05" x2="698.5" y2="9.09349e-05" gradientUnits="userSpaceOnUse"><stop stop-color="%23028202"/><stop offset="1" stop-color="%2350F650"/></linearGradient></defs></svg>');
 }
 
 .btn-green:hover {
-    border: 2px solid var(--dark-green);
     color: var(--dark-green);
-    background: var(--light-green);
+}
+
+.btn-grey {
+    border: 2px solid var(--dark-grey);
+    background-image: url('data:image/svg+xml,<svg width="2103" height="166" viewBox="0 0 2103 166" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="2103" height="166" fill="url(%23paint0_linear_104_8)"/><defs><linearGradient id="paint0_linear_104_8" x1="1399.5" y1="-3.4113e-05" x2="698.5" y2="9.09349e-05" gradientUnits="userSpaceOnUse"><stop stop-color="%23707070"/><stop offset="1" stop-color="%23CCCCCC"/></linearGradient></defs></svg>');
+}
+
+.btn-grey:hover {
+    color: var(--dark-grey);
 }
 
 footer {
@@ -252,13 +257,19 @@ footer a {
         background: linear-gradient(to right, var(--dark-blue), var(--light-blue));
         height: 80px;
 
-        grid-template-columns: 80px 1fr 65px;
+        grid-template-columns: 71px 1fr 65px;
+    }
+
+    #home svg,
+    #subpage svg {
+        height: 55px;
+        margin-inline: 8px;
     }
 
     #page-navi {
         position: absolute;
         top: 80px;
-        width: 200px;
+        width: 300px;
         flex-direction: column;
         background-color: var(--dark-blue);
         border-radius: 0 0 15px;
@@ -266,17 +277,18 @@ footer a {
     
     #page-navi a {
         display: block;
+        text-align: left;
         text-decoration: none;
-        padding: 10px 20px;
+        padding: 15px 20px 15px 25px;
         color: white;
     }
-    
+
     #page-navi .active,
     #page-navi a:hover {
         background-color: var(--light-blue);
         color: var(--dark-blue);
     }
-    
+
     #page-navi a:last-child {
         border-radius: 0 0 14px;
     }
