@@ -1,5 +1,5 @@
-// const baseUrl = 'https://rdputilities-api.onrender.com';
-const baseUrl = 'http://156.155.158.70:1830';
+const baseUrl = 'https://rdputilities-api.onrender.com';
+// const baseUrl = 'http://156.155.158.70:1830';
 
 export function getParam(param) {
     const queryString = window.location.search;
