@@ -2,9 +2,13 @@ import {
     getAllAssignments,
     getAssignments,
     getLocalStorage,
+    getParam,
     getUserData,
     renderAssignPage,
-    setProfile
+    renderNewAssign,
+    setIcon,
+    setProfile,
+    subpageHeader
 } from './utils.mjs';
 
 const id = getLocalStorage('id');
@@ -13,8 +17,13 @@ if (!id) {
 }
 
 const userData = await getUserData(id);
+
+document.querySelector('header').innerHTML = subpageHeader('Assignments', 5);
+document.querySelector('#subpage').addEventListener('click', setIcon);
+
 setProfile(userData.firstName, userData.lastName);
-document.title += ` ${userData.firstName} ${userData.lastName}`;
+
+const newAssignment = getParam('new');
 
 const wrapper = document.querySelector('.wrapper');
 document.querySelector('.load').remove();
@@ -23,4 +32,11 @@ if (userData.level <= 1) {
     location = '/rdpUtilities/restricted/';
 }
 
-renderAssignPage(userData, wrapper);
+if (newAssignment) {
+    if (userData.level < 4) {
+        location = '/rdpUtilities/restricted/';
+    }
+    renderNewAssign(wrapper);
+} else {
+    renderAssignPage(userData, wrapper);
+}

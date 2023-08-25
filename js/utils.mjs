@@ -1,5 +1,6 @@
-const baseUrl = 'https://rdputilities-api.onrender.com';
+// const baseUrl = 'https://rdputilities-api.onrender.com';
 // const baseUrl = 'http://156.155.158.70:1830';
+const baseUrl = 'http://172.20.10.9:1830';
 
 export function getParam(param) {
     const queryString = window.location.search;
@@ -329,7 +330,7 @@ export async function getAssignments(userId) {
     return data;
 }
 
-export async function createAssignment(userId, assignment, completed) {
+export async function createAssignment(userId, assignment, completed, dueDate) {
     const res = await fetch(`${baseUrl}/assignments/`, {
         method: 'POST',
         headers: {
@@ -339,14 +340,15 @@ export async function createAssignment(userId, assignment, completed) {
         body: JSON.stringify({
             'userId': userId,
             'assignment': assignment,
-            'completed': completed
+            'completed': completed,
+            'dueDate': dueDate
         })
     });
     const data = await res.json();
     return data;
 }
 
-export async function updateAssignment(assignmentId, userId, assignment, completed) {
+export async function updateAssignment(assignmentId, userId, assignment, completed, dueDate) {
     const res = await fetch(`${baseUrl}/assignments/${assignmentId}`, {
         method: 'PUT',
         headers: {
@@ -356,7 +358,8 @@ export async function updateAssignment(assignmentId, userId, assignment, complet
         body: JSON.stringify({
             'userId': userId,
             'assignment': assignment,
-            'completed': completed
+            'completed': completed,
+            'dueDate': dueDate
         })
     });
     const data = await res.json();
@@ -383,7 +386,12 @@ export function header(page) {
 }
 
 export function subpageHeader(currPage, level) {
-    const pages = [['dashboard', 'Dashboard'], ['wardCouncil', 'Ward Council'], ['bishopric', 'Bishopric'], ['sacrament', 'Sacrament']];
+    const pages = [
+        ['dashboard', 'Dashboard'],
+        ['wardCouncil', 'Ward Council'],
+        ['bishopric', 'Bishopric'],
+        ['sacrament', 'Sacrament']
+    ];
     const dropdown = () => {
         let output = '';
         for (const page of pages) {
@@ -1073,7 +1081,10 @@ export async function renderNewSacrament(createDocFunc, wrapper, method) {
 
         const program = [];
         document.querySelector('#sac-list').childNodes.forEach((child) => {
-            let item = { item: '', name: '' };
+            let item = {
+                item: '',
+                name: ''
+            };
             child.childNodes.forEach((child) => {
                 if (child.id == 'sac-prog-item') item.item = child.value;
                 if (child.id == 'sac-prog-name') item.name = child.value;
@@ -1206,7 +1217,10 @@ export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wra
 
         const program = [];
         document.querySelector('#sac-list').childNodes.forEach((child) => {
-            let item = { item: '', name: '' };
+            let item = {
+                item: '',
+                name: ''
+            };
             child.childNodes.forEach((child) => {
                 if (child.id == 'sac-prog-item') item.item = child.value;
                 if (child.id == 'sac-prog-name') item.name = child.value;
@@ -1223,86 +1237,128 @@ export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wra
 }
 
 export async function renderAssignPage(userData, wrapper) {
-    let output = '';
-    if (userData.level >= 4) {
-        const allAssign = await getAllAssignments();
-        const allUsers = await getAllUsers();
-
-        if (allAssign.length == 0) {
-            output += '<h2>There are no assignments</h2>';
+    const allAssignments = await getAllAssignments();
+    const allUsers = await getAllUsers();
+    allUsers.sort((a, b) => {
+        if (a.lastName > b.lastName) {
+            return 1
+        } else if (a.lastName == b.lastName && a.firstName > b.firstName) {
+            return 1
         } else {
-            output += '<h2>All assignments</h2>';
-            const assignments = [];
-            allAssign.forEach((assignment) => {
-                allUsers.forEach((user) => {
-                    let active = false;
-                    assignments.forEach((item) => {
-                        if (item.userId === user._id) {
-                            active = true;
-                            if (assignment.userId === user._id) {
-                                item.assignments.push(assignment);
-                            }
-                        }
-                    });
-                    if (!active) {
-                        if (assignment.userId === user._id) {
-                            assignments.push({ userId: user._id, name: `${user.firstName} ${user.lastName}`, assignments: [assignment] });
-                        }
-                    }
-                });
-            });
-
-            // Display current user's assignments first
-            for (let i = 0; i < assignments.length; i++) {
-                if (assignments[i].userId == userData._id) {
-                    let temp = [];
-                    temp.push(assignments[0]);
-                    assignments[0] = assignments[i];
-                    assignments[i] = temp[0];
-                }
-            }
-
-
-            assignments.forEach((item) => {
-                output += `<h3>${item.name}</h3>`;
-                const todo = [];
-                const complete = [];
-                item.assignments.forEach((assignment) => {
-                    output += ``;
-                    if (assignment.completed) {
-                        complete.push(`<label class="assignment"><input class="assignment-check" type="checkbox" checked data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}"><p>${assignment.assignment}</p></label>`);
-                    } else {
-                        todo.push(`<label class="assignment"><input class="assignment-check" type="checkbox" data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}"><p>${assignment.assignment}</p></label>`);
-                    }
-                    output += ``;
-                });
-                todo.forEach(item => {
-                    output += item;
-                });
-                complete.forEach(item => {
-                    output += item;
-                });
-
-            });
-
+            return -1;
         }
-    }
+    });
 
-    output += '<button id="new-assign" class="btn btn-blue">Create Assignment</button>';
+    const userAssignments = [];
+    const otherAssignments = [];
+    allAssignments.forEach((assignment) => {
+        if (assignment.userId === userData._id) {
+            userAssignments.push(assignment);
+        } else {
+            allUsers.forEach(user => {
+                if (user._id === assignment.userId) {
+                    otherAssignments.push({
+                        user: `${user.firstName} ${user.lastName}`,
+                        _id: assignment._id,
+                        userId: assignment.userId,
+                        assignment: assignment.assignment,
+                        completed: assignment.completed,
+                        dueDate: assignment.dueDate
+                    });
+                    return;
+                }
+            })
+        }
+    });
+
+    let output = `<h2>${userData.firstName} ${userData.lastName} Assignments</h2>`
+    userAssignments.forEach(assignment => {
+        output += `<label class="assignment"><input class="assignment-check" type="checkbox" data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}" data-duedate="${assignment.dueDate}"`;
+        if (assignment.completed) {
+            output += 'checked';
+        }
+        output += `><p>${assignment.assignment}</p></label>`;
+    });
+
+    if (userData.level >= 4) {
+        if (otherAssignments.length > 0) {
+            output += `<h2>Other Assignments</h2>`;
+            otherAssignments.forEach(assignment => {
+                output += `<label class="assignment"><input class="assignment-check" type="checkbox" data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}" data-duedate="${assignment.dueDate}"`;
+                if (assignment.completed) {
+                    output += 'checked';
+                }
+                output += `><p>${assignment.user}-${assignment.assignment}</p></label>`;
+            })
+        }
+
+        output += `<a href="/rdpUtilities/assignments/?new=true" class="btn btn-green">Create Assignment</a>
+        <a href="/rdpUtilities/dashboard" class="btn btn-blue">Back</a>`;
+    }
 
     wrapper.innerHTML = output;
 
     document.querySelectorAll('.assignment-check').forEach(element => {
 
         element.addEventListener('click', async (event) => {
-            const res = await updateAssignment(event.target.dataset.id, event.target.dataset.userid, event.target.dataset.assignment, event.target.checked);
+            const res = await updateAssignment(event.target.dataset.id, event.target.dataset.userid, event.target.dataset.assignment, event.target.checked, event.target.dataset.duedate);
         });
     })
+}
 
-    // document.querySelector('#new-assign').addEventListener('click', () => {
-    //     if (userData.level >= 4) {
-    //         output += '<label'
-    //     }
-    // })
-    // wrapper.innerHTML = output;
+export async function renderNewAssign(wrapper) {
+    const allUsers = await getAllUsers();
+    allUsers.sort((a, b) => {
+        if (a.lastName > b.lastName) {
+            return 1
+        } else if (a.lastName == b.lastName && a.firstName > b.firstName) {
+            return 1
+        } else {
+            return -1;
+        }
+    });
+
+    let today = new Date();
+    today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString().slice(0, 10);
+
+    const selectUser = () => {
+        let output = '';
+        allUsers.forEach(user => {
+            output += `<option value="${user._id}">${user.firstName} ${user.lastName}</option>`;
+        });
+        return output;
+    }
+
+    let output = `
+    <h2>New Assignment</h2>
+    <h3 class="form-warning"></h3>
+    <h3>Name:</h3>
+    <select id="user">
+        ${selectUser()}
+    </select>
+    <h3>Description:</h3>
+    <input type="text" id="description">
+    <h3>Due Date:</h3>
+    <input type="date" id="dueDate" value="${today}">
+
+    <button id="create" class="btn btn-green">Create Assignment</button>
+    <a href="/rdpUtilities/assignments" class="btn btn-blue">Back</a>
+    `;
+
+    wrapper.innerHTML = output;
+
+    document.querySelector('#create').addEventListener('click', async () => {
+        document.querySelector('.form-warning').textContent = '';
+        const user = document.querySelector('#user').value;
+        const assignment = document.querySelector('#description').value;
+        const dueDate = document.querySelector('#dueDate').value;
+
+        const res = await createAssignment(user, assignment, false, dueDate);
+
+        if (res.error) {
+            document.querySelector('.form-warning').textContent = res.error;
+        } else {
+            location = '/rdpUtilities/assignments';
+        }
+    });
 }
