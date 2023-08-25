@@ -23,9 +23,15 @@ const register = async () => {
         message.textContent = res.error;
         document.querySelector('.login-wrapper').removeChild(load);
         return;
+    } else {
+
+        document.querySelector('.login-wrapper').innerHTML = `
+        <h2>${firstName.value} ${lastName.value}</h2>
+        <h3>Your rdpUtilities account has been created</h3>
+        <a href="/rdpUtilities" class="btn btn-blue">Login</a>
+        `;
     }
 
-    location = '/rdpUtilities';
 };
 
 document.querySelector('#reg').addEventListener('click', register);
