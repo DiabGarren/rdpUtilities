@@ -24,7 +24,18 @@ div.doc-item {
 .doc-item h3 {
     display: inline-block;
     font-size: 18px;
+}
 
+.doc-item h4 {
+    display: inline;
+}
+
+.doc-item:has(h4) {
+    margin-top: 50px;
+}
+
+.doc-item:has(h4):last-of-type {
+    margin-top: 10px;
 }
 
 .doc-item p {

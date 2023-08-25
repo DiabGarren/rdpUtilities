@@ -52,13 +52,13 @@ if (newDoc && !update) {
     if (userData.level < '3') {
         location = '/rdpUtilities/restricted/';
     }
-    await renderNewDocPage(meeting, createWardCouncilDoc, wrapper, 'New');
+    await renderNewDocPage(meeting, userData, createWardCouncilDoc, wrapper, 'New');
 }
 if (!newDoc && update) {
     if (userData.level < '3') {
         location = '/rdpUtilities/restricted/';
     }
-    await renderUpdateDocPage(meeting, getWardCouncilDoc, updateWardCouncilDoc, date, wrapper, 'Update');
+    await renderUpdateDocPage(meeting, userData, getWardCouncilDoc, updateWardCouncilDoc, date, wrapper, 'Update');
 }
 
 if (newDoc && update) {

@@ -1,5 +1,5 @@
-const baseUrl = 'https://rdputilities-api.onrender.com';
-// const baseUrl = 'http://156.155.158.70:1830';
+// const baseUrl = 'https://rdputilities-api.onrender.com';
+const baseUrl = 'http://156.155.158.70:1830';
 // const baseUrl = 'http://172.20.10.9:1830';
 
 export function getParam(param) {
@@ -126,7 +126,7 @@ export async function getWardCouncilDoc(date) {
     return data;
 }
 
-export async function createWardCouncilDoc(date, opening, st, train, agenda, closing, notes) {
+export async function createWardCouncilDoc(date, opening, st, train, agenda, closing, notes, createdBy) {
     const res = await fetch(`${baseUrl}/wardCouncil`, {
         method: 'POST',
         headers: {
@@ -140,7 +140,9 @@ export async function createWardCouncilDoc(date, opening, st, train, agenda, clo
             'training': train,
             'agenda': agenda,
             'closingPrayer': closing,
-            'notes': notes
+            'notes': notes,
+            'createdBy': createdBy,
+            'updatedBy': [createdBy]
         })
     });
 
@@ -148,7 +150,7 @@ export async function createWardCouncilDoc(date, opening, st, train, agenda, clo
     return data;
 }
 
-export async function updateWardCouncilDoc(date, opening, st, train, agenda, closing, notes) {
+export async function updateWardCouncilDoc(date, opening, st, train, agenda, closing, notes, updatedBy) {
     const res = await fetch(`${baseUrl}/wardCouncil/${date}`, {
         method: 'PUT',
         headers: {
@@ -161,7 +163,8 @@ export async function updateWardCouncilDoc(date, opening, st, train, agenda, clo
             'training': train,
             'agenda': agenda,
             'closingPrayer': closing,
-            'notes': notes
+            'notes': notes,
+            'updatedBy': updatedBy
         })
     });
 
@@ -174,7 +177,7 @@ export async function deleteWardCouncilDoc(date) {
         method: 'DELETE'
     });
 
-    const data = await res.json();
+    const data = res;
     return data;
 }
 
@@ -190,7 +193,7 @@ export async function getBishopricDoc(date) {
     return data;
 }
 
-export async function createBishopricDoc(date, opening, st, train, agenda, closing, notes) {
+export async function createBishopricDoc(date, opening, st, train, agenda, closing, notes, createdBy) {
     const res = await fetch(`${baseUrl}/bishopric`, {
         method: 'POST',
         headers: {
@@ -204,7 +207,9 @@ export async function createBishopricDoc(date, opening, st, train, agenda, closi
             'training': train,
             'agenda': agenda,
             'closingPrayer': closing,
-            'notes': notes
+            'notes': notes,
+            'createdBy': createdBy,
+            'updatedBy': [createdBy]
         })
     });
 
@@ -212,7 +217,7 @@ export async function createBishopricDoc(date, opening, st, train, agenda, closi
     return data;
 }
 
-export async function updateBishopricDoc(date, opening, st, train, agenda, closing, notes) {
+export async function updateBishopricDoc(date, opening, st, train, agenda, closing, notes, updatedBy) {
     const res = await fetch(`${baseUrl}/bishopric/${date}`, {
         method: 'PUT',
         headers: {
@@ -225,7 +230,8 @@ export async function updateBishopricDoc(date, opening, st, train, agenda, closi
             'training': train,
             'agenda': agenda,
             'closingPrayer': closing,
-            'notes': notes
+            'notes': notes,
+            'updatedBy': updatedBy
         })
     });
 
@@ -238,7 +244,7 @@ export async function deleteBishopricDoc(date) {
         method: 'DELETE'
     });
 
-    const data = await res.json();
+    const data = res;
     return data;
 }
 
@@ -255,7 +261,7 @@ export async function getSacramentDoc(date) {
     return data;
 }
 
-export async function createSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer) {
+export async function createSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer, createdBy) {
     const res = await fetch(`${baseUrl}/sacrament`, {
         method: 'POST',
         headers: {
@@ -274,7 +280,9 @@ export async function createSacramentDoc(date, conducting, announcements, openin
             'sustainings': sustainings,
             'other': other,
             'program': program,
-            'closingPrayer': closingPrayer
+            'closingPrayer': closingPrayer,
+            'createdBy': createdBy,
+            'updatedBy': [createdBy]
         })
     });
 
@@ -282,7 +290,7 @@ export async function createSacramentDoc(date, conducting, announcements, openin
     return data;
 }
 
-export async function updateSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer) {
+export async function updateSacramentDoc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer, updatedBy) {
     const res = await fetch(`${baseUrl}/sacrament/${date}`, {
         method: 'PUT',
         headers: {
@@ -301,7 +309,8 @@ export async function updateSacramentDoc(date, conducting, announcements, openin
             'sustainings': sustainings,
             'other': other,
             'program': program,
-            'closingPrayer': closingPrayer
+            'closingPrayer': closingPrayer,
+            'updatedBy': updatedBy
         })
     });
 
@@ -314,7 +323,7 @@ export async function deleteSacramentDoc(date) {
         method: 'DELETE'
     });
 
-    const data = await res.json();
+    const data = res;
     return data;
 }
 
@@ -370,7 +379,7 @@ export async function deleteAssignment(assignmentId) {
     const res = await fetch(`${baseUrl}/assignments/${assignmentId}`, {
         method: 'DELETE'
     });
-    const data = await res.json();
+    const data = res;
     return data;
 }
 
@@ -539,10 +548,29 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
             <h3>Closing Prayer:</h3>
             <p>${doc[0].closingPrayer}</p>
         </div>
+        <div class="doc-item no-print">
+            <h4>Created By:</h4>
+            <p>${doc[0].createdBy.name}`
+        if (doc[0].createdBy.date !== 'n/a') {
+            const createdDate = new Date(doc[0].createdBy.date);
+            output += ` - ${createdDate.getDate()} ${createdDate.toLocaleString('default', { month: 'long' })} ${createdDate.getFullYear()}`;
+        }
+        output += `</p>
         </div>
-        <a class="btn btn-green no-print" href="/rdpUtilities/${meeting}/?date=${date}&update=true">Update Document</a>
-        <button id="delete" class="btn btn-red no-print">Delete Document</button>
-        <button class="btn btn-blue no-print" onclick="window.print()">Print</button>
+        <div class="doc-item no-print">
+            <h4>Last updated By:</h4>
+            <p>${doc[0].updatedBy[doc[0].updatedBy.length - 1].name}`;
+        if (doc[0].updatedBy[doc[0].updatedBy.length - 1].date !== 'n/a') {
+            const createdDate = new Date(doc[0].updatedBy[doc[0].updatedBy.length - 1].date);
+            output += ` - ${createdDate.getDate()} ${createdDate.toLocaleString('default', { month: 'long' })} ${createdDate.getFullYear()}`;
+        }
+        output += `</p>
+        </div>`;
+        if (userData.level >= 3) {
+            output += `<a class="btn btn-green no-print" href="/rdpUtilities/${meeting}/?date=${date}&update=true">Update Document</a>
+            <button id="delete" class="btn btn-red no-print">Delete Document</button>`;
+        }
+        output += `<button class="btn btn-blue no-print" onclick="window.print()">Print</button>
         <a class="btn btn-blue no-print" href="/rdpUtilities/${meeting}/">Back</a>
         `;
 
@@ -610,7 +638,7 @@ export function renderEditDocPage(meeting, wrapper, method) {
     });
 }
 
-export async function renderNewDocPage(meeting, createDocFunc, wrapper, method) {
+export async function renderNewDocPage(meeting, userData, createDocFunc, wrapper, method) {
     renderEditDocPage(meeting, wrapper, method);
 
     const addItem = (child, list) => {
@@ -640,17 +668,22 @@ export async function renderNewDocPage(meeting, createDocFunc, wrapper, method) 
             addItem(child, agenda)
         });
 
-        const res = await createDocFunc(date, openingPrayer, spiritualThought, training, agenda, closingPrayer, '');
+        const today = new Date();
+        const created = {
+            name: `${userData.firstName} ${userData.lastName}`,
+            date: today.toISOString().split('T')[0],
+        }
+
+        const res = await createDocFunc(date, openingPrayer, spiritualThought, training, agenda, closingPrayer, '',  created);
         if (!res.error && res) {
-            location = `/rdpUtilities/${meeting}/`;
+            location = `/rdpUtilities/${meeting}/?date=${date}`;
         }
     });
 }
 
-export async function renderUpdateDocPage(meeting, getDocFunc, updateDocFunc, date, wrapper, method) {
+export async function renderUpdateDocPage(meeting, userData, getDocFunc, updateDocFunc, date, wrapper, method) {
     renderEditDocPage(meeting, wrapper, method);
     const doc = await getDocFunc(date);
-    console.log(doc[0]);
 
     const addItem = (element, list) => {
         list.forEach((item) => {
@@ -705,9 +738,19 @@ export async function renderUpdateDocPage(meeting, getDocFunc, updateDocFunc, da
             addItem(child, agenda);
         });
 
-        const res = await updateDocFunc(date, openingPrayer, spiritualThought, training, agenda, closingPrayer, '');
+        const today = new Date();
+        const updated = {
+            name: `${userData.firstName} ${userData.lastName}`,
+            date: today.toISOString().split('T')[0],
+        }
+        
+        const update = doc[0].updatedBy;
+        update.push(updated);
+
+
+        const res = await updateDocFunc(date, openingPrayer, spiritualThought, training, agenda, closingPrayer, '', update);
         if (!res.error && res) {
-            location = `/rdpUtilities/${meeting}/`;
+            location = `/rdpUtilities/${meeting}/?date=${date}`;
         }
     });
 }
@@ -741,11 +784,8 @@ export async function deleteDoc(meeting, deleteDocFunc, date, wrapper) {
         wrapper.appendChild(deleteDoc);
 
         confirmBtn.onclick = async () => {
-            console.log(date);
             const res = await deleteDocFunc(date);
-            if (!res.error && res) {
-                location = `/rdpUtilities/${meeting}/`;
-            }
+            location = `/rdpUtilities/${meeting}/`;
         }
 
         cancelBtn.onclick = () => {

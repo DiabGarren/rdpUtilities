@@ -52,14 +52,14 @@ if (newDoc && !update) {
     if (userData.level < '3') {
         location = '/rdpUtilities/restricted/';
     }
-    await renderNewDocPage(meeting, createBishopricDoc, wrapper, 'New');
+    await renderNewDocPage(meeting, userData, createBishopricDoc, wrapper, 'New');
 }
 
 if (!newDoc && update) {
     if (userData.level < '3') {
         location = '/rdpUtilities/restricted/';
     }
-    await renderUpdateDocPage(meeting, getBishopricDoc, updateBishopricDoc, date, wrapper, 'Update');
+    await renderUpdateDocPage(meeting, userData, getBishopricDoc, updateBishopricDoc, date, wrapper, 'Update');
 }
 
 if (newDoc && update) {
