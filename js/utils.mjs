@@ -1,6 +1,6 @@
-// const baseUrl = 'https://rdputilities-api.onrender.com';
+const baseUrl = 'https://rdputilities-api.onrender.com';
 // const baseUrl = 'http://156.155.158.70:1830';
-const baseUrl = 'http://172.20.10.9:1830';
+// const baseUrl = 'http://172.20.10.9:1830';
 
 export function getParam(param) {
     const queryString = window.location.search;
@@ -1273,22 +1273,26 @@ export async function renderAssignPage(userData, wrapper) {
 
     let output = `<h2>${userData.firstName} ${userData.lastName} Assignments</h2>`
     userAssignments.forEach(assignment => {
-        output += `<label class="assignment"><input class="assignment-check" type="checkbox" data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}" data-duedate="${assignment.dueDate}"`;
+        output += `<div class="assignment"><input class="assignment-check" type="checkbox" data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}" data-duedate="${assignment.dueDate}"`;
         if (assignment.completed) {
             output += 'checked';
         }
-        output += `><p>${assignment.assignment}</p></label>`;
+        output += `><p>${assignment.assignment}</p>`;
+        if (userData.level >= 4) {
+            output += `<button class="btn btn-red assignment-delete" data-id="${assignment._id}">X</button>`;
+        }
+        output += `</div>`;
     });
 
     if (userData.level >= 4) {
         if (otherAssignments.length > 0) {
             output += `<h2>Other Assignments</h2>`;
             otherAssignments.forEach(assignment => {
-                output += `<label class="assignment"><input class="assignment-check" type="checkbox" data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}" data-duedate="${assignment.dueDate}"`;
+                output += `<div class="assignment"><input class="assignment-check" type="checkbox" data-id="${assignment._id}" data-userId="${assignment.userId}" data-assignment="${assignment.assignment}" data-duedate="${assignment.dueDate}"`;
                 if (assignment.completed) {
                     output += 'checked';
                 }
-                output += `><p>${assignment.user}-${assignment.assignment}</p></label>`;
+                output += `><p>${assignment.user}-${assignment.assignment}</p><button class="btn btn-red assignment-delete" data-id="${assignment._id}">X</button></div>`;
             })
         }
 
@@ -1303,7 +1307,14 @@ export async function renderAssignPage(userData, wrapper) {
         element.addEventListener('click', async (event) => {
             const res = await updateAssignment(event.target.dataset.id, event.target.dataset.userid, event.target.dataset.assignment, event.target.checked, event.target.dataset.duedate);
         });
-    })
+    });
+
+    document.querySelectorAll('.assignment-delete').forEach(element => {
+        element.addEventListener('click', async (event) => {
+            const res = await deleteAssignment(event.target.dataset.id);
+            location = '/rdpUtilities/assignments';
+        });
+    });
 }
 
 export async function renderNewAssign(wrapper) {
