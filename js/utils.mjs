@@ -383,6 +383,12 @@ export async function deleteAssignment(assignmentId) {
     return data;
 }
 
+async function getHymns() {
+    const data = await fetch('/rdpUtilities/json/hymns.json');
+    const hymns = data.json();
+    return hymns;
+}
+
 export function header(page) {
     return `
     <a href="/rdpUtilities/dashboard/" id="home">
@@ -674,7 +680,7 @@ export async function renderNewDocPage(meeting, userData, createDocFunc, wrapper
             date: today.toISOString().split('T')[0],
         }
 
-        const res = await createDocFunc(date, openingPrayer, spiritualThought, training, agenda, closingPrayer, '',  created);
+        const res = await createDocFunc(date, openingPrayer, spiritualThought, training, agenda, closingPrayer, '', created);
         if (!res.error && res) {
             location = `/rdpUtilities/${meeting}/?date=${date}`;
         }
@@ -743,7 +749,7 @@ export async function renderUpdateDocPage(meeting, userData, getDocFunc, updateD
             name: `${userData.firstName} ${userData.lastName}`,
             date: today.toISOString().split('T')[0],
         }
-        
+
         const update = doc[0].updatedBy;
         update.push(updated);
 
@@ -800,7 +806,6 @@ export async function renderSacrament(getDocFunc, date, wrapper) {
 
     const doc = await getDocFunc(date);
     if (doc.length > 0) {
-        console.log(doc);
 
         const printItems = (items) => {
             let out = '<p>';
@@ -833,7 +838,7 @@ export async function renderSacrament(getDocFunc, date, wrapper) {
         }
 
         const deleteDoc = () => {
-            return '<button id="delete" class="btn btn-red no-print">Delete</button>';
+            return '<button id="delete" class="btn btn-red no-print">Delete Document</button>';
         }
 
         let output = '';
@@ -954,9 +959,9 @@ export async function renderSacrament(getDocFunc, date, wrapper) {
             </tr>
         </table>
         </div>
-        <a class="btn btn-green no-print" href="/rdpUtilities/sacrament/?date=${doc[0].date}&update=true">Update</a>
+        <a class="btn btn-green no-print" href="/rdpUtilities/sacrament/?date=${doc[0].date}&update=true">Update Document</a>
         ${deleteDoc()}
-        <button class="btn btn-blue no-print" onclick="window.print()">Print</button>
+        <button class="btn btn-blue no-print" onclick="window.print()">Print Document</button>
         <a class="btn btn-blue no-print" href="/rdpUtilities/sacrament" >Back<a>`;
 
         wrapper.innerHTML = output;
@@ -971,6 +976,7 @@ export async function renderEditSacrament(wrapper, method) {
         today = new Date(today.getFullYear(), today.getMonth(), today.getDate() + sun + 1).toISOString().slice(0, 10);
     }
 
+    const hymns = await getHymns();
     const addItem = () => {
         let li = document.createElement('li');
         li.className = 'update-list-item';
@@ -1033,6 +1039,7 @@ export async function renderEditSacrament(wrapper, method) {
     <button id="announce-add" class="btn btn-blue">Add Item</button>
     <h3>Opening Hymn:</h3>
     <input id="openingHymn">
+    <div id="openingHymnHint" class="hymnHint" style="display: none"></div>
     <h3>Invocation</h3>
     <input id="openingPrayer">
     <h3>Ward Business</h3>
@@ -1047,11 +1054,13 @@ export async function renderEditSacrament(wrapper, method) {
     <button id="other-add" class="btn btn-blue">Add Item</button>
     <h3>Sacrament Hymn</h3>
     <input id="sacramentHymn">
+    <div id="sacramentHymnHint" class="hymnHint" style="display: none"></div>
     <h3>Sacrament Program</h3>
     <ul id="sac-list"></ul>
     <button id="sac-add" class="btn btn-blue">Add Item</button>
     <h3>Closing Hymn</h3>
     <input id="closingHymn">
+    <div id="closingHymnHint" class="hymnHint" style="display: none"></div>
     <h3>Benediction</h3>
     <input id="closingPrayer">
     <button class="btn btn-green" id="submit">Submit</button>
@@ -1059,6 +1068,55 @@ export async function renderEditSacrament(wrapper, method) {
     `;
 
     wrapper.innerHTML = output;
+
+    const setHymn = (event, hint) => {
+        hint.innerHTML = '';
+        hint.setAttribute('style', 'display: block');
+
+        hymns.forEach((hymn) => {
+            if (hymn.number.includes(event.target.value)) {
+                let button = document.createElement('button');
+                button.className = 'btn btn-blue';
+                button.textContent = `${hymn.number} ${hymn.title}`;
+                button.addEventListener('click', () => {
+                    event.target.value = button.textContent;
+                });
+
+                hint.appendChild(button);
+            }
+        })
+    }
+
+    document.querySelector('#openingHymn').addEventListener('input', (event) => {
+        const hint = document.querySelector('#openingHymnHint');
+        setHymn(event, hint);
+    });
+
+    document.querySelector('#sacramentHymn').addEventListener('input', (event) => {
+        const hint = document.querySelector('#sacramentHymnHint');
+        setHymn(event, hint);
+    });
+
+    document.querySelector('#closingHymn').addEventListener('input', (event) => {
+        const hint = document.querySelector('#closingHymnHint');
+        setHymn(event, hint);
+    });
+
+    document.addEventListener('click', (event) => {
+        if (event.target.id !== 'openingHymn' ||
+            event.target.id !== 'openingHymnHint' ||
+            event.target.id !== 'sacramentHymn' ||
+            event.target.id !== 'sacramentHymnHint' ||
+            event.target.id !== 'closingHymn' ||
+            event.target.id !== 'closingHymnHint'
+            ) {
+            document.querySelectorAll('.hymnHint').forEach(hint => {
+                hint.innerHTML = '';
+                hint.setAttribute('style', 'display: none');
+            });
+        }
+    });
+
     document.querySelector('#announce-add').addEventListener('click', () => {
         const li = addItem();
 
@@ -1134,7 +1192,7 @@ export async function renderNewSacrament(createDocFunc, wrapper, method) {
 
         const res = await createDocFunc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer);
         if (!res.error && res) {
-            location = `/rdpUtilities/sacrament/`;
+            location = `/rdpUtilities/sacrament/?date=${date}`;
         }
     });
 }
@@ -1142,7 +1200,6 @@ export async function renderNewSacrament(createDocFunc, wrapper, method) {
 export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wrapper, method) {
     renderEditSacrament(wrapper, method);
     const doc = await getDocFunc(date);
-    console.log(doc[0]);
 
     const addItem = (element, list) => {
         list.forEach((item) => {
@@ -1271,7 +1328,7 @@ export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wra
         // console.log(announcements);
         const res = await updateDocFunc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer);
         if (!res.error && res) {
-            location = `/rdpUtilities/sacrament/`;
+            location = `/rdpUtilities/sacrament/?date=${date}`;
         }
     })
 }

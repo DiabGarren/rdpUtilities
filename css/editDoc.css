@@ -60,6 +60,26 @@ textarea {
     min-height: 45px;
 }
 
+.hymnHint {
+    overflow: auto;
+    position: absolute;
+    width: calc(100% - 60px);
+    height: fit-content;
+    max-height: 300px;
+    background-color: var(--light-blue);
+    border-radius: 5px;
+    /* border: 2px solid var(--dark-blue); */
+}
+
+.hymnHint button {
+    font-size: 16px;
+    padding-inline: 5px; 
+}
+
+.hymnHint button:first-of-type {
+    margin-top: 0;
+}
+
 @media only screen and (min-width: 768px) {
     .update-sac-item {
         grid-template-columns: 22px 285px 45px;
@@ -72,5 +92,9 @@ textarea {
     textarea {
         max-width: 285px;
         min-width: 285px;
+    }
+
+    .hymnHint {
+        width: 350px;
     }
 }
