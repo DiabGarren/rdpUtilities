@@ -1,11 +1,13 @@
-import { 
-    getLocalStorage, 
-    getParam, 
-    getUserData, 
-    setIcon, 
-    setProfile, 
-    subpageHeader, 
-    updateUserData 
+import {
+    getAllUsers,
+    getLocalStorage,
+    getParam,
+    getUserData,
+    renderAllUsers,
+    setIcon,
+    setProfile,
+    subpageHeader,
+    updateUserData
 } from "./utils.mjs";
 
 const id = getLocalStorage('id');
@@ -17,6 +19,7 @@ document.querySelector('#subpage').addEventListener('click', setIcon);
 setProfile(userData.firstName, userData.lastName);
 
 const update = getParam('update');
+const user = getParam('user');
 const wrapper = document.querySelector('.wrapper');
 document.querySelector('.load').remove();
 
@@ -25,27 +28,7 @@ let output = '';
 if (!id) {
     location = '/rdpUtilities';
 }
-
-if (!update) {
-    output = `
-    <h3 class="form-warning"></h3>
-    <h3>First Name</h3>
-    <p>${userData.firstName}</p>
-    <h3>Last Name</h3>
-    <p>${userData.lastName}</p>
-    <h3>Username</h3>
-    <p>${userData.username}</p>
-    <h3>Email</h3>
-    <p>${userData.email}</p>
-    <h3>Level</h3>
-    <p>${userData.level}</p>
-    <a href="/rdpUtilities/profile/?update=true" class="btn btn-green">Update</a>
-    <a href="/rdpUtilities/logout" class="btn btn-red">Logout</a>
-    <a href="/rdpUtilities" class="btn btn-blue">Back</a>
-    `;
-    
-    wrapper.innerHTML = output;
-} else {
+if (update) {
     output = `
     <h3 class="form-warning"></h3>
     <h3>First Name</h3>
@@ -64,7 +47,7 @@ if (!update) {
     <button id="update" class="btn btn-green">Update</button>
     <a href="/rdpUtilities/profile" class="btn btn-blue">Back</a>
     `;
-    
+
     wrapper.innerHTML = output;
 
     document.querySelector('#update').addEventListener('click', async () => {
@@ -87,4 +70,34 @@ if (!update) {
             }
         }
     });
+} else if (user) {
+    if (user === 'all') {
+        await renderAllUsers(userData, wrapper);
+        
+    } else {
+
+    }
+
+} else {
+    output = `
+    <h3 class="form-warning"></h3>
+    <h3>First Name</h3>
+    <p>${userData.firstName}</p>
+    <h3>Last Name</h3>
+    <p>${userData.lastName}</p>
+    <h3>Username</h3>
+    <p>${userData.username}</p>
+    <h3>Email</h3>
+    <p>${userData.email}</p>
+    <h3>Level</h3>
+    <p>${userData.level}</p>
+    <a href="/rdpUtilities/profile/?update=true" class="btn btn-green">Update</a>
+    <a href="/rdpUtilities/logout" class="btn btn-red">Logout</a>`;
+
+    if (userData.level >= 4) {
+        output += `<a href="/rdpUtilities/profile/?user=all" class="btn btn-blue">All Users</a>`;
+    }
+    output += `<a href="/rdpUtilities/dashboard" class="btn btn-blue">Back</a>`;
+
+    wrapper.innerHTML = output;
 }

@@ -60,7 +60,7 @@ textarea {
     min-height: 45px;
 }
 
-.hymnHint {
+.drp-list {
     overflow: auto;
     position: absolute;
     width: calc(100% - 60px);
@@ -71,12 +71,12 @@ textarea {
     /* border: 2px solid var(--dark-blue); */
 }
 
-.hymnHint button {
+.drp-list button {
     font-size: 16px;
     padding-inline: 5px; 
 }
 
-.hymnHint button:first-of-type {
+.drp-list button:first-of-type {
     margin-top: 0;
 }
 
@@ -94,7 +94,7 @@ textarea {
         min-width: 285px;
     }
 
-    .hymnHint {
+    .drp-list {
         width: 350px;
     }
 }

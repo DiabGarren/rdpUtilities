@@ -412,6 +412,8 @@ export function subpageHeader(currPage, level) {
         for (const page of pages) {
             if (page[1] === currPage) {
                 output += `<a href="/rdpUtilities/${page[0]}" class="active">${page[1]}</a>`
+            } else if ((page[0] === 'bishopric' || page[0] === 'sacrament') && level < 3) {
+                output += '';
             } else {
                 output += `<a href="/rdpUtilities/${page[0]}">${page[1]}</a>`
             }
@@ -633,7 +635,7 @@ export function renderEditDocPage(meeting, wrapper, method) {
     <h3>Closing Prayer</h3>
     <input id="closingPrayer" value="By invitation">
     <button id="submit" class="btn btn-green">Submit</button>
-    <a class="btn btn-blue" href="/rdpUtilities/${meeting}">Back</a>
+    <a class="btn btn-blue" href="/rdpUtilities/${meeting}" id="back">Back</a>
     `;
 
     wrapper.innerHTML = output;
@@ -720,6 +722,7 @@ export async function renderUpdateDocPage(meeting, userData, getDocFunc, updateD
     document.querySelector('#spiritualThought').value = doc[0].spiritualThought;
     document.querySelector('#training').value = doc[0].training;
     document.querySelector('#closingPrayer').value = doc[0].closingPrayer;
+    document.querySelector('#back').href = `/rdpUtilities/${meeting}/?date=${doc[0].date}`;
 
     addItem(document.querySelector('#agenda-list'), doc[0].agenda);
 
@@ -962,7 +965,7 @@ export async function renderSacrament(getDocFunc, date, wrapper) {
         <a class="btn btn-green no-print" href="/rdpUtilities/sacrament/?date=${doc[0].date}&update=true">Update Document</a>
         ${deleteDoc()}
         <button class="btn btn-blue no-print" onclick="window.print()">Print Document</button>
-        <a class="btn btn-blue no-print" href="/rdpUtilities/sacrament" >Back<a>`;
+        <a class="btn btn-blue no-print" href="/rdpUtilities/sacrament">Back<a>`;
 
         wrapper.innerHTML = output;
     }
@@ -1039,7 +1042,7 @@ export async function renderEditSacrament(wrapper, method) {
     <button id="announce-add" class="btn btn-blue">Add Item</button>
     <h3>Opening Hymn:</h3>
     <input id="openingHymn">
-    <div id="openingHymnHint" class="hymnHint" style="display: none"></div>
+    <div id="openingHymnHint" class="drp-list" style="display: none"></div>
     <h3>Invocation</h3>
     <input id="openingPrayer">
     <h3>Ward Business</h3>
@@ -1054,17 +1057,17 @@ export async function renderEditSacrament(wrapper, method) {
     <button id="other-add" class="btn btn-blue">Add Item</button>
     <h3>Sacrament Hymn</h3>
     <input id="sacramentHymn">
-    <div id="sacramentHymnHint" class="hymnHint" style="display: none"></div>
+    <div id="sacramentHymnHint" class="drp-list" style="display: none"></div>
     <h3>Sacrament Program</h3>
     <ul id="sac-list"></ul>
     <button id="sac-add" class="btn btn-blue">Add Item</button>
     <h3>Closing Hymn</h3>
     <input id="closingHymn">
-    <div id="closingHymnHint" class="hymnHint" style="display: none"></div>
+    <div id="closingHymnHint" class="drp-list" style="display: none"></div>
     <h3>Benediction</h3>
     <input id="closingPrayer">
     <button class="btn btn-green" id="submit">Submit</button>
-    <a class="btn btn-blue" href="/rdpUtilities/sacrament/">Back</a>
+    <a class="btn btn-blue" href="/rdpUtilities/sacrament/" id="back">Back</a>
     `;
 
     wrapper.innerHTML = output;
@@ -1109,8 +1112,8 @@ export async function renderEditSacrament(wrapper, method) {
             event.target.id !== 'sacramentHymnHint' ||
             event.target.id !== 'closingHymn' ||
             event.target.id !== 'closingHymnHint'
-            ) {
-            document.querySelectorAll('.hymnHint').forEach(hint => {
+        ) {
+            document.querySelectorAll('.drp-list').forEach(hint => {
                 hint.innerHTML = '';
                 hint.setAttribute('style', 'display: none');
             });
@@ -1150,51 +1153,52 @@ export async function renderNewSacrament(createDocFunc, wrapper, method) {
             }
         })
     }
+    setTimeout(() => {
+        document.querySelector('#submit').addEventListener('click', async () => {
+            const date = document.querySelector('#date').value;
+            const conducting = document.querySelector('#conducting').value;
+            const openingHymn = document.querySelector('#openingHymn').value;
+            const openingPrayer = document.querySelector('#openingPrayer').value;
+            const sacramentHymn = document.querySelector('#sacramentHymn').value;
+            const closingHymn = document.querySelector('#closingHymn').value;
+            const closingPrayer = document.querySelector('#closingPrayer').value;
 
-    document.querySelector('#submit').addEventListener('click', async () => {
-        const date = document.querySelector('#date').value;
-        const conducting = document.querySelector('#conducting').value;
-        const openingHymn = document.querySelector('#openingHymn').value;
-        const openingPrayer = document.querySelector('#openingPrayer').value;
-        const sacramentHymn = document.querySelector('#sacramentHymn').value;
-        const closingHymn = document.querySelector('#closingHymn').value;
-        const closingPrayer = document.querySelector('#closingPrayer').value;
-
-        const announcements = [];
-        document.querySelector('#announce-list').childNodes.forEach((child) => {
-            addItem(child, announcements);
-        });
-        const releases = [];
-        document.querySelector('#release-list').childNodes.forEach((child) => {
-            addItem(child, releases);
-        });
-        const sustainings = [];
-        document.querySelector('#sustain-list').childNodes.forEach((child) => {
-            addItem(child, sustainings);
-        });
-        const other = [];
-        document.querySelector('#other-list').childNodes.forEach((child) => {
-            addItem(child, other);
-        });
-
-        const program = [];
-        document.querySelector('#sac-list').childNodes.forEach((child) => {
-            let item = {
-                item: '',
-                name: ''
-            };
-            child.childNodes.forEach((child) => {
-                if (child.id == 'sac-prog-item') item.item = child.value;
-                if (child.id == 'sac-prog-name') item.name = child.value;
+            const announcements = [];
+            document.querySelector('#announce-list').childNodes.forEach((child) => {
+                addItem(child, announcements);
             });
-            program.push(item);
-        });
+            const releases = [];
+            document.querySelector('#release-list').childNodes.forEach((child) => {
+                addItem(child, releases);
+            });
+            const sustainings = [];
+            document.querySelector('#sustain-list').childNodes.forEach((child) => {
+                addItem(child, sustainings);
+            });
+            const other = [];
+            document.querySelector('#other-list').childNodes.forEach((child) => {
+                addItem(child, other);
+            });
 
-        const res = await createDocFunc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer);
-        if (!res.error && res) {
-            location = `/rdpUtilities/sacrament/?date=${date}`;
-        }
-    });
+            const program = [];
+            document.querySelector('#sac-list').childNodes.forEach((child) => {
+                let item = {
+                    item: '',
+                    name: ''
+                };
+                child.childNodes.forEach((child) => {
+                    if (child.id == 'sac-prog-item') item.item = child.value;
+                    if (child.id == 'sac-prog-name') item.name = child.value;
+                });
+                program.push(item);
+            });
+
+            const res = await createDocFunc(date, conducting, announcements, openingPrayer, openingHymn, sacramentHymn, closingHymn, releases, sustainings, other, program, closingPrayer);
+            if (!res.error && res) {
+                location = `/rdpUtilities/sacrament/?date=${date}`;
+            }
+        });
+    }, 500);
 }
 
 export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wrapper, method) {
@@ -1276,6 +1280,7 @@ export async function renderUpdateSacrament(getDocFunc, updateDocFunc, date, wra
     addItem(document.querySelector('#other-list'), doc[0].wardBusiness.other);
 
     addSacItem(document.querySelector('#sac-list'), doc[0].program);
+    document.querySelector('#back').href = `/rdpUtilities/sacrament/?date=${doc[0].date}`;
 
     document.querySelector('#submit').addEventListener('click', async () => {
 
@@ -1469,4 +1474,147 @@ export async function renderNewAssign(wrapper) {
             location = '/rdpUtilities/assignments';
         }
     });
+}
+
+export async function renderAllUsers(userData, wrapper) {
+    if (userData.level < 4) {
+        location = '/rdpUtilities/restricted';
+    } else {
+        const allUsers = await getAllUsers();
+
+        const setUserData = (user) => {
+            let firstName = document.querySelector('#firstName');
+            let lastName = document.querySelector('#lastName');
+            let username = document.querySelector('#username');
+            let email = document.querySelector('#email');
+            let level = document.querySelector('#level');
+            let update = document.querySelector('#update');
+
+            if (!user) {
+                firstName.value = '';
+                firstName.dataset.id = '';
+                firstName.dataset.pass = '';
+                lastName.value = '';
+                username.value = '';
+                email.value = '';
+                level.value = '';
+                update.setAttribute('style', 'display: none');
+            } else {
+                firstName.value = user.firstName;
+                firstName.dataset.id = user._id;
+                firstName.dataset.pass = user.password;
+                lastName.value = user.lastName;
+                username.value = user.username;
+                email.value = user.email;
+                level.value = user.level;
+
+                update.setAttribute('style', 'display: block');
+            }
+        }
+
+        const showList = (input, list, btn, event) => {
+            list.innerHTML = '';
+
+            const show = () => {
+                const addUser = (user) => {
+                    let button = document.createElement('button');
+                    button.className = 'btn btn-blue';
+                    button.textContent = `${user.firstName} ${user.lastName}`;
+                    button.addEventListener('click', () => {
+                        input.value = button.textContent;
+                        setUserData(user);
+                    });
+
+                    list.appendChild(button);
+                }
+
+                allUsers.forEach(user => {
+                    if (input.value != '') {
+                        if (user.firstName.toLowerCase().includes(input.value.toLowerCase()) || user.lastName.toLowerCase().includes(input.value.toLowerCase())) {
+                            addUser(user);
+                        }
+                    } else {
+                        addUser(user);
+                    }
+                });
+            }
+
+            if (event == 'type') {
+                list.setAttribute('style', 'display: block');
+                btn.innerHTML = '&#x245';
+                show();
+            } else {
+                if (list.getAttribute('style') === 'display: none') {
+                    list.setAttribute('style', 'display: block');
+                    btn.innerHTML = '&#x245';
+                    show();
+                } else {
+                    list.setAttribute('style', 'display: none');
+                    btn.innerHTML = 'V';
+                }
+            }
+        }
+
+
+        let output = `<h2>Name</h2>
+            <div style="margin-bottom: 30px">
+                <input id="user" class="">
+                <button id="show-list">V</button>
+                <div class="drp-list"></div>
+            </div>
+            
+            <h3>First Name</h3>
+            <input id="firstName">
+            <h3>Last Name</h3>
+            <input id="lastName">
+            <h3>Username</h3>
+            <input id="username">
+            <h3>Email</h3>
+            <input id="email">
+            <h3>Level</h3>
+            <input id="level">
+            <button class="btn btn-green" id="update" style="display: none">Update</button>
+            <a href="/rdpUtilities/profile" class="btn btn-blue">Back</a>`;
+
+        wrapper.innerHTML = output;
+
+        const name = document.querySelector('#user');
+        const showBtn = document.querySelector('#show-list');
+        const show = document.querySelector('.drp-list');
+
+
+        showBtn.addEventListener('click', () => {
+            showList(name, show, showBtn, 'button');
+        });
+
+        name.addEventListener('input', () => {
+            showList(name, show, showBtn, 'type');
+            setUserData();
+        });
+
+        document.addEventListener('click', (event) => {
+            if (event.target !== name && event.target.id !== 'show-list' && event.target !== show && event.target.id !== 'update') {
+                show.innerHTML = '';
+                show.setAttribute('style', 'display: none');
+                showBtn.textContent = 'V';
+            }
+        });
+
+        document.querySelector('#update').addEventListener('click', async () => {
+            const firstName = document.querySelector('#firstName');
+            const lastName = document.querySelector('#lastName');
+            const username = document.querySelector('#username');
+            const email = document.querySelector('#email');
+            const level = document.querySelector('#level');
+            const id = firstName.dataset.id;
+            const pass = firstName.dataset.pass;
+
+            const res = await updateUserData(id, firstName.value, lastName.value, username.value, email.value, pass, level.value);
+
+            if (!res.error) {
+                location = `/rdpUtilities/profile/`;
+            }
+        });
+    }
+
 }
