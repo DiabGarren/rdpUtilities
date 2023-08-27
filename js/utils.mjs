@@ -410,8 +410,26 @@ export async function getAllYouthActivities() {
     const data = await res.json();
     return data;
 }
+
 export async function getYouthActivity(date) {
     const res = await fetch(`${baseUrl}/youth/${date}`);
+    const data = await res.json();
+    return data;
+}
+
+export async function createYouthActivity(date, combined, activity) {
+    const res = await fetch(`${baseUrl}/youth`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'date': date,
+            'combined': combined,
+            'activity': activity
+        })
+    });
     const data = await res.json();
     return data;
 }
@@ -1765,8 +1783,133 @@ export async function renderNewYouthActivity(wrapper) {
     }
 
     let output = `
-    <h3>Date:</h3>
-    <input type="date" value="${today}">`;
+    <h3 class="form-warning"></h3>
+    <h3>Date</h3>
+    <input type="date" id="date" value="${today}">
+    <h3>Combined</h3>
+    <input type="checkbox" id="combined-chk">
+    <div id="not-combined">
+        <h3 style="margin-top: 15px;">Young Women</h3>
+        <h3>Who</h3>
+        <input id="yw-who">
+        <h3>What</h3>
+        <input id="yw-what">
+        <h3>Responsible</h3>
+        <input id="yw-res">
+        <h3 style="margin-top: 15px;">Young Men</h3>
+        <h3>Who</h3>
+        <input id="ym-who">
+        <h3>What</h3>
+        <input id="ym-what">
+        <h3>Responsible</h3>
+        <input id="ym-res"></input>
+    </div>
+    <div id="combined" style="display: none;">
+        <h3 style="margin-top: 15px; ">Youth</h3>
+        <h3>Who</h3>
+        <input id="who">
+        <h3>What</h3>
+        <input id="what">
+        <h3>Responsible</h3>
+        <input id="res">
+    </div>
+    <button class="btn btn-green" id="submit">Create Activity</button>
+    <a href="/rdpUtilities/youth" class="btn btn-blue">Back</a>
+    `;
 
     wrapper.innerHTML = output;
+
+    let check = document.querySelector('#combined-chk');
+    let notCombined = document.querySelector('#not-combined');
+    let combined = document.querySelector('#combined');
+
+    check.addEventListener('click', (event) => {
+        if (!event.target.checked) {
+            notCombined.setAttribute('style', 'display: block');
+            combined.setAttribute('style', 'display: none');
+        } else {
+            notCombined.setAttribute('style', 'display: none');
+            combined.setAttribute('style', 'display: block');
+        }
+    })
+
+    document.querySelector('#submit').addEventListener('click', async () => {
+        let load = document.createElement('img');
+        load.className = 'load';
+        load.src = '/rdpUtilities/images/load.svg';
+        load.alt = 'loading symbol';
+        wrapper.appendChild(load);
+
+        const date = document.querySelector('#date');
+        const combined = document.querySelector('#combined-chk');
+
+        const ywWho = document.querySelector('#yw-who');
+        const ywWhat = document.querySelector('#yw-what');
+        const ywRes = document.querySelector('#yw-res');
+
+        const ymWho = document.querySelector('#ym-who');
+        const ymWhat = document.querySelector('#ym-what');
+        const ymRes = document.querySelector('#ym-res');
+
+        const who = document.querySelector('#who');
+        const what = document.querySelector('#what');
+        const res = document.querySelector('#res');
+
+        let activity;
+        if (combined.checked) {
+            activity = {
+                who: who.value,
+                what: what.value,
+                res: res.value
+            }
+        } else {
+            activity = {
+                activity: {
+                    yw: {
+                        who: ywWho.value,
+                        what: ywWhat.value,
+                        res: ywRes.value
+                    },
+                    ym: {
+                        who: ymWho.value,
+                        what: ymWhat.value,
+                        res: ymRes.value
+                    }
+                }
+            }
+        }
+
+        console.log({ date: date.value, combined: combined.checked, activity: activity });
+        date.classList.add('login');
+        combined.classList.add('login');
+        ywWho.classList.add('login');
+        ywWhat.classList.add('login');
+        ywRes.classList.add('login');
+        ymWho.classList.add('login');
+        ymWhat.classList.add('login');
+        ymRes.classList.add('login');
+        who.classList.add('login');
+        what.classList.add('login');
+        res.classList.add('login');
+        
+        const response = await createYouthActivity(date.value, combined.checked, activity);
+        if (response.error) {
+            date.classList.add('login');
+            combined.classList.remove('login');
+            ywWho.classList.remove('login');
+            ywWhat.classList.remove('login');
+            ywRes.classList.remove('login');
+            ymWho.classList.remove('login');
+            ymWhat.classList.remove('login');
+            ymRes.classList.remove('login');
+            who.classList.remove('login');
+            what.classList.remove('login');
+            res.classList.remove('login');
+
+            document.querySelector('.form-warning').textContent = response.error;
+        } else {
+            document.querySelector('.form-warning').textContent = '';
+            location = '/rdpUtilities/youth';
+        }
+    })
 }
