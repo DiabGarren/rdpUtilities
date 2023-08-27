@@ -93,6 +93,26 @@ export async function updateUserData(userId, firstName, lastName, username, emai
     return data;
 }
 
+export async function updateUser(userId, firstName, lastName, username, email, level) {
+    const res = await fetch(`${baseUrl}/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'firstName': firstName,
+            'lastName': lastName,
+            'username': username,
+            'email': email,
+            'level': level
+        })
+    });
+
+    const data = await res;
+    return data;
+}
+
 export async function resetPassword(email) {
     const userRes = await fetch(`${baseUrl}/users/email/${email}`);
     const user = await userRes.json();
@@ -1493,7 +1513,6 @@ export async function renderAllUsers(userData, wrapper) {
             if (!user) {
                 firstName.value = '';
                 firstName.dataset.id = '';
-                firstName.dataset.pass = '';
                 lastName.value = '';
                 username.value = '';
                 email.value = '';
@@ -1502,7 +1521,6 @@ export async function renderAllUsers(userData, wrapper) {
             } else {
                 firstName.value = user.firstName;
                 firstName.dataset.id = user._id;
-                firstName.dataset.pass = user.password;
                 lastName.value = user.lastName;
                 username.value = user.username;
                 email.value = user.email;
@@ -1607,9 +1625,9 @@ export async function renderAllUsers(userData, wrapper) {
             const email = document.querySelector('#email');
             const level = document.querySelector('#level');
             const id = firstName.dataset.id;
-            const pass = firstName.dataset.pass;
 
-            const res = await updateUserData(id, firstName.value, lastName.value, username.value, email.value, pass, level.value);
+            console.log(id, firstName.value, lastName.value, username.value, email.value, level.value);
+            const res = await updateUser(id, firstName.value, lastName.value, username.value, email.value, level.value);
 
             if (!res.error) {
                 location = `/rdpUtilities/profile/`;
