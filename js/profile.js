@@ -1,5 +1,5 @@
 import {
-    getAllUsers,
+    BISHOP,
     getLocalStorage,
     getParam,
     getUserData,
@@ -94,7 +94,7 @@ if (update) {
     <a href="/rdpUtilities/profile/?update=true" class="btn btn-green">Update</a>
     <a href="/rdpUtilities/logout" class="btn btn-red">Logout</a>`;
 
-    if (userData.level >= 4) {
+    if (userData.level >= BISHOP) {
         output += `<a href="/rdpUtilities/profile/?user=all" class="btn btn-blue">All Users</a>`;
     }
     output += `<a href="/rdpUtilities/dashboard" class="btn btn-blue">Back</a>`;

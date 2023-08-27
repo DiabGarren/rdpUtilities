@@ -1,4 +1,5 @@
 import {
+    BISHOPRIC,
     createSacramentDoc,
     deleteDoc,
     deleteSacramentDoc,
@@ -38,7 +39,7 @@ document.querySelector('.load').remove();
 
 
 
-if (userData.level < 3) {
+if (userData.level < BISHOPRIC) {
     location = '/rdpUtilities/restricted/';
 }
 

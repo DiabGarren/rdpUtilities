@@ -1,20 +1,22 @@
 import {
+    BISHOPRIC,
+    createWardCouncilDoc,
+    deleteDoc,
+    deleteWardCouncilDoc,
+    getAllWardCouncilDocs,
     getLocalStorage,
-    getUserData,
     getParam,
     setProfile,
-    getAllWardCouncilDocs,
+    getUserData,
     getWardCouncilDoc,
-    createWardCouncilDoc,
-    deleteWardCouncilDoc,
-    updateWardCouncilDoc,
     renderBasepage,
     renderDocPage,
     renderNewDocPage,
     renderUpdateDocPage,
-    deleteDoc,
+    setIcon,
     subpageHeader,
-    setIcon
+    updateWardCouncilDoc,
+    WARD_COUNCIL
 } from './utils.mjs';
 
 const id = getLocalStorage('id');
@@ -36,7 +38,7 @@ const meeting = 'wardCouncil';
 const wrapper = document.querySelector('.wrapper');
 document.querySelector('.load').remove();
 
-if (userData.level < '2') {
+if (userData.level < WARD_COUNCIL) {
     location = '/rdpUtilities/restricted/';
 }
 
@@ -49,13 +51,13 @@ if (date && !update && !newDoc) {
 }
 
 if (newDoc && !update) {
-    if (userData.level < '3') {
+    if (userData.level < BISHOPRIC) {
         location = '/rdpUtilities/restricted/';
     }
     await renderNewDocPage(meeting, userData, createWardCouncilDoc, wrapper, 'New');
 }
 if (!newDoc && update) {
-    if (userData.level < '3') {
+    if (userData.level < BISHOPRIC) {
         location = '/rdpUtilities/restricted/';
     }
     await renderUpdateDocPage(meeting, userData, getWardCouncilDoc, updateWardCouncilDoc, date, wrapper, 'Update');

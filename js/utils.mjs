@@ -1,6 +1,8 @@
-const baseUrl = 'https://rdputilities-api.onrender.com';
-// const baseUrl = 'http://156.155.158.70:1830';
+// const baseUrl = 'https://rdputilities-api.onrender.com';
+const baseUrl = 'http://156.155.158.70:1830';
 // const baseUrl = 'http://172.20.10.9:1830';
+
+export const BASIC = 1, WARD_COUNCIL = 2, YOUTH = 3, BISHOPRIC = 4, BISHOP = 5;
 
 export function getParam(param) {
     const queryString = window.location.search;
@@ -64,7 +66,7 @@ export async function newUser(firstName, lastName, username, email, password) {
             'username': username,
             'email': email,
             'password': password,
-            'level': '1'
+            'level': BASIC
         })
     });
 
@@ -403,6 +405,17 @@ export async function deleteAssignment(assignmentId) {
     return data;
 }
 
+export async function getAllYouthActivities() {
+    const res = await fetch(`${baseUrl}/youth`);
+    const data = await res.json();
+    return data;
+}
+export async function getYouthActivity(date) {
+    const res = await fetch(`${baseUrl}/youth/${date}`);
+    const data = await res.json();
+    return data;
+}
+
 async function getHymns() {
     const data = await fetch('/rdpUtilities/json/hymns.json');
     const hymns = data.json();
@@ -423,16 +436,22 @@ export function header(page) {
 export function subpageHeader(currPage, level) {
     const pages = [
         ['dashboard', 'Dashboard'],
-        ['wardCouncil', 'Ward Council'],
         ['bishopric', 'Bishopric'],
-        ['sacrament', 'Sacrament']
+        ['sacrament', 'Sacrament'],
+        ['wardCouncil', 'Ward Council'],
+        ['youth', 'Youth']
     ];
     const dropdown = () => {
         let output = '';
         for (const page of pages) {
+
             if (page[1] === currPage) {
                 output += `<a href="/rdpUtilities/${page[0]}" class="active">${page[1]}</a>`
-            } else if ((page[0] === 'bishopric' || page[0] === 'sacrament') && level < 3) {
+            } else if (
+                (page[0] === 'wardCouncil' && level < WARD_COUNCIL) ||
+                (page[0] === 'youth' && level < YOUTH) ||
+                ((page[0] === 'bishopric' || page[0] === 'sacrament') && level < BISHOPRIC)
+            ) {
                 output += '';
             } else {
                 output += `<a href="/rdpUtilities/${page[0]}">${page[1]}</a>`
@@ -516,7 +535,7 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
     back.textContent = 'Back';
     back.className = 'btn btn-blue';
 
-    if (userData.level >= 3) {
+    if (userData.level >= BISHOPRIC) {
         wrapper.appendChild(createDoc);
     }
 
@@ -594,7 +613,7 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
         }
         output += `</p>
         </div>`;
-        if (userData.level >= 3) {
+        if (userData.level >= BISHOPRIC) {
             output += `<a class="btn btn-green no-print" href="/rdpUtilities/${meeting}/?date=${date}&update=true">Update Document</a>
             <button id="delete" class="btn btn-red no-print">Delete Document</button>`;
         }
@@ -1400,13 +1419,13 @@ export async function renderAssignPage(userData, wrapper) {
             output += 'checked';
         }
         output += `><p>${assignment.assignment}</p>`;
-        if (userData.level >= 4) {
+        if (userData.level >= BISHOP) {
             output += `<button class="btn btn-red assignment-delete" data-id="${assignment._id}">X</button>`;
         }
         output += `</div>`;
     });
 
-    if (userData.level >= 4) {
+    if (userData.level >= BISHOP) {
         if (otherAssignments.length > 0) {
             output += `<h2>Other Assignments</h2>`;
             otherAssignments.forEach(assignment => {
@@ -1497,7 +1516,7 @@ export async function renderNewAssign(wrapper) {
 }
 
 export async function renderAllUsers(userData, wrapper) {
-    if (userData.level < 4) {
+    if (userData.level < BISHOP) {
         location = '/rdpUtilities/restricted';
     } else {
         const allUsers = await getAllUsers();
@@ -1634,5 +1653,120 @@ export async function renderAllUsers(userData, wrapper) {
             }
         });
     }
+}
 
+export async function renderYouth(userData, wrapper) {
+    let output = `<table class="youth-table">
+    <thead>
+
+        <tr>
+            <th colspan="7">
+                <h2>Youth Mutual Activities - Jul - Dec 2023</h2>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan="2" class="date">
+                <h3>Date</h3>
+            </td>
+            <td colspan="3">
+                <h3>Young Women</h3>
+            </td>
+            <td colspan="3">
+                <h3>Young Men</h3>
+            </td>
+        </tr>
+        <tr>
+            <td class="who">
+                <h3>Who</h3>
+            </td>
+            <td class="what">
+                <h3>What</h3>
+            </td>
+            <td class="res">
+                <h3>Res</h3>
+            </td>
+            <td class="who">
+                <h3>Who</h3>
+            </td>
+            <td class="what">
+                <h3>What</h3>
+            </td>
+            <td class="res">
+                <h3>Res</h3>
+            </td>
+        </tr>
+    `;
+
+    const activities = await getAllYouthActivities();
+    activities.forEach((activity) => {
+        output += `
+        <tr onclick="window.location='/rdpUtilities/youth/?date=${activity.date}';">
+            <td class="date">
+                <p>${activity.date}</p>
+            </td>`;
+        if (activity.combined) {
+            output += `<td>
+                <p>${activity.activity.who}</p>
+            </td>
+            <td colspan="4">
+                <p>${activity.activity.what}</p>
+            </td>
+            <td>
+                <p>${activity.activity.res}</p>
+            </td>`;
+        } else {
+            output += `
+            <td class="who">
+                <p>${activity.activity.yw.who}</p>
+            </td>
+            <td class="what">
+                <p>${activity.activity.yw.what}</p>
+            </td>
+            <td class="res">
+                <p>${activity.activity.yw.res}</p>
+            </td>
+            <td class="who">
+                <p>${activity.activity.ym.who}</p>
+            </td>
+            <td class="what">
+                <p>${activity.activity.ym.what}</p>
+            </td>
+            <td class="res">
+                <p>${activity.activity.ym.res}</p>
+            </td>`;
+        }
+
+        // if (userData.level >= BISHOPRIC) {
+        //     output += `
+        //     <td>
+        //         <a href="/rdpUtilities/youth/?date=${activity.date}&update=true" class="btn btn-green">&#10227;</a>
+        //         <a href="/rdpUtilities/youth/?date=${activity.date}&update=true" class="btn btn-red">&#128465;</a>
+        //     </td>`;
+        // }
+        output += `</tr>`;
+    })
+
+    output += `</tbody></table>`;
+    if (userData.level >= BISHOPRIC) {
+        output += `<a href="/rdpUtilities/youth/?new=true" class="btn btn-green">New</a>`;
+    }
+    output += `<a href="/rdpUtilities/dashboard" class="btn btn-blue">Back</a>`;
+    wrapper.innerHTML = output;
+}
+
+export async function renderNewYouthActivity(wrapper) {
+    let today = new Date();
+
+    if (today.getDay() != 2) {
+        const tues = 2 - today.getDay();
+        today = new Date(today.getFullYear(), today.getMonth(), today.getDate() + tues + 1).toISOString().slice(0, 10);
+    }
+
+    let output = `
+    <h3>Date:</h3>
+    <input type="date" value="${today}">`;
+
+    wrapper.innerHTML = output;
 }

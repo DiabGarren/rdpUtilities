@@ -6,6 +6,7 @@
 @import url('./assignment.css');
 @import url('./editDoc.css');
 @import url('./profile.css');
+@import url('./youth.css');
 
 :root {
     --dark-blue: #00799F;
@@ -96,6 +97,7 @@ header {
     background-image: url('data:image/svg+xml,<svg width="2103" height="166" viewBox="0 0 2103 166" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="2103" height="166" fill="url(%23paint0_linear_104_2)"/><defs><linearGradient id="paint0_linear_104_2" x1="1399.5" y1="-3.4113e-05" x2="698.5" y2="9.09349e-05" gradientUnits="userSpaceOnUse"><stop stop-color="%2300799F"/><stop offset="1" stop-color="%23BFDEE8"/></linearGradient></defs></svg>');
     background-position: 100%;
     transition: background-position .5s, color .5s;
+    z-index: 1;
 }
 
 #page-navi .active,

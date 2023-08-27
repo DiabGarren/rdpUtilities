@@ -1,20 +1,21 @@
 import {
-    getLocalStorage,
-    getUserData,
-    getParam,
-    setProfile,
+    BISHOPRIC,
+    createBishopricDoc,
+    deleteBishopricDoc,
+    deleteDoc,
     getAllBishopricDocs,
     getBishopricDoc,
-    createBishopricDoc,
-    updateBishopricDoc,
-    deleteBishopricDoc,
+    getLocalStorage,
+    getParam,
+    getUserData,
     renderBasepage,
     renderDocPage,
     renderNewDocPage,
     renderUpdateDocPage,
-    deleteDoc,
+    setIcon,
+    setProfile,
     subpageHeader,
-    setIcon
+    updateBishopricDoc
 } from './utils.mjs';
 
 const id = getLocalStorage('id');
@@ -36,7 +37,7 @@ const meeting = 'bishopric'
 const wrapper = document.querySelector('.wrapper');
 document.querySelector('.load').remove();
 
-if (userData.level < '3') {
+if (userData.level < BISHOPRIC) {
     location = '/rdpUtilities/restricted';
 }
 
@@ -49,14 +50,14 @@ if (date && !update && !newDoc) {
 }
 
 if (newDoc && !update) {
-    if (userData.level < '3') {
+    if (userData.level < BISHOPRIC) {
         location = '/rdpUtilities/restricted/';
     }
     await renderNewDocPage(meeting, userData, createBishopricDoc, wrapper, 'New');
 }
 
 if (!newDoc && update) {
-    if (userData.level < '3') {
+    if (userData.level < BISHOPRIC) {
         location = '/rdpUtilities/restricted/';
     }
     await renderUpdateDocPage(meeting, userData, getBishopricDoc, updateBishopricDoc, date, wrapper, 'Update');
