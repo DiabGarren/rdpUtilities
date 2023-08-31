@@ -1,5 +1,5 @@
-// const baseUrl = 'https://rdputilities-api.onrender.com';
-const baseUrl = 'http://156.155.158.70:1830';
+const baseUrl = 'https://rdputilities-api.onrender.com';
+// const baseUrl = 'http://156.155.158.70:1830';
 // const baseUrl = 'http://172.20.10.9:1830';
 
 export const BASIC = 1, WARD_COUNCIL = 2, YOUTH = 3, BISHOPRIC = 4, BISHOP = 5;
