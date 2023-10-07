@@ -571,11 +571,11 @@ export async function renderDocPage(meeting, userData, getDocFunc, date, wrapper
             if (meeting.toLowerCase() === 'bishopric') {
                 return `Roodepoort Ward<br>
                 Bishopric Meeting Agenda<br>
-                8:00am ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
+                7:00am ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}`;
             } else if (meeting.toLowerCase() === 'wardcouncil') {
                 return `Roodepoort Ward<br>
                 Ward Coucil Meeting Agenda<br>
-                7:00pm ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}<br>
+                8:00am ${docDate.getDate()} ${docDate.toLocaleString('default', { month: 'long' })} ${docDate.getFullYear()}<br>
                 Attendees: Bishopric, Elders Quorum, Relief Society, Young Woman, Primary`;
             }
         }
