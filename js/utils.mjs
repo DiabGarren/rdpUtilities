@@ -672,7 +672,7 @@ export async function renderDocPage(
       if (meeting.toLowerCase() === "bishopric") {
         return `Roodepoort Ward<br>
                 Bishopric Meeting Agenda<br>
-                8:00am ${docDate.getDate()} ${docDate.toLocaleString(
+                6:30am ${docDate.getDate()} ${docDate.toLocaleString(
           "default",
           { month: "long" }
         )} ${docDate.getFullYear()}`;
