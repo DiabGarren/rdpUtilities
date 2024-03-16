@@ -607,7 +607,7 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
   wrapper.appendChild(heading);
 
   const docs = await getAllFunc();
-  docs.reverse();
+  // docs.reverse();
 
   docs.docs.forEach((doc) => {
     const docDate = new Date(doc.date);
