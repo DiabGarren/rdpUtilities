@@ -607,10 +607,10 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
   wrapper.appendChild(heading);
 
   const docs = await getAllFunc();
-  console.log(docs);
-  // docs.reverse();
+  //   console.log(docs);
+  docs.reverse();
 
-  docs.docs.forEach((doc) => {
+  docs.forEach((doc) => {
     const docDate = new Date(doc.date);
     let wcDoc = document.createElement("a");
     wcDoc.href = `/rdpUtilities/${meeting}/?date=${doc.date}`;
