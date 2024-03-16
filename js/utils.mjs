@@ -607,6 +607,7 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
   wrapper.appendChild(heading);
 
   const docs = await getAllFunc();
+  console.log(docs);
   // docs.reverse();
 
   docs.docs.forEach((doc) => {
