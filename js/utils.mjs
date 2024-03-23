@@ -626,16 +626,20 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
   let oldWrapper = document.createElement("div");
   let oldDocHeader = document.createElement("h3");
   oldDocHeader.innerHTML =
-    'Past Documents <svg width="41" height="52" viewBox="0 0 41 52" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.7735 1.18233L38.7596 21.8397C41.7283 23.8188 41.7283 28.1811 38.7596 30.1602L7.7735 50.8176C4.45073 53.0328 0 50.6509 0 46.6574L0 5.34258C0 1.34911 4.45073 -1.03285 7.7735 1.18233Z" fill="black"/></svg>';
+    'Past Documents <svg width="15" height="15" viewBox="0 0 41 52" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.7735 1.18233L38.7596 21.8397C41.7283 23.8188 41.7283 28.1811 38.7596 30.1602L7.7735 50.8176C4.45073 53.0328 0 50.6509 0 46.6574L0 5.34258C0 1.34911 4.45073 -1.03285 7.7735 1.18233Z" fill="black"/></svg>';
 
   let oldDocsWrapper = document.createElement("div");
-  oldDocsWrapper.setAttribute("style", "hidden");
+  oldDocsWrapper.setAttribute("style", "display: none");
 
   oldDocHeader.addEventListener("click", () => {
-    if (oldDocsWrapper.getAttribute("style").includes("hidden")) {
+    if (oldDocsWrapper.getAttribute("style").includes("none")) {
       oldDocsWrapper.setAttribute("style", "display: block");
+      oldDocHeader.innerHTML =
+        'Past Documents <svg width="15" height="15" viewBox="0 0 53 42" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M51.3176 8.27349L30.6602 39.2596C28.6811 42.2283 24.3188 42.2283 22.3397 39.2596L1.68233 8.27349C-0.53285 4.95071 1.8491 0.499989 5.84258 0.499989H47.1574C51.1509 0.499989 53.5328 4.95071 51.3176 8.27349Z" fill="black"/></svg>';
     } else {
-      oldDocsWrapper.setAttribute("style", "hidden");
+      oldDocsWrapper.setAttribute("style", "display: none");
+      oldDocHeader.innerHTML =
+        'Past Documents <svg width="15" height="15" viewBox="0 0 41 52" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.7735 1.18233L38.7596 21.8397C41.7283 23.8188 41.7283 28.1811 38.7596 30.1602L7.7735 50.8176C4.45073 53.0328 0 50.6509 0 46.6574L0 5.34258C0 1.34911 4.45073 -1.03285 7.7735 1.18233Z" fill="black"/></svg>';
     }
   });
 
