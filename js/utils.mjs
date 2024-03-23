@@ -625,7 +625,7 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
 
   let oldWrapper = document.createElement("div");
   let oldDocHeader = document.createElement("h3");
-  oldDocHeader.setAttribute("style", "margin-top: 15px");
+  oldDocHeader.setAttribute("style", "margin-top: 15px; cursor: pointer");
   oldDocHeader.innerHTML =
     'Past Documents <svg width="15" height="15" viewBox="0 0 41 52" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.7735 1.18233L38.7596 21.8397C41.7283 23.8188 41.7283 28.1811 38.7596 30.1602L7.7735 50.8176C4.45073 53.0328 0 50.6509 0 46.6574L0 5.34258C0 1.34911 4.45073 -1.03285 7.7735 1.18233Z" fill="black"/></svg>';
 
