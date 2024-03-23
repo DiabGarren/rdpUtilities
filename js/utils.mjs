@@ -624,7 +624,20 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
   wrapper.appendChild(back);
 
   let oldWrapper = document.createElement("div");
-  oldWrapper.style = "hidden";
+  let oldDocHeader = document.createElement("h3");
+  oldDocHeader.innerHTML =
+    'Past Documents <svg width="41" height="52" viewBox="0 0 41 52" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.7735 1.18233L38.7596 21.8397C41.7283 23.8188 41.7283 28.1811 38.7596 30.1602L7.7735 50.8176C4.45073 53.0328 0 50.6509 0 46.6574L0 5.34258C0 1.34911 4.45073 -1.03285 7.7735 1.18233Z" fill="black"/></svg>';
+
+  let oldDocsWrapper = document.createElement("div");
+  oldDocsWrapper.setAttribute("style", "hidden");
+
+  oldDocHeader.addEventListener("click", () => {
+    if (oldDocsWrapper.getAttribute("style").includes("hidden")) {
+      oldDocsWrapper.setAttribute("style", "display: block");
+    } else {
+      oldDocsWrapper.setAttribute("style", "hidden");
+    }
+  });
 
   const docs = await getAllFunc();
   //   console.log(docs);
@@ -661,9 +674,12 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
     ) {
       wrapper.appendChild(wcDoc);
     } else {
-      oldWrapper.appendChild(wcDoc);
+      oldDocsWrapper.appendChild(wcDoc);
     }
   });
+
+  oldWrapper.appendChild(oldDocHeader);
+  oldWrapper.appendChild(oldDocsWrapper);
   wrapper.appendChild(oldWrapper);
 }
 
