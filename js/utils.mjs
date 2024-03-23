@@ -606,6 +606,26 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
   heading.textContent = "Meetings";
   wrapper.appendChild(heading);
 
+  let createDoc = document.createElement("a");
+  createDoc.href = `/rdpUtilities/${meeting}/?new=true`;
+  createDoc.textContent = "Create document";
+  createDoc.className = "btn btn-blue";
+
+  let back = document.createElement("a");
+  back.href = `/rdpUtilities/dashboard/`;
+  back.textContent = "Back";
+  back.className = "btn btn-blue";
+  back.style.marginBottom = "15px";
+
+  if (userData.level >= BISHOPRIC) {
+    wrapper.appendChild(createDoc);
+  }
+
+  wrapper.appendChild(back);
+
+  let oldWrapper = document.createElement("div");
+  oldWrapper.style = "hidden";
+
   const docs = await getAllFunc();
   //   console.log(docs);
   docs.reverse();
@@ -635,23 +655,16 @@ export async function renderBasepage(meeting, userData, getAllFunc, wrapper) {
       wcDoc.className = "btn btn-green";
     }
 
-    wrapper.appendChild(wcDoc);
+    if (
+      wcDoc.className.includes("btn-green") ||
+      wcDoc.className.includes("btn-blue")
+    ) {
+      wrapper.appendChild(wcDoc);
+    } else {
+      oldWrapper.appendChild(wcDoc);
+    }
   });
-  let createDoc = document.createElement("a");
-  createDoc.href = `/rdpUtilities/${meeting}/?new=true`;
-  createDoc.textContent = "Create document";
-  createDoc.className = "btn btn-blue";
-
-  let back = document.createElement("a");
-  back.href = `/rdpUtilities/dashboard/`;
-  back.textContent = "Back";
-  back.className = "btn btn-blue";
-
-  if (userData.level >= BISHOPRIC) {
-    wrapper.appendChild(createDoc);
-  }
-
-  wrapper.appendChild(back);
+  wrapper.appendChild(oldWrapper);
 }
 
 export async function renderDocPage(
